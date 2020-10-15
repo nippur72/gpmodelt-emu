@@ -17,7 +17,7 @@ function io_read(ioport) {
       case 0x77:
          // ACI + video sync pins
          // VSYNC necessita bit 3 posto a 0, bit 2 posto a 1
-         return 0b00000100;
+         return 0b00000100 | (cassette_bit_in << 1);
    }
    console.warn(`read from unknown port ${hex(port)}h`);
    return 0x00;
