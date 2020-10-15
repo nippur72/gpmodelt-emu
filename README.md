@@ -1,8 +1,37 @@
 # GENERAL PROCESSOR MODEL T emulator
 
-## Z80
+## TIMINGS
 
-24 / 7
+System clock: 10 Mhz
+CPU Speed: 2.5 Mhz (10 / 4)
+Video: 640x312 dot pixels (512x208 active display)
+Refresh: 50 Hz
+Linerate: 15625 kHz
+Character matrix: 8x13
+
+## ROMS
+
+### ROM SU MAIN BOARD
+
+U1	E000..E3FF
+U2	E400..E7FF
+U3	E800..EBFF
+U4	EC00..EFFF
+
+DT49-48_U1.BIN     TMON ???             slot U1
+ROM_MT16_U2.BIN    TMON ???             slot U2
+FDC8-8_U3.BIN      floppy 8"            slot U3   (76 tracks*)
+ROM-U3.BIN         floppy 5.25"         slot U3   (39 tracks*)
+ACI_15-48_U4.BIN   interfaccia cassette slot U4
+
+(*) le due EPROM differiscono per 4 bytes
+
+### ROM SCHEDA VIDEO
+
+GCE_M1.U3          chargen 64x16        MEM BOARD  pixel da 0..7
+GCE_M2.U4          chargen 64x16        MEM BOARD  pixel da 8..12
+G-CAR-A_U7.BIN     chargen 80x24        MEM BOARD  pixel da 0..7
+G-CAR-B_U8.BIN     chargen 80x24        MEM BOARD  pixel da 8..11?
 
 
 ## MEMORY MAP
@@ -94,4 +123,13 @@ In lettura:
 1 - segnale registratore
 2 - segnale video anti brillio
 3 - segnale video anti brillio
+
+
+## integrati usati
+
+2114    RAM 1024 4bit words
+2708    1K EPROM
+74165   Parallel 8 Bit shift registers
+7432    Quad 2-input OR gate
+74LS245 3-STATE Octal Bus Transceiver
 
