@@ -1,0 +1,998 @@
+<html>
+<head>
+</head>
+<body>
+<pre><code>
+
+	ORG	0EC00h
+
+<a name="LEC00"></a>	jp	<a	href="#LEE60">LEE60</a></a>
+
+<a name="LEC03"></a>LEC03:	jp	<a	href="#LEE4F">LEE4F</a>+1	; reference not aligned to instruction</a>
+
+<a name="LEC06"></a>	; Referenced from <a href="#LEF98">EF98</a>
+	; --- START PROC LEC06 ---
+LEC06:	jp	<a	href="#LEE80">LEE80</a></a>
+
+<a name="LEC09"></a>	; Referenced from <a href="#LEF7B">EF7B</a>
+	; --- START PROC LEC09 ---
+LEC09:	jp	<a	href="#LEE70">LEE70</a></a>
+
+<a name="LEC0C"></a>LEC0C:	jp	0FFFFh</a>
+
+<a name="LEC0F"></a>LEC0F:	jp	0FFFFh</a>
+
+<a name="LEC12"></a>LEC12:	jp	0FFFFh</a>
+
+<a name="LEC15"></a>LEC15:	jp	0FFFFh</a>
+
+<a name="LEC18"></a>LEC18:	nop</a>
+<a name="LEC19"></a>	ld	bc,0000h</a>
+<a name="LEC1C"></a>	ld	bc,0001h</a>
+<a name="LEC1F"></a>
+	; Referenced from <a href="#LEE5A">EE5A</a>, <a href="#LEE73">EE73</a>
+LEC1F:	ld	bc,1F37h</a>
+<a name="LEC22"></a>	and	0FAh</a>
+<a name="LEC24"></a>	ld	(0BFFFh),a</a>
+<a name="LEC27"></a>	call	<a	href="#LEC94">LEC94</a></a>
+<a name="LEC2A"></a>	push	de</a>
+<a name="LEC2B"></a>	push	bc</a>
+<a name="LEC2C"></a>	ld	a,(0BFFFh)</a>
+<a name="LEC2F"></a>	bit	3,a</a>
+<a name="LEC31"></a>	jr	nz,<a	href="#LEC84">LEC84</a></a>
+<a name="LEC33"></a>	ld	e,04h</a>
+<a name="LEC35"></a>
+	; Referenced from <a href="#LEC39">EC39</a>
+LEC35:	call	<a	href="#LECC0">LECC0</a></a>
+<a name="LEC38"></a>	dec	e</a>
+<a name="LEC39"></a>	jr	nz,<a	href="#LEC35">LEC35</a></a>
+<a name="LEC3B"></a>
+	; Referenced from <a href="#LEC89">EC89</a>
+LEC3B:	scf</a>
+<a name="LEC3C"></a>	call	<a	href="#LED2C">LED2C</a></a>
+<a name="LEC3F"></a>	xor	a</a>
+<a name="LEC40"></a>	ld	(0BFFEh),a</a>
+<a name="LEC43"></a>	pop	bc</a>
+<a name="LEC44"></a>	call	<a	href="#LECCB">LECCB</a></a>
+<a name="LEC47"></a>	pop	de</a>
+<a name="LEC48"></a>	ld	c,e</a>
+<a name="LEC49"></a>	call	<a	href="#LECCB">LECCB</a></a>
+<a name="LEC4C"></a>	ld	c,d</a>
+<a name="LEC4D"></a>	call	<a	href="#LECCB">LECCB</a></a>
+<a name="LEC50"></a>	push	de</a>
+<a name="LEC51"></a>	ld	c,l</a>
+<a name="LEC52"></a>	call	<a	href="#LECCB">LECCB</a></a>
+<a name="LEC55"></a>	ld	c,h</a>
+<a name="LEC56"></a>	call	<a	href="#LECCB">LECCB</a></a>
+<a name="LEC59"></a>	pop	iy</a>
+<a name="LEC5B"></a>	call	<a	href="#LEC8B">LEC8B</a></a>
+<a name="LEC5E"></a>	ld	e,a</a>
+<a name="LEC5F"></a>
+	; Referenced from <a href="#LEC70">EC70</a>, <a href="#LEC73">EC73</a>
+LEC5F:	ld	c,(iy+00h)</a>
+<a name="LEC62"></a>	call	<a	href="#LECCB">LECCB</a></a>
+<a name="LEC65"></a>	inc	e</a>
+<a name="LEC66"></a>	jr	nz,<a	href="#LEC6C">LEC6C</a></a>
+<a name="LEC68"></a>	call	<a	href="#LEC8B">LEC8B</a></a>
+<a name="LEC6B"></a>	ld	d,a</a>
+<a name="LEC6C"></a>
+	; Referenced from <a href="#LEC66">EC66</a>
+LEC6C:	inc	iy</a>
+<a name="LEC6E"></a>	dec	hl</a>
+<a name="LEC6F"></a>	or	h</a>
+<a name="LEC70"></a>	jr	nz,<a	href="#LEC5F">LEC5F</a></a>
+<a name="LEC72"></a>	or	l</a>
+<a name="LEC73"></a>	jr	nz,<a	href="#LEC5F">LEC5F</a></a>
+<a name="LEC75"></a>	call	<a	href="#LEC8B">LEC8B</a></a>
+<a name="LEC78"></a>	call	<a	href="#LECA6">LECA6</a></a>
+<a name="LEC7B"></a>	ld	a,(0BFFFh)</a>
+<a name="LEC7E"></a>	bit	1,a</a>
+<a name="LEC80"></a>	ret	nz</a>
+<a name="LEC81"></a>	jp	<a	href="#LEDCA">LEDCA</a></a>
+
+<a name="LEC84"></a>	; Referenced from <a href="#LEC31">EC31</a>
+LEC84:	ld	d,57h	; 'W'</a>
+<a name="LEC86"></a>	call	<a	href="#LECC2">LECC2</a></a>
+<a name="LEC89"></a>	jr	<a	href="#LEC3B">LEC3B</a></a>
+
+<a name="LEC8B"></a>	; Referenced from <a href="#LEC5B">EC5B</a>, <a href="#LEC68">EC68</a>, <a href="#LEC75">EC75</a>
+	; --- START PROC LEC8B ---
+LEC8B:	ld	a,(0BFFEh)</a>
+<a name="LEC8E"></a>	ld	c,a</a>
+<a name="LEC8F"></a>	inc	c</a>
+<a name="LEC90"></a>	call	<a	href="#LECD2">LECD2</a></a>
+<a name="LEC93"></a>	ret</a>
+
+<a name="LEC94"></a>	; Referenced from <a href="#LEC27">EC27</a>
+	; --- START PROC LEC94 ---
+LEC94:	scf</a>
+<a name="LEC95"></a>	ccf</a>
+<a name="LEC96"></a>	sbc	hl,de</a>
+<a name="LEC98"></a>	inc	hl</a>
+<a name="LEC99"></a>
+	; Referenced from <a href="#LED39">ED39</a>
+	; --- START PROC LEC99 ---
+LEC99:	ld	a,0FFh</a>
+<a name="LEC9B"></a>	nop</a>
+<a name="LEC9C"></a>	nop</a>
+<a name="LEC9D"></a>	ld	a,02h</a>
+<a name="LEC9F"></a>	nop</a>
+<a name="LECA0"></a>	nop</a>
+<a name="LECA1"></a>	ld	a,99h</a>
+<a name="LECA3"></a>	nop</a>
+<a name="LECA4"></a>	nop</a>
+<a name="LECA5"></a>	ret</a>
+
+<a name="LECA6"></a>	; Referenced from <a href="#LEC78">EC78</a>
+	; --- START PROC LECA6 ---
+LECA6:	ld	a,(0BFFDh)</a>
+<a name="LECA9"></a>	out	(77h),a	; 'w'</a>
+<a name="LECAB"></a>	bit	4,a</a>
+<a name="LECAD"></a>	ld	c,0Ch</a>
+<a name="LECAF"></a>	jr	nz,<a	href="#LECB3">LECB3</a></a>
+<a name="LECB1"></a>	ld	c,64h	; 'd'</a>
+<a name="LECB3"></a>
+	; Referenced from <a href="#LECAF">ECAF</a>, <a href="#LECBD">ECBD</a>
+LECB3:	ld	a,1Eh</a>
+<a name="LECB5"></a>
+	; Referenced from <a href="#LECBA">ECBA</a>
+LECB5:	ld	b,00h</a>
+<a name="LECB7"></a>
+	; Referenced from <a href="#LECB7">ECB7</a>
+LECB7:	djnz	<a	href="#LECB7">LECB7</a></a>
+<a name="LECB9"></a>	dec	a</a>
+<a name="LECBA"></a>	jr	nz,<a	href="#LECB5">LECB5</a></a>
+<a name="LECBC"></a>	dec	c</a>
+<a name="LECBD"></a>	jr	nz,<a	href="#LECB3">LECB3</a></a>
+<a name="LECBF"></a>	ret</a>
+
+<a name="LECC0"></a>	; Referenced from <a href="#LEC35">EC35</a>
+	; --- START PROC LECC0 ---
+LECC0:	ld	d,00h</a>
+<a name="LECC2"></a>
+	; Referenced from <a href="#LEC86">EC86</a>, <a href="#LECC8">ECC8</a>
+	; --- START PROC LECC2 ---
+LECC2:	ld	c,00h</a>
+<a name="LECC4"></a>	call	<a	href="#LECD2">LECD2</a></a>
+<a name="LECC7"></a>	dec	d</a>
+<a name="LECC8"></a>	jr	nz,<a	href="#LECC2">LECC2</a></a>
+<a name="LECCA"></a>	ret</a>
+
+<a name="LECCB"></a>	; Referenced from <a href="#LEC44">EC44</a>, <a href="#LEC49">EC49</a>, <a href="#LEC4D">EC4D</a>, <a href="#LEC52">EC52</a>, <a href="#LEC56">EC56</a>, <a href="#LEC62">EC62</a>
+	; --- START PROC LECCB ---
+LECCB:	ld	a,(0BFFEh)</a>
+<a name="LECCE"></a>	add	a,c</a>
+<a name="LECCF"></a>	ld	(0BFFEh),a</a>
+<a name="LECD2"></a>
+	; Referenced from <a href="#LEC90">EC90</a>, <a href="#LECC4">ECC4</a>
+	; --- START PROC LECD2 ---
+LECD2:	scf</a>
+<a name="LECD3"></a>	rr	c</a>
+<a name="LECD5"></a>
+	; Referenced from <a href="#LECDA">ECDA</a>
+LECD5:	call	<a	href="#LECDD">LECDD</a></a>
+<a name="LECD8"></a>	srl	c</a>
+<a name="LECDA"></a>	jr	nz,<a	href="#LECD5">LECD5</a></a>
+<a name="LECDC"></a>	ret</a>
+
+<a name="LECDD"></a>	; Referenced from <a href="#LECD5">ECD5</a>
+	; --- START PROC LECDD ---
+LECDD:	jp	c,<a	href="#LECED">LECED</a></a>
+<a name="LECE0"></a>	call	<a	href="#LECFA">LECFA</a></a>
+<a name="LECE3"></a>	call	<a	href="#LED0F">LED0F</a></a>
+<a name="LECE6"></a>	call	<a	href="#LECFA">LECFA</a></a>
+<a name="LECE9"></a>	call	<a	href="#LED0F">LED0F</a></a>
+<a name="LECEC"></a>	ret</a>
+
+<a name="LECED"></a>	; Referenced from <a href="#LECDD">ECDD</a>
+LECED:	call	<a	href="#LECFA">LECFA</a></a>
+<a name="LECF0"></a>	call	<a	href="#LECFA">LECFA</a></a>
+<a name="LECF3"></a>	call	<a	href="#LED0F">LED0F</a></a>
+<a name="LECF6"></a>	call	<a	href="#LECFA">LECFA</a></a>
+<a name="LECF9"></a>	ret</a>
+
+<a name="LECFA"></a>	; Referenced from <a href="#LECE0">ECE0</a>, <a href="#LECE6">ECE6</a>, <a href="#LECED">ECED</a>, <a href="#LECF0">ECF0</a>, <a href="#LECF6">ECF6</a>, <a href="#LED2C">ED2C</a>, <a href="#LED2F">ED2F</a>
+	; --- START PROC LECFA ---
+LECFA:	ld	a,(0BFFDh)</a>
+<a name="LECFD"></a>	and	0Ah</a>
+<a name="LECFF"></a>	or	05h</a>
+<a name="LED01"></a>	call	<a	href="#LED24">LED24</a></a>
+<a name="LED04"></a>	ld	a,(0BFFDh)</a>
+<a name="LED07"></a>	and	0Ah</a>
+<a name="LED09"></a>	or	04h</a>
+<a name="LED0B"></a>	call	<a	href="#LED24">LED24</a></a>
+<a name="LED0E"></a>	ret</a>
+
+<a name="LED0F"></a>	; Referenced from <a href="#LECE3">ECE3</a>, <a href="#LECE9">ECE9</a>, <a href="#LECF3">ECF3</a>
+	; --- START PROC LED0F ---
+LED0F:	ld	a,(0BFFDh)</a>
+<a name="LED12"></a>	and	0Ah</a>
+<a name="LED14"></a>	or	00h</a>
+<a name="LED16"></a>	call	<a	href="#LED24">LED24</a></a>
+<a name="LED19"></a>	ld	a,(0BFFDh)</a>
+<a name="LED1C"></a>	and	0Ah</a>
+<a name="LED1E"></a>	or	00h</a>
+<a name="LED20"></a>	call	<a	href="#LED24">LED24</a></a>
+<a name="LED23"></a>	ret</a>
+
+<a name="LED24"></a>	; Referenced from <a href="#LED01">ED01</a>, <a href="#LED0B">ED0B</a>, <a href="#LED16">ED16</a>, <a href="#LED20">ED20</a>
+	; --- START PROC LED24 ---
+LED24:	ld	b,17h</a>
+<a name="LED26"></a>	out	(77h),a	; 'w'</a>
+<a name="LED28"></a>
+	; Referenced from <a href="#LED28">ED28</a>
+LED28:	djnz	<a	href="#LED28">LED28</a></a>
+<a name="LED2A"></a>	xor	a</a>
+<a name="LED2B"></a>	ret</a>
+
+<a name="LED2C"></a>	; Referenced from <a href="#LEC3C">EC3C</a>
+	; --- START PROC LED2C ---
+LED2C:	call	<a	href="#LECFA">LECFA</a></a>
+<a name="LED2F"></a>	call	<a	href="#LECFA">LECFA</a></a>
+<a name="LED32"></a>	ret</a>
+
+<a name="LED33"></a>	; Referenced from <a href="#LEE62">EE62</a>, <a href="#LEE83">EE83</a>
+	; --- START PROC LED33 ---
+LED33:	srl	a</a>
+<a name="LED35"></a>	ld	(0BFFFh),a</a>
+<a name="LED38"></a>	push	de</a>
+<a name="LED39"></a>	call	<a	href="#LEC99">LEC99</a></a>
+<a name="LED3C"></a>	ld	a,(0BFFDh)</a>
+<a name="LED3F"></a>	out	(77h),a	; 'w'</a>
+<a name="LED41"></a>	ld	l,c</a>
+<a name="LED42"></a>
+	; Referenced from <a href="#LED58">ED58</a>
+LED42:	call	<a	href="#LEDD1">LEDD1</a></a>
+<a name="LED45"></a>	xor	a</a>
+<a name="LED46"></a>	ld	(0BFFEh),a</a>
+<a name="LED49"></a>	call	<a	href="#LEE0F">LEE0F</a></a>
+<a name="LED4C"></a>	call	<a	href="#LEDE8">LEDE8</a></a>
+<a name="LED4F"></a>	ld	a,(0BFFFh)</a>
+<a name="LED52"></a>	bit	0,a</a>
+<a name="LED54"></a>	jr	nz,<a	href="#LED5A">LED5A</a></a>
+<a name="LED56"></a>	ld	a,c</a>
+<a name="LED57"></a>	sub	l</a>
+<a name="LED58"></a>	jr	nz,<a	href="#LED42">LED42</a></a>
+<a name="LED5A"></a>
+	; Referenced from <a href="#LED54">ED54</a>
+LED5A:	call	<a	href="#LEDE8">LEDE8</a></a>
+<a name="LED5D"></a>	ld	l,c</a>
+<a name="LED5E"></a>	call	<a	href="#LEDE8">LEDE8</a></a>
+<a name="LED61"></a>	ld	h,c</a>
+<a name="LED62"></a>	pop	de</a>
+<a name="LED63"></a>	ld	a,(0BFFFh)</a>
+<a name="LED66"></a>	bit	4,a</a>
+<a name="LED68"></a>	jr	z,<a	href="#LED6B">LED6B</a></a>
+<a name="LED6A"></a>	ex	de,hl</a>
+<a name="LED6B"></a>
+	; Referenced from <a href="#LED68">ED68</a>
+LED6B:	push	hl</a>
+<a name="LED6C"></a>	pop	iy</a>
+<a name="LED6E"></a>	call	<a	href="#LEDE8">LEDE8</a></a>
+<a name="LED71"></a>	ld	l,c</a>
+<a name="LED72"></a>	call	<a	href="#LEDE8">LEDE8</a></a>
+<a name="LED75"></a>	ld	h,c</a>
+<a name="LED76"></a>	scf</a>
+<a name="LED77"></a>	call	<a	href="#LEDA4">LEDA4</a></a>
+<a name="LED7A"></a>	jr	nc,<a	href="#LEDB7">LEDB7</a></a>
+<a name="LED7C"></a>
+	; Referenced from <a href="#LED91">ED91</a>, <a href="#LED94">ED94</a>
+LED7C:	push	de</a>
+<a name="LED7D"></a>	call	<a	href="#LEDE8">LEDE8</a></a>
+<a name="LED80"></a>	pop	de</a>
+<a name="LED81"></a>	ld	(iy+00h),c</a>
+<a name="LED84"></a>	inc	e</a>
+<a name="LED85"></a>	scf</a>
+<a name="LED86"></a>	call	z,<a	href="#LEDA4">LEDA4</a></a>
+<a name="LED89"></a>	jr	nc,<a	href="#LEDB7">LEDB7</a></a>
+<a name="LED8B"></a>	inc	iy</a>
+<a name="LED8D"></a>	dec	hl</a>
+<a name="LED8E"></a>	ld	a,00h</a>
+<a name="LED90"></a>	or	h</a>
+<a name="LED91"></a>	jr	nz,<a	href="#LED7C">LED7C</a></a>
+<a name="LED93"></a>	or	l</a>
+<a name="LED94"></a>	jr	nz,<a	href="#LED7C">LED7C</a></a>
+<a name="LED96"></a>	call	<a	href="#LEDA4">LEDA4</a></a>
+<a name="LED99"></a>	call	nc,<a	href="#LEDB7">LEDB7</a></a>
+<a name="LED9C"></a>	ld	a,(0BFFFh)</a>
+<a name="LED9F"></a>	bit	2,a</a>
+<a name="LEDA1"></a>	ret	nz</a>
+<a name="LEDA2"></a>	jr	<a	href="#LEDCA">LEDCA</a></a>
+
+<a name="LEDA4"></a>	; Referenced from <a href="#LED77">ED77</a>, <a href="#LED86">ED86</a>, <a href="#LED96">ED96</a>
+	; --- START PROC LEDA4 ---
+LEDA4:	ld	e,08h</a>
+<a name="LEDA6"></a>
+	; Referenced from <a href="#LEDAC">EDAC</a>
+LEDA6:	call	<a	href="#LEE15">LEE15</a></a>
+<a name="LEDA9"></a>	rr	c</a>
+<a name="LEDAB"></a>	dec	e</a>
+<a name="LEDAC"></a>	jr	nz,<a	href="#LEDA6">LEDA6</a></a>
+<a name="LEDAE"></a>	ld	a,(0BFFEh)</a>
+<a name="LEDB1"></a>	inc	a</a>
+<a name="LEDB2"></a>	sub	c</a>
+<a name="LEDB3"></a>	scf</a>
+<a name="LEDB4"></a>	ret	z</a>
+<a name="LEDB5"></a>	ccf</a>
+<a name="LEDB6"></a>	ret</a>
+
+<a name="LEDB7"></a>	; Referenced from <a href="#LED7A">ED7A</a>, <a href="#LED89">ED89</a>, <a href="#LED99">ED99</a>
+	; --- START PROC LEDB7 ---
+LEDB7:	ld	hl,0EDC0h</a>
+<a name="LEDBA"></a>	call	0E3FAh</a>
+<a name="LEDBD"></a>	jp	<a	href="#LEDCA">LEDCA</a></a>
+
+<a name="LEDC0"></a>LEDC0:	dec	c</a>
+<a name="LEDC1"></a>	ld	a,(bc)</a>
+<a name="LEDC2"></a>	ld	d,d</a>
+<a name="LEDC3"></a>	ld	h,h</a>
+<a name="LEDC4"></a>	jr	nz,<a	href="#LEE2B">LEE2B</a></a>
+<a name="LEDC6"></a>	ld	(hl),d</a>
+<a name="LEDC7"></a>	ld	(hl),d</a>
+<a name="LEDC8"></a>	and	b</a>
+<a name="LEDC9"></a>	ld	a,a</a>
+<a name="LEDCA"></a>
+	; Referenced from <a href="#LEC81">EC81</a>, <a href="#LEDA2">EDA2</a>, <a href="#LEDBD">EDBD</a>
+	; --- START PROC LEDCA ---
+LEDCA:	ld	a,00h</a>
+<a name="LEDCC"></a>	out	(77h),a	; 'w'</a>
+<a name="LEDCE"></a>	nop</a>
+<a name="LEDCF"></a>	nop</a>
+<a name="LEDD0"></a>	ret</a>
+
+<a name="LEDD1"></a>	; Referenced from <a href="#LED42">ED42</a>, <a href="#LEDE2">EDE2</a>
+	; --- START PROC LEDD1 ---
+LEDD1:	ld	h,00h</a>
+<a name="LEDD3"></a>	ld	a,(0BFFFh)</a>
+<a name="LEDD6"></a>	bit	3,a</a>
+<a name="LEDD8"></a>	jr	z,<a	href="#LEDDC">LEDDC</a></a>
+<a name="LEDDA"></a>	ld	h,28h	; '('</a>
+<a name="LEDDC"></a>
+	; Referenced from <a href="#LEDD8">EDD8</a>, <a href="#LEDE5">EDE5</a>
+LEDDC:	call	<a	href="#LEDE8">LEDE8</a></a>
+<a name="LEDDF"></a>	ld	a,00h</a>
+<a name="LEDE1"></a>	add	a,c</a>
+<a name="LEDE2"></a>	jr	nz,<a	href="#LEDD1">LEDD1</a></a>
+<a name="LEDE4"></a>	dec	h</a>
+<a name="LEDE5"></a>	jr	nz,<a	href="#LEDDC">LEDDC</a></a>
+<a name="LEDE7"></a>	ret</a>
+
+<a name="LEDE8"></a>	; Referenced from <a href="#LED4C">ED4C</a>, <a href="#LED5A">ED5A</a>, <a href="#LED5E">ED5E</a>, <a href="#LED6E">ED6E</a>, <a href="#LED72">ED72</a>, <a href="#LED7D">ED7D</a>, <a href="#LEDDC">EDDC</a>
+	; --- START PROC LEDE8 ---
+LEDE8:	ld	e,08h</a>
+<a name="LEDEA"></a>
+	; Referenced from <a href="#LEDF0">EDF0</a>
+LEDEA:	call	<a	href="#LEE15">LEE15</a></a>
+<a name="LEDED"></a>	rr	c</a>
+<a name="LEDEF"></a>	dec	e</a>
+<a name="LEDF0"></a>	jr	nz,<a	href="#LEDEA">LEDEA</a></a>
+<a name="LEDF2"></a>	ld	a,(0BFFEh)</a>
+<a name="LEDF5"></a>	add	a,c</a>
+<a name="LEDF6"></a>	ld	(0BFFEh),a</a>
+<a name="LEDF9"></a>	ret</a>
+
+<a name="LEDFA"></a>	; Referenced from <a href="#LEDFE">EDFE</a>, <a href="#LEE0F">EE0F</a>, <a href="#LEE16">EE16</a>
+	; --- START PROC LEDFA ---
+LEDFA:	in	a,(77h)	; 'w'</a>
+<a name="LEDFC"></a>	bit	1,a</a>
+<a name="LEDFE"></a>	jr	nz,<a	href="#LEDFA">LEDFA</a></a>
+<a name="LEE00"></a>
+	; Referenced from <a href="#LEE04">EE04</a>
+LEE00:	in	a,(77h)	; 'w'</a>
+<a name="LEE02"></a>	bit	1,a</a>
+<a name="LEE04"></a>	jr	z,<a	href="#LEE00">LEE00</a></a>
+<a name="LEE06"></a>	ld	b,48h	; 'H'</a>
+<a name="LEE08"></a>
+	; Referenced from <a href="#LEE08">EE08</a>
+LEE08:	djnz	<a	href="#LEE08">LEE08</a></a>
+<a name="LEE0A"></a>	in	a,(77h)	; 'w'</a>
+<a name="LEE0C"></a>	rrca</a>
+<a name="LEE0D"></a>	rrca</a>
+<a name="LEE0E"></a>	ret</a>
+
+<a name="LEE0F"></a>	; Referenced from <a href="#LED49">ED49</a>, <a href="#LEE12">EE12</a>
+	; --- START PROC LEE0F ---
+LEE0F:	call	<a	href="#LEDFA">LEDFA</a></a>
+<a name="LEE12"></a>	jr	nc,<a	href="#LEE0F">LEE0F</a></a>
+<a name="LEE14"></a>	ret</a>
+
+<a name="LEE15"></a>	; Referenced from <a href="#LEDA6">EDA6</a>, <a href="#LEDEA">EDEA</a>
+	; --- START PROC LEE15 ---
+LEE15:	push	hl</a>
+<a name="LEE16"></a>	call	<a	href="#LEDFA">LEDFA</a></a>
+<a name="LEE19"></a>	ld	l,03h</a>
+<a name="LEE1B"></a>	rl	l</a>
+<a name="LEE1D"></a>	ld	b,37h	; '7'</a>
+<a name="LEE1F"></a>
+	; Referenced from <a href="#LEE1F">EE1F</a>
+LEE1F:	djnz	<a	href="#LEE1F">LEE1F</a></a>
+<a name="LEE21"></a>	in	a,(77h)	; 'w'</a>
+<a name="LEE23"></a>	rrca</a>
+<a name="LEE24"></a>	rrca</a>
+<a name="LEE25"></a>	rl	l</a>
+<a name="LEE27"></a>	ld	b,3Dh	; '='</a>
+<a name="LEE29"></a>
+	; Referenced from <a href="#LEE29">EE29</a>
+LEE29:	djnz	<a	href="#LEE29">LEE29</a></a>
+<a name="LEE2B"></a>
+	; Referenced from <a href="#LEDC4">EDC4</a>
+LEE2B:	in	a,(77h)	; 'w'</a>
+<a name="LEE2D"></a>	rrca</a>
+<a name="LEE2E"></a>	rrca</a>
+<a name="LEE2F"></a>	rl	l</a>
+<a name="LEE31"></a>	ld	h,0ECh</a>
+<a name="LEE33"></a>	ld	a,(hl)</a>
+<a name="LEE34"></a>	rrca</a>
+<a name="LEE35"></a>	pop	hl</a>
+<a name="LEE36"></a>	ret</a>
+
+<a name="LEE37"></a>	; Referenced from <a href="#LEE70">EE70</a>, <a href="#LEE80">EE80</a>
+	; --- START PROC LEE37 ---
+LEE37:	push	af</a>
+<a name="LEE38"></a>	scf</a>
+<a name="LEE39"></a>	rra</a>
+<a name="LEE3A"></a>	bit	6,a</a>
+<a name="LEE3C"></a>	res	3,a</a>
+<a name="LEE3E"></a>	jr	nz,<a	href="#LEE42">LEE42</a></a>
+<a name="LEE40"></a>	set	3,a</a>
+<a name="LEE42"></a>
+	; Referenced from <a href="#LEE3E">EE3E</a>
+LEE42:	bit	5,a</a>
+<a name="LEE44"></a>	res	1,a</a>
+<a name="LEE46"></a>	jr	nz,<a	href="#LEE4A">LEE4A</a></a>
+<a name="LEE48"></a>	set	1,a</a>
+<a name="LEE4A"></a>
+	; Referenced from <a href="#LEE46">EE46</a>
+LEE4A:	ld	(0BFFDh),a</a>
+<a name="LEE4D"></a>	pop	af</a>
+<a name="LEE4E"></a>	ret</a>
+
+<a name="LEE4F"></a>	; Referenced from <a href="#LEC03">EC03</a>
+LEE4F:	jr	nz,<a	href="#LEE8F">LEE8F</a></a>
+<a name="LEE51"></a>	add	a,b</a>
+<a name="LEE52"></a>	ld	c,0BAh</a>
+<a name="LEE54"></a>	ld	de,0000h</a>
+<a name="LEE57"></a>	ld	hl,3F00h</a>
+<a name="LEE5A"></a>	call	<a	href="#LEC1F">LEC1F</a>+1	; reference not aligned to instruction</a>
+<a name="LEE5D"></a>
+	; Referenced from <a href="#LEE5D">EE5D</a>
+LEE5D:	jp	<a	href="#LEE5D">LEE5D</a></a>
+
+<a name="LEE60"></a>	; Referenced from <a href="#LEC00">EC00</a>
+LEE60:	ld	a,42h	; 'B'</a>
+<a name="LEE62"></a>	call	<a	href="#LED33">LED33</a></a>
+<a name="LEE65"></a>
+	; Referenced from <a href="#LEE65">EE65</a>
+LEE65:	jr	<a	href="#LEE65">LEE65</a></a>
+
+<a name="LEE67"></a>LEE67:	rst	0x38</a>
+
+<a name="LEE68"></a>LEE68:	rst	0x38</a>
+
+<a name="LEE69"></a>LEE69:	rst	0x38</a>
+
+<a name="LEE6A"></a>LEE6A:	rst	0x38</a>
+
+<a name="LEE6B"></a>LEE6B:	rst	0x38</a>
+
+<a name="LEE6C"></a>LEE6C:	rst	0x38</a>
+
+<a name="LEE6D"></a>LEE6D:	rst	0x38</a>
+
+<a name="LEE6E"></a>LEE6E:	rst	0x38</a>
+
+<a name="LEE6F"></a>LEE6F:	rst	0x38</a>
+
+<a name="LEE70"></a>	; Referenced from <a href="#LEC09">EC09</a>
+	; --- START PROC LEE70 ---
+LEE70:	call	<a	href="#LEE37">LEE37</a></a>
+<a name="LEE73"></a>	jp	<a	href="#LEC1F">LEC1F</a>+1	; reference not aligned to instruction</a>
+
+<a name="LEE76"></a>LEE76:	rst	0x38</a>
+
+<a name="LEE77"></a>LEE77:	rst	0x38</a>
+
+<a name="LEE78"></a>LEE78:	rst	0x38</a>
+
+<a name="LEE79"></a>LEE79:	rst	0x38</a>
+
+<a name="LEE7A"></a>LEE7A:	rst	0x38</a>
+
+<a name="LEE7B"></a>LEE7B:	rst	0x38</a>
+
+<a name="LEE7C"></a>LEE7C:	rst	0x38</a>
+
+<a name="LEE7D"></a>LEE7D:	rst	0x38</a>
+
+<a name="LEE7E"></a>LEE7E:	rst	0x38</a>
+
+<a name="LEE7F"></a>LEE7F:	rst	0x38</a>
+
+<a name="LEE80"></a>	; Referenced from <a href="#LEC06">EC06</a>
+	; --- START PROC LEE80 ---
+LEE80:	call	<a	href="#LEE37">LEE37</a></a>
+<a name="LEE83"></a>	jp	<a	href="#LED33">LED33</a></a>
+
+<a name="LEE86"></a>LEE86:	rst	0x38</a>
+
+<a name="LEE87"></a>LEE87:	rst	0x38</a>
+
+<a name="LEE88"></a>LEE88:	rst	0x38</a>
+
+<a name="LEE89"></a>LEE89:	rst	0x38</a>
+
+<a name="LEE8A"></a>LEE8A:	rst	0x38</a>
+
+<a name="LEE8B"></a>LEE8B:	rst	0x38</a>
+
+<a name="LEE8C"></a>LEE8C:	rst	0x38</a>
+
+<a name="LEE8D"></a>LEE8D:	rst	0x38</a>
+
+<a name="LEE8E"></a>LEE8E:	rst	0x38</a>
+
+<a name="LEE8F"></a>	; Referenced from <a href="#LEE4F">EE4F</a>
+LEE8F:	rst	0x38</a>
+
+<a name="LEE90"></a>LEE90:	rst	0x38</a>
+
+<a name="LEE91"></a>LEE91:	rst	0x38</a>
+
+<a name="LEE92"></a>LEE92:	rst	0x38</a>
+
+<a name="LEE93"></a>LEE93:	rst	0x38</a>
+
+<a name="LEE94"></a>LEE94:	rst	0x38</a>
+
+<a name="LEE95"></a>LEE95:	rst	0x38</a>
+
+<a name="LEE96"></a>LEE96:	rst	0x38</a>
+
+<a name="LEE97"></a>LEE97:	rst	0x38</a>
+
+<a name="LEE98"></a>LEE98:	rst	0x38</a>
+
+<a name="LEE99"></a>LEE99:	rst	0x38</a>
+
+<a name="LEE9A"></a>LEE9A:	rst	0x38</a>
+
+<a name="LEE9B"></a>LEE9B:	rst	0x38</a>
+
+<a name="LEE9C"></a>LEE9C:	rst	0x38</a>
+
+<a name="LEE9D"></a>LEE9D:	rst	0x38</a>
+
+<a name="LEE9E"></a>LEE9E:	rst	0x38</a>
+
+<a name="LEE9F"></a>LEE9F:	rst	0x38</a>
+
+<a name="LEEA0"></a>LEEA0:	rst	0x38</a>
+
+<a name="LEEA1"></a>LEEA1:	rst	0x38</a>
+
+<a name="LEEA2"></a>LEEA2:	rst	0x38</a>
+
+<a name="LEEA3"></a>LEEA3:	rst	0x38</a>
+
+<a name="LEEA4"></a>LEEA4:	rst	0x38</a>
+
+<a name="LEEA5"></a>LEEA5:	rst	0x38</a>
+
+<a name="LEEA6"></a>LEEA6:	rst	0x38</a>
+
+<a name="LEEA7"></a>LEEA7:	rst	0x38</a>
+
+<a name="LEEA8"></a>LEEA8:	rst	0x38</a>
+
+<a name="LEEA9"></a>LEEA9:	rst	0x38</a>
+
+<a name="LEEAA"></a>LEEAA:	rst	0x38</a>
+
+<a name="LEEAB"></a>LEEAB:	rst	0x38</a>
+
+<a name="LEEAC"></a>LEEAC:	rst	0x38</a>
+
+<a name="LEEAD"></a>LEEAD:	rst	0x38</a>
+
+<a name="LEEAE"></a>LEEAE:	rst	0x38</a>
+
+<a name="LEEAF"></a>LEEAF:	rst	0x38</a>
+
+<a name="LEEB0"></a>LEEB0:	rst	0x38</a>
+
+<a name="LEEB1"></a>LEEB1:	rst	0x38</a>
+
+<a name="LEEB2"></a>LEEB2:	rst	0x38</a>
+
+<a name="LEEB3"></a>LEEB3:	rst	0x38</a>
+
+<a name="LEEB4"></a>LEEB4:	rst	0x38</a>
+
+<a name="LEEB5"></a>LEEB5:	rst	0x38</a>
+
+<a name="LEEB6"></a>LEEB6:	rst	0x38</a>
+
+<a name="LEEB7"></a>LEEB7:	rst	0x38</a>
+
+<a name="LEEB8"></a>LEEB8:	rst	0x38</a>
+
+<a name="LEEB9"></a>LEEB9:	rst	0x38</a>
+
+<a name="LEEBA"></a>LEEBA:	rst	0x38</a>
+
+<a name="LEEBB"></a>LEEBB:	rst	0x38</a>
+
+<a name="LEEBC"></a>LEEBC:	rst	0x38</a>
+
+<a name="LEEBD"></a>LEEBD:	rst	0x38</a>
+
+<a name="LEEBE"></a>LEEBE:	rst	0x38</a>
+
+<a name="LEEBF"></a>LEEBF:	rst	0x38</a>
+
+<a name="LEEC0"></a>LEEC0:	rst	0x38</a>
+
+<a name="LEEC1"></a>LEEC1:	rst	0x38</a>
+
+<a name="LEEC2"></a>LEEC2:	rst	0x38</a>
+
+<a name="LEEC3"></a>LEEC3:	rst	0x38</a>
+
+<a name="LEEC4"></a>LEEC4:	rst	0x38</a>
+
+<a name="LEEC5"></a>LEEC5:	rst	0x38</a>
+
+<a name="LEEC6"></a>LEEC6:	rst	0x38</a>
+
+<a name="LEEC7"></a>LEEC7:	rst	0x38</a>
+
+<a name="LEEC8"></a>LEEC8:	rst	0x38</a>
+
+<a name="LEEC9"></a>LEEC9:	rst	0x38</a>
+
+<a name="LEECA"></a>LEECA:	rst	0x38</a>
+
+<a name="LEECB"></a>LEECB:	rst	0x38</a>
+
+<a name="LEECC"></a>LEECC:	rst	0x38</a>
+
+<a name="LEECD"></a>LEECD:	rst	0x38</a>
+
+<a name="LEECE"></a>LEECE:	rst	0x38</a>
+
+<a name="LEECF"></a>LEECF:	rst	0x38</a>
+
+<a name="LEED0"></a>LEED0:	rst	0x38</a>
+
+<a name="LEED1"></a>LEED1:	rst	0x38</a>
+
+<a name="LEED2"></a>LEED2:	rst	0x38</a>
+
+<a name="LEED3"></a>LEED3:	rst	0x38</a>
+
+<a name="LEED4"></a>LEED4:	rst	0x38</a>
+
+<a name="LEED5"></a>LEED5:	rst	0x38</a>
+
+<a name="LEED6"></a>LEED6:	rst	0x38</a>
+
+<a name="LEED7"></a>LEED7:	rst	0x38</a>
+
+<a name="LEED8"></a>LEED8:	rst	0x38</a>
+
+<a name="LEED9"></a>LEED9:	rst	0x38</a>
+
+<a name="LEEDA"></a>LEEDA:	rst	0x38</a>
+
+<a name="LEEDB"></a>LEEDB:	rst	0x38</a>
+
+<a name="LEEDC"></a>LEEDC:	rst	0x38</a>
+
+<a name="LEEDD"></a>LEEDD:	rst	0x38</a>
+
+<a name="LEEDE"></a>LEEDE:	rst	0x38</a>
+
+<a name="LEEDF"></a>LEEDF:	rst	0x38</a>
+
+<a name="LEEE0"></a>LEEE0:	rst	0x38</a>
+
+<a name="LEEE1"></a>LEEE1:	rst	0x38</a>
+
+<a name="LEEE2"></a>LEEE2:	rst	0x38</a>
+
+<a name="LEEE3"></a>LEEE3:	rst	0x38</a>
+
+<a name="LEEE4"></a>LEEE4:	rst	0x38</a>
+
+<a name="LEEE5"></a>LEEE5:	rst	0x38</a>
+
+<a name="LEEE6"></a>LEEE6:	rst	0x38</a>
+
+<a name="LEEE7"></a>LEEE7:	rst	0x38</a>
+
+<a name="LEEE8"></a>LEEE8:	rst	0x38</a>
+
+<a name="LEEE9"></a>LEEE9:	rst	0x38</a>
+
+<a name="LEEEA"></a>LEEEA:	rst	0x38</a>
+
+<a name="LEEEB"></a>LEEEB:	rst	0x38</a>
+
+<a name="LEEEC"></a>LEEEC:	rst	0x38</a>
+
+<a name="LEEED"></a>LEEED:	rst	0x38</a>
+
+<a name="LEEEE"></a>LEEEE:	rst	0x38</a>
+
+<a name="LEEEF"></a>LEEEF:	rst	0x38</a>
+
+<a name="LEEF0"></a>LEEF0:	rst	0x38</a>
+
+<a name="LEEF1"></a>LEEF1:	rst	0x38</a>
+
+<a name="LEEF2"></a>LEEF2:	rst	0x38</a>
+
+<a name="LEEF3"></a>LEEF3:	rst	0x38</a>
+
+<a name="LEEF4"></a>LEEF4:	rst	0x38</a>
+
+<a name="LEEF5"></a>LEEF5:	rst	0x38</a>
+
+<a name="LEEF6"></a>LEEF6:	rst	0x38</a>
+
+<a name="LEEF7"></a>LEEF7:	rst	0x38</a>
+
+<a name="LEEF8"></a>LEEF8:	rst	0x38</a>
+
+<a name="LEEF9"></a>LEEF9:	rst	0x38</a>
+
+<a name="LEEFA"></a>LEEFA:	rst	0x38</a>
+
+<a name="LEEFB"></a>LEEFB:	rst	0x38</a>
+
+<a name="LEEFC"></a>LEEFC:	rst	0x38</a>
+
+<a name="LEEFD"></a>LEEFD:	rst	0x38</a>
+
+<a name="LEEFE"></a>LEEFE:	rst	0x38</a>
+
+<a name="LEEFF"></a>LEEFF:	rst	0x38</a>
+
+<a name="LEF00"></a>LEF00:	rst	0x38</a>
+
+<a name="LEF01"></a>LEF01:	rst	0x38</a>
+
+<a name="LEF02"></a>LEF02:	rst	0x38</a>
+
+<a name="LEF03"></a>LEF03:	rst	0x38</a>
+
+<a name="LEF04"></a>LEF04:	rst	0x38</a>
+
+<a name="LEF05"></a>LEF05:	rst	0x38</a>
+
+<a name="LEF06"></a>LEF06:	rst	0x38</a>
+
+<a name="LEF07"></a>LEF07:	rst	0x38</a>
+
+<a name="LEF08"></a>LEF08:	rst	0x38</a>
+
+<a name="LEF09"></a>LEF09:	rst	0x38</a>
+
+<a name="LEF0A"></a>LEF0A:	rst	0x38</a>
+
+<a name="LEF0B"></a>LEF0B:	rst	0x38</a>
+
+<a name="LEF0C"></a>LEF0C:	rst	0x38</a>
+
+<a name="LEF0D"></a>LEF0D:	rst	0x38</a>
+
+<a name="LEF0E"></a>LEF0E:	rst	0x38</a>
+
+<a name="LEF0F"></a>LEF0F:	rst	0x38</a>
+
+<a name="LEF10"></a>LEF10:	rst	0x38</a>
+
+<a name="LEF11"></a>LEF11:	rst	0x38</a>
+
+<a name="LEF12"></a>LEF12:	rst	0x38</a>
+
+<a name="LEF13"></a>LEF13:	rst	0x38</a>
+
+<a name="LEF14"></a>LEF14:	rst	0x38</a>
+
+<a name="LEF15"></a>LEF15:	rst	0x38</a>
+
+<a name="LEF16"></a>LEF16:	rst	0x38</a>
+
+<a name="LEF17"></a>LEF17:	rst	0x38</a>
+
+<a name="LEF18"></a>LEF18:	rst	0x38</a>
+
+<a name="LEF19"></a>LEF19:	rst	0x38</a>
+
+<a name="LEF1A"></a>LEF1A:	rst	0x38</a>
+
+<a name="LEF1B"></a>LEF1B:	rst	0x38</a>
+
+<a name="LEF1C"></a>LEF1C:	rst	0x38</a>
+
+<a name="LEF1D"></a>LEF1D:	rst	0x38</a>
+
+<a name="LEF1E"></a>LEF1E:	rst	0x38</a>
+
+<a name="LEF1F"></a>LEF1F:	rst	0x38</a>
+
+<a name="LEF20"></a>LEF20:	rst	0x38</a>
+
+<a name="LEF21"></a>LEF21:	rst	0x38</a>
+
+<a name="LEF22"></a>LEF22:	rst	0x38</a>
+
+<a name="LEF23"></a>LEF23:	rst	0x38</a>
+
+<a name="LEF24"></a>LEF24:	rst	0x38</a>
+
+<a name="LEF25"></a>LEF25:	rst	0x38</a>
+
+<a name="LEF26"></a>LEF26:	rst	0x38</a>
+
+<a name="LEF27"></a>LEF27:	rst	0x38</a>
+
+<a name="LEF28"></a>LEF28:	rst	0x38</a>
+
+<a name="LEF29"></a>LEF29:	rst	0x38</a>
+
+<a name="LEF2A"></a>LEF2A:	rst	0x38</a>
+
+<a name="LEF2B"></a>	; Referenced from <a href="#LEFA8">EFA8</a>, <a href="#LEFAD">EFAD</a>
+	; --- START PROC LEF2B ---
+LEF2B:	call	<a	href="#LEFE8">LEFE8</a></a>
+<a name="LEF2E"></a>	push	af</a>
+<a name="LEF2F"></a>	ld	a,0FFh</a>
+<a name="LEF31"></a>	nop</a>
+<a name="LEF32"></a>	nop</a>
+<a name="LEF33"></a>	out	(77h),a	; 'w'</a>
+<a name="LEF35"></a>	pop	af</a>
+<a name="LEF36"></a>	ret</a>
+
+<a name="LEF37"></a>	; Referenced from <a href="#LEF9E">EF9E</a>
+	; --- START PROC LEF37 ---
+LEF37:	ld	e,22h	; '"'</a>
+<a name="LEF39"></a>	jp	0848h</a>
+
+<a name="LEF3C"></a>LEF3C:	push	hl</a>
+<a name="LEF3D"></a>	ld	hl,0C000h</a>
+<a name="LEF40"></a>	ld	(0BFE9h),hl</a>
+<a name="LEF43"></a>	pop	hl</a>
+<a name="LEF44"></a>	push	af</a>
+<a name="LEF45"></a>	ld	a,0A4h</a>
+<a name="LEF47"></a>	ld	(0BFEBh),a</a>
+<a name="LEF4A"></a>	pop	af</a>
+<a name="LEF4B"></a>	jp	z,1088h</a>
+<a name="LEF4E"></a>	jp	2315h</a>
+
+<a name="LEF51"></a>	; Referenced from <a href="#LEFA5">EFA5</a>
+LEF51:	ld	a,(0BFEBh)</a>
+<a name="LEF54"></a>	and	0DBh</a>
+<a name="LEF56"></a>	ld	(0BFEBh),a</a>
+<a name="LEF59"></a>	call	<a	href="#LEF74">LEF74</a></a>
+<a name="LEF5C"></a>	pop	hl</a>
+<a name="LEF5D"></a>	ret</a>
+
+<a name="LEF5E"></a>LEF5E:	push	af</a>
+<a name="LEF5F"></a>	ld	a,62h	; 'b'</a>
+<a name="LEF61"></a>	ld	(0BFEBh),a</a>
+<a name="LEF64"></a>	call	<a	href="#LEF91">LEF91</a></a>
+<a name="LEF67"></a>	pop	af</a>
+<a name="LEF68"></a>	jp	z,1086h</a>
+<a name="LEF6B"></a>	jp	234Eh</a>
+
+<a name="LEF6E"></a>LEF6E:	call	<a	href="#LEFE8">LEFE8</a></a>
+<a name="LEF71"></a>	jp	23B5h</a>
+
+<a name="LEF74"></a>	; Referenced from <a href="#LEF59">EF59</a>, <a href="#LEFCF">EFCF</a>
+	; --- START PROC LEF74 ---
+LEF74:	push	hl</a>
+<a name="LEF75"></a>	push	de</a>
+<a name="LEF76"></a>	push	bc</a>
+<a name="LEF77"></a>	push	af</a>
+<a name="LEF78"></a>	call	<a	href="#LEFB6">LEFB6</a></a>
+<a name="LEF7B"></a>	call	<a	href="#LEC09">LEC09</a></a>
+<a name="LEF7E"></a>	call	<a	href="#LEFE8">LEFE8</a></a>
+<a name="LEF81"></a>	ld	a,0B4h</a>
+<a name="LEF83"></a>
+	; Referenced from <a href="#LEFA1">EFA1</a>
+	; --- START PROC LEF83 ---
+LEF83:	ld	(0BFEBh),a</a>
+<a name="LEF86"></a>	ld	hl,0C000h</a>
+<a name="LEF89"></a>	ld	(0BFE9h),hl</a>
+<a name="LEF8C"></a>	pop	af</a>
+<a name="LEF8D"></a>	pop	bc</a>
+<a name="LEF8E"></a>	pop	de</a>
+<a name="LEF8F"></a>	pop	hl</a>
+<a name="LEF90"></a>	ret</a>
+
+<a name="LEF91"></a>	; Referenced from <a href="#LEF64">EF64</a>, <a href="#LEFE2">EFE2</a>
+	; --- START PROC LEF91 ---
+LEF91:	push	hl</a>
+<a name="LEF92"></a>	push	de</a>
+<a name="LEF93"></a>	push	bc</a>
+<a name="LEF94"></a>	push	af</a>
+<a name="LEF95"></a>	call	<a	href="#LEFB6">LEFB6</a></a>
+<a name="LEF98"></a>	call	<a	href="#LEC06">LEC06</a></a>
+<a name="LEF9B"></a>	nop</a>
+<a name="LEF9C"></a>	ld	a,7Ah	; 'z'</a>
+<a name="LEF9E"></a>	jp	nc,<a	href="#LEF37">LEF37</a></a>
+<a name="LEFA1"></a>	jp	<a	href="#LEF83">LEF83</a></a>
+
+<a name="LEFA4"></a>LEFA4:	pop	af</a>
+<a name="LEFA5"></a>	jp	p,<a	href="#LEF51">LEF51</a></a>
+<a name="LEFA8"></a>	call	<a	href="#LEF2B">LEF2B</a></a>
+<a name="LEFAB"></a>	pop	hl</a>
+<a name="LEFAC"></a>	ret</a>
+
+<a name="LEFAD"></a>LEFAD:	call	<a	href="#LEF2B">LEF2B</a></a>
+<a name="LEFB0"></a>	ld	(075Bh),hl</a>
+<a name="LEFB3"></a>	jp	23A8h</a>
+
+<a name="LEFB6"></a>	; Referenced from <a href="#LEF78">EF78</a>, <a href="#LEF95">EF95</a>
+	; --- START PROC LEFB6 ---
+LEFB6:	ld	a,(0BFEBh)</a>
+<a name="LEFB9"></a>	ld	c,0DBh</a>
+<a name="LEFBB"></a>	ld	de,0C000h</a>
+<a name="LEFBE"></a>	ld	hl,0C0BFh</a>
+<a name="LEFC1"></a>	ret</a>
+
+<a name="LEFC2"></a>LEFC2:	push	hl</a>
+<a name="LEFC3"></a>	push	af</a>
+<a name="LEFC4"></a>	ld	hl,(0BFE9h)</a>
+<a name="LEFC7"></a>	ld	(hl),a</a>
+<a name="LEFC8"></a>	inc	hl</a>
+<a name="LEFC9"></a>	ld	a,0C0h</a>
+<a name="LEFCB"></a>	ld	(0BFE9h),hl</a>
+<a name="LEFCE"></a>	cp	l</a>
+<a name="LEFCF"></a>	call	z,<a	href="#LEF74">LEF74</a></a>
+<a name="LEFD2"></a>	pop	af</a>
+<a name="LEFD3"></a>	pop	hl</a>
+<a name="LEFD4"></a>	ret</a>
+
+<a name="LEFD5"></a>LEFD5:	push	hl</a>
+<a name="LEFD6"></a>	ld	hl,(0BFE9h)</a>
+<a name="LEFD9"></a>	ld	a,(hl)</a>
+<a name="LEFDA"></a>	push	af</a>
+<a name="LEFDB"></a>	inc	hl</a>
+<a name="LEFDC"></a>	ld	a,0C0h</a>
+<a name="LEFDE"></a>	ld	(0BFE9h),hl</a>
+<a name="LEFE1"></a>	cp	l</a>
+<a name="LEFE2"></a>	call	z,<a	href="#LEF91">LEF91</a></a>
+<a name="LEFE5"></a>	pop	af</a>
+<a name="LEFE6"></a>	pop	hl</a>
+<a name="LEFE7"></a>	ret</a>
+
+<a name="LEFE8"></a>	; Referenced from <a href="#LEF2B">EF2B</a>, <a href="#LEF6E">EF6E</a>, <a href="#LEF7E">EF7E</a>
+	; --- START PROC LEFE8 ---
+LEFE8:	push	hl</a>
+<a name="LEFE9"></a>	push	bc</a>
+<a name="LEFEA"></a>	push	af</a>
+<a name="LEFEB"></a>	ld	c,0A0h</a>
+<a name="LEFED"></a>	ld	hl,0C000h</a>
+<a name="LEFF0"></a>	nop</a>
+<a name="LEFF1"></a>	nop</a>
+<a name="LEFF2"></a>	nop</a>
+<a name="LEFF3"></a>	nop</a>
+<a name="LEFF4"></a>	nop</a>
+<a name="LEFF5"></a>	nop</a>
+<a name="LEFF6"></a>	ld	b,0C0h</a>
+<a name="LEFF8"></a>
+	; Referenced from <a href="#LEFFA">EFFA</a>
+LEFF8:	ld	(hl),c</a>
+<a name="LEFF9"></a>	inc	hl</a>
+<a name="LEFFA"></a>	djnz	<a	href="#LEFF8">LEFF8</a></a>
+<a name="LEFFC"></a>	pop	af</a>
+<a name="LEFFD"></a>	pop	bc</a>
+<a name="LEFFE"></a>	pop	hl</a>
+<a name="LEFFF"></a>	ret</a>
+
+</code></pre>
+</body>
+</head>
