@@ -23,9 +23,6 @@ let canvas, canvasContext;
 let screenCanvas, screenContext;
 let imageData, bmp;
 
-let rgbmask_opacity = 0.0;
-let rgbmask_size = 3;
-
 let saturation = 1.0;
 
 function calculateGeometry() {
