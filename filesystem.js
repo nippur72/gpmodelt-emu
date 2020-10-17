@@ -1,4 +1,4 @@
-const STORAGE_KEY = "CHILDZ";
+const STORAGE_KEY = "gpmodelt";
 
 const idb = idbKeyval;
 const store = new idb.Store(STORAGE_KEY, STORAGE_KEY);
@@ -62,9 +62,7 @@ async function load(filename, p) {
 
         if(ext === ".bin") await load_file(filename, p);
    else if(ext === ".dsk") await load_disk(filename, p);
-   else if(ext === ".nic") await load_disk(filename, p);
-   else if(ext === ".emu") await load_state(filename);
-   else console.log("give filename .bin, .dsk or .emu extension");
+   else console.log("give filename .bin or .dsk extension");
 }
 
 async function save(filename, p1, p2) {
@@ -72,13 +70,11 @@ async function save(filename, p1, p2) {
 
         if(ext == ".bin") await save_file(filename, p1, p2);
    else if(ext == ".dsk") await save_disk(filename, p1);
-   else if(ext == ".nic") await save_disk(filename, p1);
-   else if(ext == ".emu") await save_state(filename);
-   else console.log("give filename .bin, .dsk or .emu extension");
+   else console.log("give filename .bin or .dsk extension");
 }
 
 function loadBytes(bytes, address, fileName) {
-   const startAddress = (address === undefined) ? 0x0400 : address;
+   const startAddress = (address === undefined) ? 0x0100 : address;
    const end = startAddress + bytes.length - 1;
 
    for(let i=0,t=startAddress;t<=end;i++,t++) {
