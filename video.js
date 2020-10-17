@@ -91,7 +91,7 @@ function buildPalette() {
    setPalette( 5, 0x80, 0x30, 0xf0);  /* magenta */
    setPalette( 6, 0x6c, 0x87, 0x01);  /* yellow */
    setPalette( 7, 0xc0, 0xc0, 0xc0);  /* bright grey */
-   setPalette( 8, 0x1f, 0x1f, 0x1f);  /* dark grey */
+   setPalette( 8, 0x25, 0x25, 0x25);  /* dark grey */
    setPalette( 9, 0x80, 0x80, 0xff);  /* bright blue */
    setPalette(10, 0x50, 0xFF, 0x50);  /* bright green */
    setPalette(11, 0x87, 0xc5, 0xff);  /* bright cyan */
