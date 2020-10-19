@@ -68,8 +68,8 @@ async function crun(filename, address) {
 }
 
 function drag_drop_disk(diskname, bytes) {
-   //console.log(`dropped disk "${diskname}"`);
-   //writeFile(diskname, bytes);
+   console.log(`dropped disk "${diskname}"`);
+   writeFile(diskname, bytes);
 }
 
 function paste(text) {   
@@ -82,7 +82,7 @@ function paste(text) {
 }
 
 function zap() {      
-   for(let t=0;t<memory.length;t++) memory[t] = (Math.random()*4096) & 0xFF;
+   for(let t=0;t<memory.length;t++) memory[t] = 0x76; //(Math.random()*4096) & 0xFF;
    initMem();   
    let state = cpu.getState();
    state.halted = true;
@@ -163,7 +163,7 @@ function not_bit(b,n) {
 function dumpStack() {
    const sp = cpu.getState().sp;
 
-   for(let t=sp;t<0xd000;t+=2) {
+   for(let t=sp;t<0xC000;t+=2) {
       const word = mem_read_word(t);
       console.log(`${hex(t,4)}: ${hex(word,4)}  (${word})`);
    }

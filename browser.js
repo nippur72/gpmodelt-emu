@@ -103,6 +103,13 @@ function droppedFile(outName, bytes, address) {
       return;
    }   
 
+   const dsk = /\.dsk$/i;
+   if(dsk.test(outName)) {
+      drag_drop_disk(outName, bytes);
+      load(outName, 1);
+      return;
+   }
+
    const bin = /\.bin$/i;
    if(bin.test(outName)) {     
       writeFile(outName, bytes)

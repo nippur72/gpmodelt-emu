@@ -110,6 +110,9 @@ DF 1791 - Dati  (dovrebbe essere BF ???)
     - Bit 6: Lettura linea INTREQ 1791
     - Bit 7: Lettura linea DATA REQ 1791
 
+la porta 3f serve per single side e per selezionare la faccia
+la macchina vede A=1°drive side A, B=1°drive sideB, C=2°drivesideA e D_2°drive sideB
+
 ## PORTA 77h ACI CASSETTE (pag. 74 manuale utente)
 
 In uscita:
@@ -132,4 +135,22 @@ In lettura:
 74165   Parallel 8 Bit shift registers
 7432    Quad 2-input OR gate
 74LS245 3-STATE Octal Bus Transceiver
+
+
+## 1791 notes
+
+- /MR master reset is not connected
+- /D0-/D7 are bit inverted
+- DRQ (DATA REQUEST)
+-     READ:  1=data is ready in data register
+-     WRITE: 1=data register is empty
+-     reset when CPU reads or writes the data register
+- INTRQ set   to 1 when a command is completed
+-       reset to 0 when reading the status register writing to command register
+- HLT  (chiamato HLD nel manuale) set to 1 when the drive head is engaged
+- Track register is incremented/decremented automatically when head steps
+- /DDEN = 1 on the GP => single density (FM)
+- STATUS REGISTER
+
+- IBM 3470: 26 sectors per track, 128 bytes per sectors, 77 tracce
 
