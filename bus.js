@@ -5,6 +5,7 @@ function mem_read(address) {
 function mem_write(address, value) {
    // TODO replicate video memory pages
    if(address <= 0xCFFF) memory[address] = value;
+   //if(address < 0xb000) console.log(`POKE &h${hex(address,4)}, &h${hex(value)} pc=${hex(cpu.getState().pc,4)}`);
 }
 
 let warnings = 0;
