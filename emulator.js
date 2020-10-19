@@ -10,10 +10,11 @@ function initMem() {
       }
    }
    
-   rom_load(rom_E000,      0xE000);
-   rom_load(rom_E400,      0xE400);
+   rom_load(rom_E000,        0xE000);
+   rom_load(rom_E400,        0xE400);
    rom_load(rom_E800_FDC8, 0xE800);
-   rom_load(rom_EC00_ACI,  0xEC00);
+   //rom_load(rom_E800_FDC525, 0xE800);
+   rom_load(rom_EC00_ACI,    0xEC00);
 
    rom_load([ 0xC3, 0x00, 0xE0 ], 0x0000); // JP E000
 }
@@ -55,9 +56,7 @@ let options = {
    saturation: 1.0,
    bt: undefined,
    bb: undefined,
-   bh: undefined,
-   rgbmaskopacity: 0.0,
-   rgbmasksize: 3
+   bh: undefined
 };
 
 function cpuCycle() {
