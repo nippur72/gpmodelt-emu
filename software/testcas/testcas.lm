@@ -1,0 +1,36 @@
+;
+; Programma di test della porta cassetta del GP Model T
+; pensato per essere caricato dal T-MON
+;
+; Legge il bit della cassetta e lo visualizza a video
+; sotto forma di carattere 0 o 32
+;
+; Mettendo in input un'onda quadra a 1497.35 Hz si dovrebbe
+; vedere un pattern stabile a video
+
+ORG $0100
+
+CASPORT EQU $77         ; cassette input port
+CASMASK EQU $2          ; bit 1 = cassette audio input
+VIDEO   EQU $C000       ; video start address
+
+testcas:
+    ld   c,CASPORT
+    ld   HL,VIDEO
+
+readbit:
+    in   a,(c)         ;
+    and  CASMASK       ; legge bit 1 dalla porta cassetta
+    rla                ;
+    rla                ;
+    rla                ;
+    rla                ;
+    ld   (hl),a        ; lo scrive a video come carattere 0 o 32
+    inc  hl            ; incrementa il video
+    ld   a,h           ;
+    and  $c3           ;
+    ld   h,a           ; h = h and $C3, restringe gli indirizzi C0-C3
+    jr   readbit       ; loopa
+
+
+
