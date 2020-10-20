@@ -1,8 +1,43 @@
+let keyboard_buffer = [];
+
 let key_pressed_ascii = -1;
 
+let KEYBOARD_USE_BUFFER = true;
+
 function keyboard_read() {
-   if(key_pressed_ascii == -1) return 0xFF;
-   return key_pressed_ascii ^ 0x7f;
+   let key;
+
+   if(!KEYBOARD_USE_BUFFER) {
+      key = keyascii;
+   }
+   else {
+      if(keyboard_buffer.length == 0) key = -1;
+      else {
+         key = keyboard_buffer[0];
+         keyboard_buffer = keyboard_buffer.slice(1);
+      }
+   }
+
+   if(key == -1) return 0xFF;
+   else return key ^ 0x7f;
+}
+
+function keyboard_presskey(keyascii) {
+   if(!KEYBOARD_USE_BUFFER) {
+      key_pressed_ascii = keyascii;
+   }
+   else {
+      keyboard_buffer.push(keyascii);
+   }
+}
+
+function keyboard_releasekey() {
+   if(!KEYBOARD_USE_BUFFER) {
+      key_pressed_ascii = -1;
+   }
+   else {
+      keyboard_buffer.push(-1);
+   }
 }
 
 function keyDown(e) { 
@@ -11,13 +46,6 @@ function keyDown(e) {
    audioContextResume();
 
    let key = e.key;
-
-
-   // disable auto repeat
-   if(e.repeat) {
-      e.preventDefault(); 
-      return;
-   } 
 
    // *** special (non characters) keys ***
 
@@ -134,12 +162,12 @@ function keyDown(e) {
    
    // console.log("down",e);
 
-   if(k !== 0) key_pressed_ascii = k;
+   if(k !== 0) {
+      keyboard_presskey(k);
+   }
    else {
       if(e.key.length === 1) {         
-         key_pressed_ascii = e.key.charCodeAt(0);
-         console.log(`key pressed: ${e.key.toUpperCase()}`);
-         pending_key = true;
+         keyboard_presskey(e.key.charCodeAt(0));
       }
    }
 
@@ -147,7 +175,7 @@ function keyDown(e) {
 }
 
 function keyUp(e) {
-   key_pressed_ascii = -1;
+   keyboard_releasekey();
    e.preventDefault();
 }
 
