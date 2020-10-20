@@ -98,8 +98,7 @@ function renderLines(nlines, hidden) {
 
 let haltD = false;
 
-function renderAllLines() {   
-   // cpu.interrupt(false, 0);                         
+function renderAllLines() {
    renderLines(HIDDEN_SCANLINES_TOP, true);               
    renderLines(SCREEN_H, false);                    
    renderLines(HIDDEN_SCANLINES_BOTTOM, true);               
