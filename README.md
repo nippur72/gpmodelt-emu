@@ -20,18 +20,18 @@ U4	EC00..EFFF
 
 DT49-48_U1.BIN     TMON ???             slot U1
 ROM_MT16_U2.BIN    TMON ???             slot U2
-FDC8-8_U3.BIN      floppy 8"            slot U3   (76 tracks*)
-ROM-U3.BIN         floppy 5.25"         slot U3   (39 tracks*)
+FDC8-8_U3.BIN      floppy 8"            slot U3   (77 tracks*)
+ROM-U3.BIN         floppy 5.25"         slot U3   (40 tracks*)
 ACI_15-48_U4.BIN   interfaccia cassette slot U4
 
 (*) le due EPROM differiscono per 4 bytes
 
 ### ROM SCHEDA VIDEO
 
-GCE_M1.U3          chargen 64x16        MEM BOARD  pixel da 0..7
-GCE_M2.U4          chargen 64x16        MEM BOARD  pixel da 8..12
-G-CAR-A_U7.BIN     chargen 80x24        MEM BOARD  pixel da 0..7
-G-CAR-B_U8.BIN     chargen 80x24        MEM BOARD  pixel da 8..11?
+GCE_M1.U3          chargen 64x16        MEM BOARD  pixel riga da 0..7
+GCE_M2.U4          chargen 64x16        MEM BOARD  pixel riga da 8..12
+G-CAR-A_U7.BIN     chargen 80x24        MEM BOARD  pixel riga da 0..7
+G-CAR-B_U8.BIN     chargen 80x24        MEM BOARD  pixel riga da 8..11?
 
 
 ## MEMORY MAP
@@ -53,24 +53,27 @@ BF06-BF07 cursor address in memory
 
 BFE0 address to VDD cursor info table
 
-E000    MONITOR   monitor entry point
+E000    MONITOR monitor entry point
 E003-4  pointer to VDD table
 
-?? E003 VDR       video driver, prints character in A
+?? E003 VDR video driver, prints character in A
 E3DC (E006??) KBDIN keyboard input, puts read key in A
 E3FA (E009??) WRSTG write string, pointed by HL until a char with bit 7 turned on,
                     register A is destroyed, HL points to end of string
-?? E00C PRTDVR    printer driver, prints char in A (after CR or LF)
-?? E00F INIZV     inizializza il video
-?? E012 INIZP     inizializza la stampante
-?? E015 PTBTE     stampa BC in esadecimale (BC destroyed)
-?? E018 TOGCUR    toggle cursor
+?? E00C PRTDVR printer driver, prints char in A (after CR or LF)
+?? E00F INIZV inizializza il video
+?? E012 INIZP inizializza la stampante
+?? E015 PTBTE stampa BC in esadecimale (BC destroyed)
+?? E018 TOGCUR toggle cursor
 
-E40C NOBLK
+E40C NOBLK attende il sincronismo video per evitare il "brillio" durante l'accesso al video
 
 ## TASTIERA
 
 - Tasto BRK genera RESET sullo Z80
+- I/O port $FF in sola lettura
+- bit 0..6: carattera ASCII premuto (inverito)
+- bit 7: 1=tasto premuto
 
 ## VIDEO
 
