@@ -76,9 +76,13 @@ function paste(text) {
    for(let t=0;t<text.length;t++) {
       const v = text.charCodeAt(t);
       key_pressed_ascii = v;
-      cpu.interrupt(false, 0x70); // trigger interrupt mode 2 (im 2), jumps at $0070
+      console.log(v);
       renderAllLines();
-   }   
+      renderAllLines();
+      key_pressed_ascii = -1;
+      renderAllLines();
+      renderAllLines();
+   }
 }
 
 function zap() {      
