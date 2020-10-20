@@ -3,7 +3,7 @@
 let border_top = undefined;
 let border_bottom = undefined;
 let border_h = undefined;
-let aspect = 1.55;
+let aspect = 1.75; // aspect varies greatly due to Y deflection trimmer regulation
 
 const TEXT_W = 512; 
 const TEXT_H = 208;
