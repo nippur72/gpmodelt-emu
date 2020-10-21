@@ -510,10 +510,32 @@ class Drive {
 const drives = [ new Drive(0), new Drive(1) ];
 
 async function cpm() {
-  await fetchProgramAll("GP16_IMD.dsk");
-  await fetchProgramAll("GP02_IMD.dsk");
-  await load("GP16_IMD.dsk",1);
-  await load("GP02_IMD.dsk",2);
+   if(!await fileExists("GP01_IMD.dsk")) await fetchProgramAll("GP01_IMD.dsk");
+   if(!await fileExists("GP02_IMD.dsk")) await fetchProgramAll("GP02_IMD.dsk");
+   if(!await fileExists("GP03_IMD.dsk")) await fetchProgramAll("GP03_IMD.dsk");
+   if(!await fileExists("GP04_IMD.dsk")) await fetchProgramAll("GP04_IMD.dsk");
+   if(!await fileExists("GP05_IMD.dsk")) await fetchProgramAll("GP05_IMD.dsk");
+   if(!await fileExists("GP06_IMD.dsk")) await fetchProgramAll("GP06_IMD.dsk");
+   if(!await fileExists("GP07_IMD.dsk")) await fetchProgramAll("GP07_IMD.dsk");
+   if(!await fileExists("GP08_IMD.dsk")) await fetchProgramAll("GP08_IMD.dsk");
+   if(!await fileExists("GP09_IMD.dsk")) await fetchProgramAll("GP09_IMD.dsk");
+   if(!await fileExists("GP10_IMD.dsk")) await fetchProgramAll("GP10_IMD.dsk");
+   if(!await fileExists("GP11_IMD.dsk")) await fetchProgramAll("GP11_IMD.dsk");
+   if(!await fileExists("GP12_IMD.dsk")) await fetchProgramAll("GP12_IMD.dsk");
+   if(!await fileExists("GP13_IMD.dsk")) await fetchProgramAll("GP13_IMD.dsk");
+   if(!await fileExists("GP14_IMD.dsk")) await fetchProgramAll("GP14_IMD.dsk");
+   if(!await fileExists("GP15_IMD.dsk")) await fetchProgramAll("GP15_IMD.dsk");
+   if(!await fileExists("GP16_IMD.dsk")) await fetchProgramAll("GP16_IMD.dsk");
+   if(!await fileExists("GP17_IMD.dsk")) await fetchProgramAll("GP17_IMD.dsk");
+   if(!await fileExists("GP18_IMD.dsk")) await fetchProgramAll("GP18_IMD.dsk");
+   if(!await fileExists("GP19_IMD.dsk")) await fetchProgramAll("GP19_IMD.dsk");
+   if(!await fileExists("GP20_IMD.dsk")) await fetchProgramAll("GP20_IMD.dsk");
+   if(!await fileExists("GP21_IMD.dsk")) await fetchProgramAll("GP21_IMD.dsk");
+   if(!await fileExists("GP22_IMD.dsk")) await fetchProgramAll("GP22_IMD.dsk");
+   if(!await fileExists("GP23_IMD.dsk")) await fetchProgramAll("GP23_IMD.dsk");
+
+   await load("GP16_IMD.dsk",1);
+   await load("GP02_IMD.dsk",2);
 }
 
 function dump_disk(track, sector) {
