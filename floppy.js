@@ -510,9 +510,10 @@ class Drive {
 const drives = [ new Drive(0), new Drive(1) ];
 
 async function cpm() {
+  await fetchProgramAll("GP16_IMD.dsk");
+  await fetchProgramAll("GP02_IMD.dsk");
   await load("GP16_IMD.dsk",1);
   await load("GP02_IMD.dsk",2);
-  await paste("\rBD");
 }
 
 function dump_disk(track, sector) {

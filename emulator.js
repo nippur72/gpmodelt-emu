@@ -310,3 +310,5 @@ if(autoload !== undefined) {
    // gives 1 sec delay, so that load happens after ram is initialized by the eprom
    setTimeout(()=>loadBytes(autoload), 1000);
 }
+
+cpm();
