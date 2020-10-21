@@ -104,7 +104,7 @@ function paste(text) {
 }
 
 function zap() {      
-   for(let t=0;t<memory.length;t++) memory[t] = 0x76; //(Math.random()*4096) & 0xFF;
+   for(let t=0;t<memory.length;t++) memory[t] = (Math.random()*4096) & 0xFF;
    initMem();   
    let state = cpu.getState();
    state.halted = true;
