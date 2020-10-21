@@ -105,7 +105,7 @@ BE 1791 - Settore
 DF 1791 - Dati  (dovrebbe essere BF ???)
 
 3fh: (in uscita)
-    - Bit 0 ed 1: selezione drive (0=drive 0)
+    - Bit 0,1,2: selezione drive 001,010,100
     - Bit 3: selezione side (0=2.nda faccia)
     (in ingresso)
     - Bit 0, 1, 3: rilettura dati da uscita

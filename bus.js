@@ -8,25 +8,12 @@ function mem_write(address, value) {
    //if(address < 0xb000) console.log(`POKE &h${hex(address,4)}, &h${hex(value)} pc=${hex(cpu.getState().pc,4)}`);
 }
 
-let warnings = 0;
-
 function io_read(ioport) {  
    const port = ioport & 0xFF;
    switch(port) {
 
       case 0x3f:
-         let byte = FDC_drive_number                |
-                    ((FDC_side^1)            << 2)  |
-                    (FDC_HLD                 << 5)  |
-                    (FDC_INTREQ              << 6)  |
-                    (FDC_STATUS_DATA_REQUEST << 7);
-
-         warnings++;
-         if(warnings < 1000) {
-            // console.log(`read from drive select: ret=${hex(byte)}h drive number=${FDC_drive_number} side=${FDC_side} INTREQ=${FDC_INTREQ} DATAREQ=${FDC_STATUS_DATA_REQUEST}`);
-         }
-
-         return byte;
+         return FDC_read_port_3f();
 
       case 0xff:
       case 0xd8:
@@ -46,10 +33,9 @@ function io_read(ioport) {
          return ~FDC_read(reg) & 0xFF;   // negated because D0-D7 are negated on the 1791
       }
    }
-   warnings++;
-   if(warnings < 1000) {
-      console.warn(`read from unknown port ${hex(port)}h`);
-   }
+
+   warn(`read from unknown port ${hex(port)}h`);
+
    return 0x00;
 }
 
@@ -59,14 +45,10 @@ let ser_data = 0;
 function io_write(ioport, value) {    
    const port = ioport & 0xFF;
 
-   // console.log(`io write ${hex(port)} ${hex(value)}`)  
+   //console.log(`io write ${hex(port)} ${hex(value)}`)
    switch(port) {
       case 0x3f:
-         // scheda FDC
-         FDC_drive_number = value & 0b11;
-         FDC_side = ((value & 0b100) >> 2) ^ 1;
-         //console.log(`write to drive select: drive number=${FDC_drive_number} side=${FDC_side} ${cpu_status()}`);
-         console.log(`drive select: drive number=${FDC_drive_number} side=${FDC_side}`);
+         FDC_write_port_3f(value);
          return;
 
       case 0x77:
@@ -85,9 +67,6 @@ function io_write(ioport, value) {
         return;
       }
    } 
-   warnings++;
-   if(warnings < 1000) {
-      console.warn(`write on unknown port ${hex(port)}h value ${hex(value)}h`);
-   }
+   warn(`write on unknown port ${hex(port)}h value ${hex(value)}h`);
 }
 

@@ -1,6 +1,20 @@
+let debug_write_track      = false;
+let debug_read_track       = false;
+let debug_write_sector     = false;
+let debug_write_sector_dma = false;
+let debug_read_sector      = false;
+let debug_read_sector_dma  = false;
+let debug_read_address     = false;
+let debug_read_address_dma = false;
+let debug_read_status      = false;
+let debug_read_3f          = false;
+
 // 3f interface outside registers
-let FDC_drive_number = 0;
+let FDC_drive_number = 3;
 let FDC_side = 0;
+
+let FDC_side_descs = [ "S0", "S1" ];
+let FDC_drive_number_descs = [ "D0", "D1", "D2", "D3" ];
 
 // 1791 internal registers
 let FDC_track = 0;
@@ -14,6 +28,8 @@ let FDC_DMA_NONE         = 0;
 let FDC_DMA_READ_ADDRESS = 1;
 let FDC_DMA_READ_SECTOR  = 2;
 let FDC_DMA_WRITE_SECTOR = 3;
+let FDC_DMA_READ_TRACK   = 3;
+let FDC_DMA_WRITE_TRACK  = 4;
 
 let FDC_dma = FDC_DMA_NONE;
 
@@ -54,14 +70,56 @@ let FDC_MEDIA_SIZE = FDC_SECTORSIZE * FDC_NSECTORS * FDC_NSIDES * FDC_NTRACKS;
 
 function FDC_getpos(side, track, sector) {
 
-   let s = sector -1;
-   if(s<0) s=0;
+   let sec = sector -1;
+   if(sec<0) sec=0;
+
+   let sid = side == 0 ? 0 : 1;
 
    let pos = track * FDC_NSIDES * FDC_SECTORSIZE * FDC_NSECTORS;
-   pos += side * FDC_SECTORSIZE * FDC_NSECTORS;
-   pos += s * FDC_SECTORSIZE;
+   pos += sid * FDC_SECTORSIZE * FDC_NSECTORS;
+   pos += sec * FDC_SECTORSIZE;
+
+   /*
+   let pos = track * FDC_NSIDES * FDC_SECTORSIZE * FDC_NSECTORS;
+   pos += s * FDC_SECTORSIZE * FDC_NSIDES;
+   pos += side * FDC_SECTORSIZE;
+   */
 
    return pos;
+}
+
+let warnings = 0;
+function warn(msg) {
+   warnings++;
+   if(warnings < 1000) {
+      console.log(msg);
+   }
+}
+
+function FDC_read_port_3f() {
+   let byte = (FDC_drive_number        << 0)  |
+              (FDC_side                << 3)  |
+              (FDC_HLD                 << 5)  |
+              (FDC_INTREQ              << 6)  |
+              (FDC_STATUS_DATA_REQUEST << 7);
+
+   if(debug_read_3f) console.log(`read from drive select: ret=${hex(byte)}h drive number=${FDC_drive_number} side=${FDC_side} INTREQ=${FDC_INTREQ} DATAREQ=${FDC_STATUS_DATA_REQUEST}`);
+
+   return byte;
+}
+
+function FDC_write_port_3f(value) {
+   let drive_number = value & 0b11;
+   let side = (value & 0b1000) >> 3;
+
+   //if(drive_number != FDC_drive_number) console.log(`**** drive number changed to "${FDC_drive_number_descs[drive_number]}"`);
+   //if(side != FDC_side) console.log(`**** side changed to "${FDC_side_descs[side]}"`);
+
+   FDC_drive_number = drive_number;
+   FDC_side = side;
+
+   //console.log(`write to drive select: drive number=${FDC_drive_number} side=${FDC_side} ${cpu_status()}`);
+   //console.log(`drive select: drive number=${FDC_drive_number} side=${FDC_side}`);
 }
 
 function FDC_read(port) {
@@ -69,31 +127,36 @@ function FDC_read(port) {
       case 0x00:
          // read status register
          FDC_INTREQ = 0;  // reading the status registers clears INTREQ
-         console.log(`read FDC status = ${hex(FDC_status)}h`);
+         if(debug_read_status) console.log(`read FDC status = ${hex(FDC_status)}h`);
          return FDC_status;
 
       case 0x01:
          // read track register
-         console.warn(`read FDC track register}`);
+         //console.warn(`read FDC track register}`);
          return FDC_track;
 
       case 0x02:
          // read sector register
-         console.warn(`read FDC sector register}`);
+         //console.warn(`read FDC sector register}`);
          return FDC_sector;
 
       case 0x03:
          // read data register
 
-         let side = FDC_drive_number == 1 || FDC_drive_number == 3 ? 1 : 0;
-         let drvn = FDC_drive_number == 0 || FDC_drive_number == 1 ? 0 : 1;
+         // let side = FDC_drive_number == 1 || FDC_drive_number == 3 ? 1 : 0;
+
+         let side = FDC_side == 0 ? 1 : 0;
+
+         let drvn = FDC_drive_number == 2 ? 0 : 1;
          let pos = FDC_getpos(side, FDC_track, FDC_sector) + FDC_sector_ptr;
 
          // read sector transfer
          if(FDC_dma === FDC_DMA_READ_SECTOR) {
 
-            if(FDC_sector_ptr == 0)   console.log(`sector start read`);
-            if(FDC_sector_ptr == 127) console.log(`sector end read`);
+            if(debug_read_sector_dma && FDC_sector_ptr == 0)   console.log(`sector start read`);
+            if(debug_read_sector_dma && FDC_sector_ptr == 127) console.log(`sector end read`);
+
+            //if(FDC_sector_ptr == 0) console.log(`sector start read drvn=${drvn} pos=${pos}`);
 
             FDC_data = drives[drvn].floppy[pos];
             FDC_sector_ptr++;
@@ -109,16 +172,15 @@ function FDC_read(port) {
                FDC_dma = FDC_DMA_NONE;         // reading ended
             }
             FDC_update_status(FDC_COMMAND_READ_SECTOR);
-            //console.log(`read FDC READ ADDRESS byte index=${FDC_sector_ptr-1} data=${hex(~FDC_data & 0xff)}h`);
          }
          // read address transfer
          else if(FDC_dma === FDC_DMA_READ_ADDRESS) {
-                 if(FDC_sector_ptr === 0) FDC_data = 0;           // track address
-            else if(FDC_sector_ptr === 1) FDC_data = 0;           // side number
-            else if(FDC_sector_ptr === 2) FDC_data = 0;           // sector address
-            else if(FDC_sector_ptr === 3) FDC_data = 0;           // sector length 0=128 bytes
-            else if(FDC_sector_ptr === 4) FDC_data = 0x00;        // CRC 1 (fake)
-            else if(FDC_sector_ptr === 5) FDC_data = 0x00;        // CRC 2 (fake)
+                 if(FDC_sector_ptr === 0) FDC_data = 0;                  // dummy data, track address
+            else if(FDC_sector_ptr === 1) FDC_data = 0;                  // dummy data, side number
+            else if(FDC_sector_ptr === 2) FDC_data = 0;                  // dummy data, sector address
+            else if(FDC_sector_ptr === 3) FDC_data = 0;                  // dummy data, sector length 0=128 bytes
+            else if(FDC_sector_ptr === 4) FDC_data = 0x00;               // dummy data, CRC 1 (fake)
+            else if(FDC_sector_ptr === 5) FDC_data = 0x00;               // dummy data, CRC 2 (fake)
 
             FDC_sector_ptr++;
 
@@ -137,13 +199,12 @@ function FDC_read(port) {
             }
             FDC_update_status(FDC_COMMAND_READ_ADDRESS);
 
-            console.log(`read FDC READ ADDRESS byte index=${FDC_sector_ptr-1} data=${hex(FDC_data)}h`);
+            if(debug_read_address_dma) console.log(`read FDC READ ADDRESS byte index=${FDC_sector_ptr-1} data=${hex(FDC_data)}h`);
          }
 
          return FDC_data;
    }
 }
-
 
 function FDC_write(port, value) {
    switch(port) {
@@ -158,19 +219,67 @@ function FDC_write(port, value) {
       case 0x01:
          // track port
          FDC_track = value;
-         //console.log(`set FDC track = ${hex(value)}h ${cpu_status()}`);
+         //console.log(`set FDC track = ${hex(value)}h`);
          return;
 
       case 0x02:
          // sector port
          FDC_sector = value;
-         //console.warn(`set FDC sector = ${hex(value)}h ${cpu_status()}`);
+         //console.warn(`set FDC sector = ${hex(value)}h`);
          return;
 
       case 0x03:
          // data port
          FDC_data = value;
-         //console.log(`FDC data = ${hex(value)}h ${cpu_status()}`);
+         // write data register
+
+         let side = FDC_side == 0 ? 1 : 0;
+         let drvn = FDC_drive_number == 2 ? 0 : 1;
+
+         // write sector transfer
+         if(FDC_dma === FDC_DMA_WRITE_SECTOR) {
+            let pos = FDC_getpos(side, FDC_track, FDC_sector) + FDC_sector_ptr;
+
+            if(debug_write_sector_dma && FDC_sector_ptr == 0)                  console.log(`sector start write`);
+            if(debug_write_sector_dma && FDC_sector_ptr == FDC_SECTORSIZE - 1) console.log(`sector end write`);
+
+            drives[drvn].floppy[pos] = FDC_data;
+            FDC_sector_ptr++;
+
+            if(FDC_sector_ptr < FDC_SECTORSIZE) {
+               FDC_STATUS_DATA_REQUEST = 1;   // there is still data to write
+               FDC_STATUS_BUSY = 1;           // and we are still busy
+            }
+            else {
+               FDC_STATUS_DATA_REQUEST = 0;    // no more data
+               FDC_STATUS_BUSY = 0;            // we are no longer busy
+               FDC_INTREQ      = 1;            // and the READ command terminated
+               FDC_dma = FDC_DMA_NONE;         // reading ended
+            }
+            FDC_update_status(FDC_COMMAND_WRITE_SECTOR);
+         }
+         else if(FDC_dma === FDC_DMA_WRITE_TRACK) {
+            let pos = FDC_getpos(side, FDC_track, 1) + FDC_sector_ptr;
+
+            if(debug_write_sector_dma && FDC_sector_ptr == 0)                                 console.log(`track start write`);
+            if(debug_write_sector_dma && FDC_sector_ptr == FDC_NSECTORS * FDC_SECTORSIZE - 1) console.log(`track end write`);
+
+            drives[drvn].floppy[pos] = FDC_data;
+            FDC_sector_ptr++;
+
+            if(FDC_sector_ptr < FDC_NSECTORS * FDC_SECTORSIZE) {
+               FDC_STATUS_DATA_REQUEST = 1;   // there is still data to write
+               FDC_STATUS_BUSY = 1;           // and we are still busy
+            }
+            else {
+               FDC_STATUS_DATA_REQUEST = 0;    // no more data
+               FDC_STATUS_BUSY = 0;            // we are no longer busy
+               FDC_INTREQ      = 1;            // and the READ command terminated
+               FDC_dma = FDC_DMA_NONE;         // reading ended
+            }
+            FDC_update_status(FDC_COMMAND_WRITE_TRACK);
+         }
+
          return;
    }
 }
@@ -263,18 +372,20 @@ function FDC_parse_command(cmd) {
    // type I flags
    let V = (cmd >> 2) & 1;  // verify bit
    let h = (cmd >> 3) & 1;  // HLD bit
+   let u = (cmd >> 4) & 1;  // update track bit
 
    // type II & III flags
-   let C = (cmd >> 1) & 1;  // F1 bit aka "enable side select compare"
-   let E = (cmd >> 2) & 1;  // E bit (15 ms delay)
-   let S = (cmd >> 3) & 1;  // F2 bit aka "side to compare"
-   let m = (cmd >> 4) & 1;  // m (multiple sectors read/write) bit
+   let C  = (cmd >> 1) & 1;  // F1 bit aka "enable side select compare"
+   let E  = (cmd >> 2) & 1;  // E bit (15 ms delay)
+   let S  = (cmd >> 3) & 1;  // F2 bit aka "side to compare"
+   let m  = (cmd >> 4) & 1;  // m (multiple sectors read/write) bit
+   let a0 = (cmd >> 0) & 1;  // a0 data address mark 1=F8, 0=FB
 
    // RESTORE command
    if((cmd >> 4) === 0b0000) {
       // TODO V,h bits ignored
       //console.log(`FDC RESTORE with V=${V} h=${h} @@@ ${cpu_status()}`);
-      console.log(`FDC RESTORE`);
+      //console.log(`FDC RESTORE`);
       FDC_track = 0;             // goes to track 0
       FDC_INTREQ = 1;            // command terminated
       FDC_STATUS_BUSY = 0;       // no longer busy
@@ -287,7 +398,7 @@ function FDC_parse_command(cmd) {
    if((cmd >> 4) === 0b0001) {
       // TODO V,h bits ignored
       //console.log(`FDC SEEK from track ${FDC_track} to ${FDC_data} with V=${V} h=${h} @@@ ${cpu_status()}`);
-      console.log(`FDC SEEK from track ${FDC_track} to ${FDC_data}`);
+      //console.log(`FDC SEEK from track ${FDC_track} to ${FDC_data}`);
 
       FDC_track = FDC_data;      // does the seek from current track to desidered track
       FDC_INTREQ = 1;            // command terminated
@@ -297,11 +408,56 @@ function FDC_parse_command(cmd) {
       return;
    }
 
+   // STEP IN command
+   if((cmd & 0b11100000) === 0b01000000) {
+      // TODO V,h bits ignored
+      //console.log(`FDC STEP IN at track ${FDC_track}`);
+
+      if(u === 1) FDC_track++    // increment track register if u bit is 1
+      FDC_INTREQ = 1;            // command terminated
+      FDC_STATUS_BUSY = 0;       // no longer busy
+
+      FDC_update_status(FDC_COMMAND_TYPE_I);
+      return;
+   }
+
+   // WRITE SECTOR command
+   if((cmd & 0b11100000) === 0b10100000) {
+      // TODO m,F1,F2,E,a0 bits ignored
+      //console.log(`FDC READ SECTOR track ${FDC_track} sec ${FDC_sector} with m=${m} S=${S} C=${C} E=${E} @@@ ${cpu_status()}`);
+      if(debug_write_sector) console.log(`FDC WRITE SECTOR track ${FDC_track} sec ${FDC_sector} with m=${m}`);
+
+      FDC_STATUS_BUSY = 1;            // marks as busy
+      FDC_sector_ptr = 0;             // starts writing from byte 0
+      FDC_dma = FDC_DMA_WRITE_SECTOR; // enable writing
+      FDC_STATUS_DATA_REQUEST = 1;    // asks for a byte to be sent
+
+      FDC_update_status(FDC_COMMAND_WRITE_SECTOR);
+
+      return;
+   }
+
+   // WRITE TRACK command
+   if((cmd & 0b11110000) === 0b11110000) {
+      // TODO m,F1,F2,E,a0 bits ignored
+      //console.log(`FDC READ SECTOR track ${FDC_track} sec ${FDC_sector} with m=${m} S=${S} C=${C} E=${E} @@@ ${cpu_status()}`);
+      if(debug_write_track) console.log(`FDC WRITE TRACK track ${FDC_track}`);
+
+      FDC_STATUS_BUSY = 1;            // marks as busy
+      FDC_sector_ptr = 0;             // starts writing from byte 0
+      FDC_dma = FDC_DMA_WRITE_TRACK;  // enable writing
+      FDC_STATUS_DATA_REQUEST = 1;    // asks for a byte to be sent
+
+      FDC_update_status(FDC_COMMAND_WRITE_TRACK);
+
+      return;
+   }
+
    // READ SECTOR command
    if((cmd & 0b11100001) === 0b10000000) {
       // TODO m,F1,F2,E bits ignored
       //console.log(`FDC READ SECTOR track ${FDC_track} sec ${FDC_sector} with m=${m} S=${S} C=${C} E=${E} @@@ ${cpu_status()}`);
-      console.log(`FDC READ SECTOR track ${FDC_track} sec ${FDC_sector} with m=${m}`);
+      if(debug_read_sector) console.log(`FDC READ SECTOR track ${FDC_track} sec ${FDC_sector} with m=${m}`);
 
       FDC_STATUS_BUSY = 1;           // marks as busy
       FDC_sector_ptr = 0;            // starts reading from byte 0
@@ -317,7 +473,7 @@ function FDC_parse_command(cmd) {
    if((cmd & 0b11111011) === 0b11000000) {
       // TODO E bit ignored
       //console.warn(`FDC READ ADDRESS track ${FDC_track} sec ${FDC_sector} with E=${E} @@@ ${cpu_status()}`);
-      console.warn(`FDC READ ADDRESS track ${FDC_track} sec ${FDC_sector}`);
+      if(debug_read_address) console.log(`FDC READ ADDRESS track ${FDC_track} sec ${FDC_sector}`);
 
       FDC_STATUS_BUSY = 1;            // marks as busy
       FDC_sector_ptr = 0;             // starts sending first of 6 bytes
@@ -353,4 +509,15 @@ class Drive {
 // the actual floppy disks inserted in the drives
 const drives = [ new Drive(0), new Drive(1) ];
 
+async function cpm() {
+  await load("GP16_IMD.dsk",1);
+  await load("GP02_IMD.dsk",2);
+  await paste("\rBD");
+}
+
+function dump_disk(track, sector) {
+   let pos = FDC_getpos(0, track, sector);
+   let bytes = drives[0].floppy.slice(pos,pos+128);
+   dumpBytes(bytes, 0, 127);
+}
 

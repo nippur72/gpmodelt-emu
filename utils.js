@@ -18,6 +18,25 @@ function dumpMem(start, end, rows) {
    console.log(s);
 }
 
+function dumpBytes(bytes, start, end, rows) {
+   if(rows==undefined) rows=16;
+   let s="\r\n";
+   for(let r=start;r<=end;r+=rows) {
+      s+= hex(r, 4) + ": ";
+      for(let c=0;c<rows && (r+c)<=end;c++) {
+         const byte = bytes[r+c];
+         s+= hex(byte)+" ";
+      }
+      for(let c=0;c<rows && (r+c)<=end;c++) {
+         const byte = bytes[r+c];
+         s+= (byte>32 && byte<127) ? String.fromCharCode(byte) : '.' ;
+      }
+      s+="\n";
+   }
+   console.log(s);
+}
+
+
 function hexDump(memory, start, end, rows) {
    let s="";
    for(let r=start;r<end;r+=rows) {
@@ -75,11 +94,10 @@ function drag_drop_disk(diskname, bytes) {
 function paste(text) {   
    for(let t=0;t<text.length;t++) {
       const v = text.charCodeAt(t);
-      key_pressed_ascii = v;
-      console.log(v);
+      keyboard_presskey(v);
       renderAllLines();
       renderAllLines();
-      key_pressed_ascii = -1;
+      keyboard_releasekey();
       renderAllLines();
       renderAllLines();
    }

@@ -100,6 +100,17 @@ debugBefore = (function() {
    };
 })();
 
+// logs when PC = BA00h (CPM entry)
+debugBefore = (function() {
+   let lastpc = 0;
+   return function() {
+      if(lastpc === 0xBA00) {
+         // there was a call to RST 30
+         console.log(`CP/M entry point reached`);
+      }
+      lastpc = cpu.getState().pc;
+   };
+})();
 
 /*
 // *******************************************************************************
