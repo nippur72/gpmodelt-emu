@@ -220,7 +220,7 @@ function drawFrame_y_text(y)
 
 function setPixelBorder(x, y, color) {      
    const c0 = palette[color];   
-   const c1 = halfpalette[color];   
+   const c1 = palette[color];
    const ptr0 = ((y*2)+0) * SCREEN_W + x;   
    const ptr1 = ((y*2)+1) * SCREEN_W + x;      
    bmp[ ptr0 ] = c0;      
@@ -229,7 +229,7 @@ function setPixelBorder(x, y, color) {
 
 function setPixel640(x, y, color) {
    const c0 = palette[color];   
-   const c1 = halfpalette[color];   
+   const c1 = color === 8 ? palette[color] : halfpalette[color];
    const xx = x + BORDER_H;
    const yy = (y + BORDER_V)*2;
    const ptr0 = (yy+0) * SCREEN_W + xx;
@@ -240,7 +240,7 @@ function setPixel640(x, y, color) {
 
 function setPixel320(x, y, color) {   
    const c0 = palette[color];   
-   const c1 = halfpalette[color];   
+   const c1 = halfpalette[color];
    const yy = (y + BORDER_V) * 2;
    let ptr0 = (yy+0) * SCREEN_W + x*2 + BORDER_H;
    let ptr1 = (yy+1) * SCREEN_W + x*2 + BORDER_H;
