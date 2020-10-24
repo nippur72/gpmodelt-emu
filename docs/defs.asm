@@ -8,6 +8,7 @@ JUMPTOBDOS  EQU $0005   ; (3 bytes) JP BDOS
 
 ; CPM addresses
 STARTCCP    EQU $A400   ; start of CCP in memory
+STARTBDOS   EQU $AC06   ; start of BDOS in memory
 STARTBIOS   EQU $BA00   ; start of bios in memory
 
 ; CPM bios RAM workspace
@@ -44,13 +45,23 @@ EPROM_CURRDRIVE EQU $09  ; current drive for eprom routines
 
 MONITOR           EQU $E000    ; monitor entry point
 VDDPOINTER        EQU $E003    ; (word) address of the VDD table in memory (usually contains $BFE0)
+TMON              EQU $E02A    ; control back to TMON
+INIZS             EQU $E3D9    ; inizializza il sistema, monitor, porte I/O
 KBDIN             EQU $E3DC    ; keyboard input, puts read key in A
+TMONLOAD          EQU $E3DF    ; T-MON "L"
+INIZV             EQU $E3E2    ; inizializza il video
+INIZO             EQU $E3E5    ; inizializza le porte I/O
+RDNUM             EQU $E3E8    ; read HEX number from keyboard ant put in HL, D=0 exit with "." or "/"
+PTBTE             EQU $E3EB    ; stampa BC in esadecimale (BC destroyed)
+PRTAD0            EQU $E3EE    ; stampa BC in esadecimale con ":"
+RDCHR             EQU $E3F1    ; read char con echo
+CRLF              EQU $E3F7    ; stampa CR+LF
 WRSTG             EQU $E3FA    ; prints string in HL until char with 7 bit on
+TMONTEST          EQU $E3FD    ; T-MON "T"
 ;PRTDVR            EQU ??       ; printer driver, prints char in A (after CR or LF)
-;INIZV             EQU ??       ; E00F? inizializza il video
 ;INIZP             EQU ??       ; E012? inizializza la stampante
-;PTBTE             EQU ??       ; E015? stampa BC in esadecimale (BC destroyed)
 ;TOGCUR            EQU ??       ; E018? toggle cursor
+RDFLE             EQU $E406    ; read file from cassette (documented page 58)
 NOBLK             EQU $E40C    ; attende il sincronismo video per evitare il "brillio" durante l'accesso al video
 ;??                EQU $E650    ; ?? chiamata dall jump table del CBIOS, legge/scrive su 5Ch/5Dh
 ;??                EQU $E800    ; used by CBIOS
