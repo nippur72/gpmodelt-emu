@@ -1,4 +1,9 @@
 # CCP versions
+AAA DOS 2.04
+BBB loops on boot/doesn't boot
+CCC DOS 2.0
+DDD DOS 2.2
+EEE loops on boot/doesn't boot
 
 GP01_IMD.dsk.side0.ccp.bin - empty
 GP01_IMD.dsk.side1.ccp.bin - empty
@@ -6,7 +11,7 @@ GP02_IMD.dsk.side0.ccp.bin AAA
 GP02_IMD.dsk.side1.ccp.bin AAA
 GP03_IMD.dsk.side0.ccp.bin BBB
 GP03_IMD.dsk.side1.ccp.bin - empty
-GP04_IMD.dsk.side0.ccp.bin CCC possibly corrupted
+GP04_IMD.dsk.side0.ccp.bin CCC
 GP04_IMD.dsk.side1.ccp.bin - empty
 GP05_IMD.dsk.side0.ccp.bin BBB
 GP05_IMD.dsk.side1.ccp.bin - empty
