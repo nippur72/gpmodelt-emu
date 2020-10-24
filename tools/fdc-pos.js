@@ -19,5 +19,17 @@ function FDC_getpos(side, track, sector) {
    return pos;
 }
 
-module.exports = FDC_getpos;
+function FDC_getpos_geometry(side, track, sector, geometry) {
+
+   let s = sector -1;
+   if(s<0) s=0;
+
+   let pos = track * geometry.NSIDES * geometry.SECTORSIZE * geometry.NSECTORS;
+   pos += side * geometry.SECTORSIZE * geometry.NSECTORS;
+   pos += s * geometry.SECTORSIZE;
+
+   return pos;
+}
+
+module.exports = { FDC_getpos, FDC_getpos_geometry };
 
