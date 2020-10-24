@@ -1,13 +1,13 @@
-let debug_write_track      = false;
-let debug_read_track       = false;
-let debug_write_sector     = false;
-let debug_write_sector_dma = false;
-let debug_read_sector      = false;
-let debug_read_sector_dma  = false;
-let debug_read_address     = false;
-let debug_read_address_dma = false;
-let debug_read_status      = false;
-let debug_read_3f          = false;
+let debug_write_track      = false ;
+let debug_read_track       = false ;
+let debug_write_sector     = false ;
+let debug_write_sector_dma = false ;
+let debug_read_sector      = false ;
+let debug_read_sector_dma  = false ;
+let debug_read_address     = false ;
+let debug_read_address_dma = false ;
+let debug_read_status      = false ;
+let debug_read_3f          = false ;
 
 // 3f interface outside registers
 let FDC_drive_number = 3;
@@ -52,18 +52,29 @@ let FDC_STATUS_INDEX           = 0;  // bit 1 for type I commands
 let FDC_STATUS_DATA_REQUEST    = 0;  // bit 1 for read/write commands
 let FDC_STATUS_BUSY            = 0;  // bit 0 for all commands
 
-let FDC_COMMAND_TYPE_I       = 0;
-let FDC_COMMAND_READ_ADDRESS = 1;
-let FDC_COMMAND_READ_SECTOR  = 2;
-let FDC_COMMAND_READ_TRACK   = 3;
-let FDC_COMMAND_WRITE_SECTOR = 4;
-let FDC_COMMAND_WRITE_TRACK  = 5;
+let FDC_COMMAND_TYPE_I          = 0;
+let FDC_COMMAND_READ_ADDRESS    = 1;
+let FDC_COMMAND_READ_SECTOR     = 2;
+let FDC_COMMAND_READ_TRACK      = 3;
+let FDC_COMMAND_WRITE_SECTOR    = 4;
+let FDC_COMMAND_WRITE_TRACK     = 5;
+let FDC_COMMAND_FORCE_INTERRUPT = 6;
 
+// 8"
 let FDC_NSIDES     = 2;
 let FDC_NTRACKS    = 77;
 let FDC_NSECTORS   = 26;
 let FDC_SECTORSIZE = 128;
 let FDC_MEDIA_SIZE = FDC_SECTORSIZE * FDC_NSECTORS * FDC_NSIDES * FDC_NTRACKS;
+
+/*
+// 5.25 "
+let FDC_NSIDES     = 2;
+let FDC_NTRACKS    = 40;
+let FDC_NSECTORS   = 18;
+let FDC_SECTORSIZE = 128;
+let FDC_MEDIA_SIZE = FDC_SECTORSIZE * FDC_NSECTORS * FDC_NSIDES * FDC_NTRACKS;
+*/
 
 // data is assumed to be stored on the media:
 // track 0 side 0 [ sectors 0-26 ], track 0 side 1 [ sectors 0-26 ], ...
@@ -71,19 +82,16 @@ let FDC_MEDIA_SIZE = FDC_SECTORSIZE * FDC_NSECTORS * FDC_NSIDES * FDC_NTRACKS;
 function FDC_getpos(side, track, sector) {
 
    let sec = sector -1;
-   if(sec<0) sec=0;
+   if(sec<0) {
+      console.warn(`sector ${sec}`)
+      sec=0;
+   }
 
    let sid = side == 0 ? 0 : 1;
 
    let pos = track * FDC_NSIDES * FDC_SECTORSIZE * FDC_NSECTORS;
    pos += sid * FDC_SECTORSIZE * FDC_NSECTORS;
    pos += sec * FDC_SECTORSIZE;
-
-   /*
-   let pos = track * FDC_NSIDES * FDC_SECTORSIZE * FDC_NSECTORS;
-   pos += s * FDC_SECTORSIZE * FDC_NSIDES;
-   pos += side * FDC_SECTORSIZE;
-   */
 
    return pos;
 }
@@ -111,6 +119,10 @@ function FDC_read_port_3f() {
 function FDC_write_port_3f(value) {
    let drive_number = value & 0b11;
    let side = (value & 0b1000) >> 3;
+
+   // DDEN is supported only on the 5.25 machine
+   // let DDEN = (value >> 6) & 1;
+   // console.log(`*************** ${DDEN}`);
 
    //if(drive_number != FDC_drive_number) console.log(`**** drive number changed to "${FDC_drive_number_descs[drive_number]}"`);
    //if(side != FDC_side) console.log(`**** side changed to "${FDC_side_descs[side]}"`);
@@ -213,6 +225,7 @@ function FDC_write(port, value) {
          FDC_INTREQ = 0;      // writing to command registers clears INTREQ
 
          // parse commands
+         //console.warn(`DC command ${hex(value)}h`);
          FDC_parse_command(value);
          return;
 
@@ -364,6 +377,18 @@ function FDC_update_status(command) {
          (FDC_STATUS_DATA_REQUEST    << 1) |
          (FDC_STATUS_BUSY            << 0) ;
    }
+   else if(command === FDC_COMMAND_FORCE_INTERRUPT) {
+      // force interrupt works as TYPE I
+      FDC_status =
+         (FDC_STATUS_NOT_READY       << 7) |
+         (FDC_STATUS_WRITE_PROTECTED << 6) |
+         (FDC_STATUS_HEAD_LOADED     << 5) |
+         (FDC_STATUS_SEEK_ERROR      << 4) |
+         (FDC_STATUS_CRC_ERROR       << 3) |
+         (FDC_STATUS_TRACK_0         << 2) |
+         (FDC_STATUS_INDEX           << 1) |
+         (FDC_STATUS_BUSY            << 0) ;
+   }
    else throw `invalid command ${command}`;
 }
 
@@ -464,6 +489,14 @@ function FDC_parse_command(cmd) {
       FDC_dma = FDC_DMA_READ_SECTOR; // enable reading
       FDC_STATUS_DATA_REQUEST = 1;   // byte is ready
 
+      /*
+      // simula un settore non trovato
+      FDC_STATUS_BUSY = 0;
+      FDC_STATUS_DATA_REQUEST = 0;   // byte is ready
+      FDC_STATUS_RNF = 1;
+      FDC_INTREQ = 1;
+      */
+
       FDC_update_status(FDC_COMMAND_READ_SECTOR);
 
       return;
@@ -481,6 +514,18 @@ function FDC_parse_command(cmd) {
       FDC_STATUS_DATA_REQUEST = 1;    // byte is ready
 
       FDC_update_status(FDC_COMMAND_READ_ADDRESS);
+
+      return;
+   }
+
+   // FORCE INTERRUPT command
+   if((cmd & 0b11110000) === 0b11010000) {
+      // TODO I3-I0 ignored
+      FDC_STATUS_BUSY = 0;         // terminate any command
+      FDC_dma = FDC_DMA_NONE;      // and any dma transfer
+      FDC_STATUS_DATA_REQUEST = 0; //
+
+      FDC_update_status(FDC_COMMAND_FORCE_INTERRUPT);
 
       return;
    }
