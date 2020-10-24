@@ -12,9 +12,15 @@ function initMem() {
    
    rom_load(rom_E000,        0xE000);
    rom_load(rom_E400,        0xE400);
-   rom_load(rom_E800_FDC8, 0xE800);
+   rom_load(rom_E800_FDC8,   0xE800);
    //rom_load(rom_E800_FDC525, 0xE800);
    rom_load(rom_EC00_ACI,    0xEC00);
+
+   /*
+   rom_load(rom_MON24_2,   0xE000);
+   rom_load(rom_SYS2K_482, 0xE400);
+   rom_load(rom_RIG02_U,   0xE800);
+   */
 
    rom_load([ 0xC3, 0x00, 0xE0 ], 0x0000); // JP E000
 }
