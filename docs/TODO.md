@@ -19,6 +19,8 @@
 - emulazione seriale parallela in cpm LST: ecc
 - implementare comandi 1791 mancanti (step out ecc)
 - questione dei byte aggiuntivi in write track
+- emulare seriale per cpm e/o PIP US1
+- /DDEN su macchina a 5.25
 
 # emulatore
 
