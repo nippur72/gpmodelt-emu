@@ -1,0 +1,4132 @@
+                                        ; Referenced from 0EA7Eh
+                                        ; --- START PROC 0E000h ---
+E000: C3 25 E0                   0E000h:        jp      0E025h
+
+                                        ; Referenced from 0E02Ah, 0E1E7h, 0E3B7h, 0E85Ah
+E003: E0                         0E003h:        ret     po
+E004: BF                                cp      a
+E005: 4D                                ld      c,l
+E006: E0                                ret     po
+E007: 4D                                ld      c,l
+E008: E0                                ret     po
+E009: A9                                xor     c
+E00A: E0                                ret     po
+E00B: 4E                                ld      c,(hl)
+E00C: E1                                pop     hl
+E00D: FD E3                             ex      (sp),iy
+E00F: 4D                                ld      c,l
+E010: E0                                ret     po
+E011: 4D                                ld      c,l
+E012: E0                                ret     po
+E013: 6C                                ld      l,h
+E014: E0                                ret     po
+E015: 4D                                ld      c,l
+E016: E0                                ret     po
+E017: 00                                nop
+E018: E0                                ret     po
+E019: 4D                                ld      c,l
+E01A: E0                                ret     po
+E01B: 4D                                ld      c,l
+E01C: E0                                ret     po
+E01D: DF                                rst     0x18
+
+E01E: E3                         0E01Eh:        ex      (sp),hl
+E01F: 70                                ld      (hl),b
+E020: E0                                ret     po
+E021: 4D                                ld      c,l
+E022: E0                                ret     po
+E023: 4D                                ld      c,l
+E024: E0                                ret     po
+
+                                        ; Referenced from 0E000h, 0E028h
+E025: DB FF                      0E025h:        in      a,(0FFh)
+E027: 07                                rlca
+E028: 38 FB                             jr      c,0E025h
+E02A: 2A 03 E0                          ld      hl,(0E003h)
+E02D: 2E 80                             ld      l,80h
+E02F: 44                                ld      b,h
+E030: 0E 00                             ld      c,00h
+E032: 00                                nop
+E033: 00                                nop
+E034: 00                                nop
+E035: 00                                nop
+E036: 00                                nop
+E037: 00                                nop
+E038: 00                                nop
+E039: 00                                nop
+E03A: 00                                nop
+E03B: 00                                nop
+E03C: 00                                nop
+E03D: 00                                nop
+E03E: F9                                ld      sp,hl
+E03F: C5                                push    bc
+E040: CD D9 E3                          call    0E3D9h
+E043: C1                                pop     bc
+E044: 21 94 E1                          ld      hl,0E194h
+E047: CD FA E3                          call    0E3FAh
+E04A: CD EE E3                          call    0E3EEh
+E04D: CD F7 E3                          call    0E3F7h
+E050: 3E 3F                             ld      a,3Fh   ; '?'
+E052: CD F4 E3                          call    0E3F4h
+E055: CD F1 E3                          call    0E3F1h
+E058: E6 0F                             and     0Fh
+E05A: 4F                                ld      c,a
+E05B: 06 00                             ld      b,00h
+E05D: 21 05 E0                          ld      hl,0E005h
+E060: 09                                add     hl,bc
+E061: 09                                add     hl,bc
+E062: 01 4D E0                          ld      bc,0E04Dh
+E065: C5                                push    bc
+E066: 4E                                ld      c,(hl)
+E067: 23                                inc     hl
+E068: 46                                ld      b,(hl)
+E069: 60                                ld      h,b
+E06A: 69                                ld      l,c
+E06B: E9                                jp      (hl)
+
+E06C: CD E8 E3                   0E06Ch:        call    0E3E8h
+E06F: E9                                jp      (hl)
+
+E070: CD DF E0                   0E070h:        call    0E0DFh
+E073: FE 2D                             cp      2Dh     ; '-'
+E075: 20 17                             jr      nz,0E08Eh
+E077: CD E5 E0                          call    0E0E5h
+E07A: 18 05                             jr      0E081h
+
+                                        ; Referenced from 0E08Bh
+E07C: 79                         0E07Ch:        ld      a,c
+E07D: E6 0F                             and     0Fh
+E07F: 20 03                             jr      nz,0E084h
+
+                                        ; Referenced from 0E07Ah
+E081: CD 29 E1                   0E081h:        call    0E129h
+
+                                        ; Referenced from 0E07Fh
+E084: CD EB E3                   0E084h:        call    0E3EBh
+E087: 03                                inc     bc
+E088: CD 12 E1                          call    0E112h
+E08B: 20 EF                             jr      nz,0E07Ch
+E08D: C9                                ret
+
+                                        ; Referenced from 0E075h, 0E0A7h
+E08E: CD 29 E1                   0E08Eh:        call    0E129h
+E091: CD EB E3                          call    0E3EBh
+E094: CD E8 E3                          call    0E3E8h
+E097: FE 2F                             cp      2Fh     ; '/'
+E099: C8                                ret     z
+E09A: FE 2E                             cp      2Eh     ; '.'
+E09C: 20 02                             jr      nz,0E0A0h
+E09E: 0B                                dec     bc
+E09F: 0B                                dec     bc
+
+                                        ; Referenced from 0E09Ch
+E0A0: CB 42                      0E0A0h:        bit     0,d
+E0A2: 28 02                             jr      z,0E0A6h
+E0A4: 7D                                ld      a,l
+E0A5: 02                                ld      (bc),a
+
+                                        ; Referenced from 0E0A2h
+E0A6: 03                         0E0A6h:        inc     bc
+E0A7: 18 E5                             jr      0E08Eh
+
+E0A9: CD F1 E3                   0E0A9h:        call    0E3F1h
+E0AC: FE 43                             cp      43h     ; 'C'
+E0AE: 20 08                             jr      nz,0E0B8h
+E0B0: 3E 42                             ld      a,42h   ; 'B'
+E0B2: CD 06 E4                          call    0E406h
+E0B5: C3 00 00                          jp      0000h
+
+                                        ; Referenced from 0E0AEh
+E0B8: FE 44                      0E0B8h:        cp      44h     ; 'D'
+E0BA: CA 18 E8                          jp      z,0E818h
+E0BD: C9                                ret
+
+                                        ; Referenced from 0E3E8h
+                                        ; --- START PROC 0E0BEh ---
+E0BE: 21 00 00                   0E0BEh:        ld      hl,0000h
+E0C1: 16 00                             ld      d,00h
+E0C3: CD EE E0                          call    0E0EEh
+E0C6: 30 09                             jr      nc,0E0D1h
+E0C8: FE 0D                             cp      0Dh
+E0CA: C8                                ret     z
+E0CB: FE 2F                             cp      2Fh     ; '/'
+E0CD: C8                                ret     z
+E0CE: FE 2E                             cp      2Eh     ; '.'
+E0D0: C8                                ret     z
+
+                                        ; Referenced from 0E0C6h, 0E0DDh
+E0D1: 29                         0E0D1h:        add     hl,hl
+E0D2: 16 01                             ld      d,01h
+E0D4: 29                                add     hl,hl
+E0D5: 29                                add     hl,hl
+E0D6: 29                                add     hl,hl
+E0D7: B5                                or      l
+E0D8: 6F                                ld      l,a
+E0D9: CD EE E0                          call    0E0EEh
+E0DC: D8                                ret     c
+E0DD: 18 F2                             jr      0E0D1h
+
+                                        ; Referenced from 0E070h
+                                        ; --- START PROC 0E0DFh ---
+E0DF: CD E8 E3                   0E0DFh:        call    0E3E8h
+E0E2: 44                                ld      b,h
+E0E3: 4D                                ld      c,l
+E0E4: C9                                ret
+
+                                        ; Referenced from 0E077h, 0E14Eh
+                                        ; --- START PROC 0E0E5h ---
+E0E5: CD E8 E3                   0E0E5h:        call    0E3E8h
+E0E8: 54                                ld      d,h
+E0E9: 5D                                ld      e,l
+E0EA: C9                                ret
+
+                                        ; Referenced from 0E0F8h
+                                        ; --- START PROC 0E0EBh ---
+E0EB: D6 30                      0E0EBh:        sub     30h     ; '0'
+E0ED: C9                                ret
+
+                                        ; Referenced from 0E0C3h, 0E0D9h
+                                        ; --- START PROC 0E0EEh ---
+E0EE: CD F1 E3                   0E0EEh:        call    0E3F1h
+E0F1: E6 7F                             and     7Fh     ; ''
+E0F3: FE 30                             cp      30h     ; '0'
+E0F5: D8                                ret     c
+E0F6: FE 3A                             cp      3Ah     ; ':'
+E0F8: 38 F1                             jr      c,0E0EBh
+E0FA: FE 41                             cp      41h     ; 'A'
+E0FC: D8                                ret     c
+E0FD: FE 47                             cp      47h     ; 'G'
+E0FF: 3F                                ccf
+E100: D8                                ret     c
+E101: D6 37                             sub     37h     ; '7'
+E103: C9                                ret
+
+                                        ; Referenced from 0E11Dh, 0E121h, 0E131h, 0E135h, 0E13Dh, 0E141h
+                                        ; --- START PROC 0E104h ---
+E104: E6 0F                      0E104h:        and     0Fh
+E106: C6 30                             add     a,30h   ; '0'
+E108: FE 3A                             cp      3Ah     ; ':'
+E10A: DA F4 E3                          jp      c,0E3F4h
+E10D: C6 07                             add     a,07h
+E10F: C3 F4 E3                          jp      0E3F4h
+
+                                        ; Referenced from 0E088h
+                                        ; --- START PROC 0E112h ---
+E112: 78                         0E112h:        ld      a,b
+E113: BA                                cp      d
+E114: C0                                ret     nz
+E115: 79                                ld      a,c
+E116: BB                                cp      e
+E117: C9                                ret
+
+                                        ; Referenced from 0E3EBh
+                                        ; --- START PROC 0E118h ---
+E118: 0A                         0E118h:        ld      a,(bc)
+E119: 1F                                rra
+E11A: 1F                                rra
+E11B: 1F                                rra
+E11C: 1F                                rra
+E11D: CD 04 E1                          call    0E104h
+E120: 0A                                ld      a,(bc)
+E121: CD 04 E1                          call    0E104h
+E124: 3E 20                             ld      a,20h   ; ' '
+E126: C3 F4 E3                          jp      0E3F4h
+
+                                        ; Referenced from 0E081h, 0E08Eh
+                                        ; --- START PROC 0E129h ---
+E129: CD F7 E3                   0E129h:        call    0E3F7h
+
+                                        ; Referenced from 0E3EEh
+                                        ; --- START PROC 0E12Ch ---
+E12C: 78                         0E12Ch:        ld      a,b
+E12D: 1F                                rra
+E12E: 1F                                rra
+E12F: 1F                                rra
+E130: 1F                                rra
+E131: CD 04 E1                          call    0E104h
+E134: 78                                ld      a,b
+E135: CD 04 E1                          call    0E104h
+E138: 79                                ld      a,c
+E139: 1F                                rra
+E13A: 1F                                rra
+E13B: 1F                                rra
+E13C: 1F                                rra
+E13D: CD 04 E1                          call    0E104h
+E140: 79                                ld      a,c
+E141: CD 04 E1                          call    0E104h
+E144: 3E 3A                             ld      a,3Ah   ; ':'
+E146: CD F4 E3                          call    0E3F4h
+E149: 3E 20                             ld      a,20h   ; ' '
+E14B: C3 F4 E3                          jp      0E3F4h
+
+E14E: CD E5 E0                   0E14Eh:        call    0E0E5h
+E151: FE 2D                             cp      2Dh     ; '-'
+E153: C0                                ret     nz
+E154: D5                                push    de
+E155: CD E8 E3                          call    0E3E8h
+E158: D1                                pop     de
+E159: 3E 80                             ld      a,80h
+E15B: C3 09 E4                          jp      0E409h
+
+                                        ; Referenced from 0E3DFh
+E15E: 3E 42                      0E15Eh:        ld      a,42h   ; 'B'
+E160: C3 06 E4                          jp      0E406h
+
+                                        ; Referenced from 0E3F1h
+                                        ; --- START PROC 0E163h ---
+E163: CD DC E3                   0E163h:        call    0E3DCh
+E166: C3 F4 E3                          jp      0E3F4h
+
+                                        ; Referenced from 0E16Ch, 0E3DCh
+                                        ; --- START PROC 0E169h ---
+E169: DB FF                      0E169h:        in      a,(0FFh)
+E16B: 07                                rlca
+E16C: 38 FB                             jr      c,0E169h
+E16E: 0F                                rrca
+E16F: 2F                                cpl
+E170: F5                                push    af
+
+                                        ; Referenced from 0E174h
+E171: DB FF                      0E171h:        in      a,(0FFh)
+E173: 07                                rlca
+E174: 30 FB                             jr      nc,0E171h
+E176: F1                                pop     af
+E177: E6 7F                             and     7Fh     ; ''
+E179: C9                                ret
+
+                                        ; Referenced from 0E3F7h
+                                        ; --- START PROC 0E17Ah ---
+E17A: 3E 0A                      0E17Ah:        ld      a,0Ah
+E17C: CD F4 E3                          call    0E3F4h
+E17F: 3E 0D                             ld      a,0Dh
+E181: CD F4 E3                          call    0E3F4h
+E184: 3E 00                             ld      a,00h
+E186: C3 F4 E3                          jp      0E3F4h
+
+                                        ; Referenced from 0E3FAh
+                                        ; --- START PROC 0E189h ---
+E189: 7E                         0E189h:        ld      a,(hl)
+E18A: CD F4 E3                          call    0E3F4h
+E18D: CB 7F                             bit     7,a
+E18F: 23                                inc     hl
+E190: CA FA E3                          jp      z,0E3FAh
+E193: C9                                ret
+
+E194: 0A                         0E194h:        ld      a,(bc)
+E195: 20 20                             jr      nz,0E1B7h
+E197: 20 20                             jr      nz,0E1B9h
+E199: 20 20                             jr      nz,0E1BBh
+E19B: 20 20                             jr      nz,0E1BDh
+E19D: 20 47                             jr      nz,0E1E6h
+E19F: 20 45                             jr      nz,0E1E6h
+E1A1: 20 4E                             jr      nz,0E1F0h+1     ; reference not aligned to instruction
+E1A3: 20 45                             jr      nz,0E1EAh
+E1A5: 20 52                             jr      nz,0E1F9h
+E1A7: 20 41                             jr      nz,0E1EAh
+E1A9: 20 4C                             jr      nz,0E1F6h+1     ; reference not aligned to instruction
+E1AB: 20 20                             jr      nz,0E1CDh
+E1AD: 20 50                             jr      nz,0E1FFh
+E1AF: 20 52                             jr      nz,0E203h
+E1B1: 20 4F                             jr      nz,0E200h+2     ; reference not aligned to instruction
+E1B3: 20 43                             jr      nz,0E1F6h+2     ; reference not aligned to instruction
+E1B5: 20 45                             jr      nz,0E1FAh+2     ; reference not aligned to instruction
+
+                                        ; Referenced from 0E195h
+E1B7: 20 53                      0E1B7h:        jr      nz,0E20Bh+1     ; reference not aligned to instruction
+
+                                        ; Referenced from 0E197h
+E1B9: 20 53                      0E1B9h:        jr      nz,0E20Dh+1     ; reference not aligned to instruction
+
+                                        ; Referenced from 0E199h
+E1BB: 20 4F                      0E1BBh:        jr      nz,0E20Bh+1     ; reference not aligned to instruction
+
+                                        ; Referenced from 0E19Bh
+E1BD: 20 52                      0E1BDh:        jr      nz,0E211h
+E1BF: 0A                                ld      a,(bc)
+E1C0: 0A                                ld      a,(bc)
+E1C1: 0D                                dec     c
+E1C2: 59                                ld      e,c
+E1C3: 6F                                ld      l,a
+E1C4: 75                                ld      (hl),l
+E1C5: 72                                ld      (hl),d
+E1C6: 20 68                             jr      nz,0E22Fh+1     ; reference not aligned to instruction
+E1C8: 69                                ld      l,c
+E1C9: 67                                ld      h,a
+E1CA: 68                                ld      l,b
+E1CB: 65                                ld      h,l
+E1CC: 73                                ld      (hl),e
+
+                                        ; Referenced from 0E1ABh
+E1CD: 74                         0E1CDh:        ld      (hl),h
+E1CE: 20 72                             jr      nz,0E241h+1     ; reference not aligned to instruction
+E1D0: 61                                ld      h,c
+E1D1: 6D                                ld      l,l
+E1D2: 20 6C                             jr      nz,0E23Fh+1     ; reference not aligned to instruction
+E1D4: 6F                                ld      l,a
+E1D5: 63                                ld      h,e
+E1D6: 2E 20                             ld      l,20h   ; ' '
+E1D8: 28 68                             jr      z,0E241h+1      ; reference not aligned to instruction
+E1DA: 65                                ld      h,l
+E1DB: 78                                ld      a,b
+E1DC: 29                                add     hl,hl
+E1DD: 20 69                             jr      nz,0E247h+1     ; reference not aligned to instruction
+E1DF: 73                                ld      (hl),e
+E1E0: BA                                cp      d
+
+                                        ; Referenced from 0E35Fh, 0E3F4h, 0E403h
+                                        ; --- START PROC 0E1E1h ---
+E1E1: D5                         0E1E1h:        push    de
+E1E2: DD E5                             push    ix
+E1E4: E5                                push    hl
+E1E5: C5                                push    bc
+
+                                        ; Referenced from 0E19Dh, 0E19Fh
+E1E6: F5                         0E1E6h:        push    af
+E1E7: 2A 03 E0                          ld      hl,(0E003h)
+
+                                        ; Referenced from 0E1A3h, 0E1A7h
+E1EA: 5E                         0E1EAh:        ld      e,(hl)
+E1EB: 23                                inc     hl
+E1EC: 56                                ld      d,(hl)
+E1ED: D5                                push    de
+E1EE: DD E1                             pop     ix
+
+                                        ; Referenced from 0E1A1h
+E1F0: C3 B0 E4                   0E1F0h:        jp      0E4B0h
+
+                                        ; Referenced from 0E3D6h, 0E4B6h
+                                        ; --- START PROC 0E1F3h ---
+E1F3: DD 6E 05                   0E1F3h:        ld      l,(ix+05h)
+
+                                        ; Referenced from 0E1A9h, 0E1B3h
+E1F6: CD 59 E2                   0E1F6h:        call    0E259h
+
+                                        ; Referenced from 0E1A5h
+E1F9: 47                         0E1F9h:        ld      b,a
+
+                                        ; Referenced from 0E1B5h
+E1FA: 3A 1B E4                   0E1FAh:        ld      a,(0E41Bh)
+E1FD: FE DD                             cp      0DDh
+
+                                        ; Referenced from 0E1ADh
+E1FF: 78                         0E1FFh:        ld      a,b
+
+                                        ; Referenced from 0E1B1h
+E200: CA 1B E4                   0E200h:        jp      z,0E41Bh
+
+                                        ; Referenced from 0E1AFh, 0E46Dh
+                                        ; --- START PROC 0E203h ---
+E203: FE 00                      0E203h:        cp      00h
+E205: 28 16                             jr      z,0E21Dh
+E207: FE FF                             cp      0FFh
+E209: 28 12                             jr      z,0E21Dh
+
+                                        ; Referenced from 0E1B7h, 0E1BBh
+E20B: FE 0D                      0E20Bh:        cp      0Dh
+
+                                        ; Referenced from 0E1B9h
+E20D: 28 18                      0E20Dh:        jr      z,0E227h
+E20F: FE 0A                             cp      0Ah
+
+                                        ; Referenced from 0E1BDh
+E211: 28 1C                      0E211h:        jr      z,0E22Fh
+E213: FE 0C                             cp      0Ch
+E215: 28 2A                             jr      z,0E241h
+E217: 77                                ld      (hl),a
+
+                                        ; Referenced from 0E462h
+                                        ; --- START PROC 0E218h ---
+E218: C3 A1 E3                   0E218h:        jp      0E3A1h
+
+                                        ; Referenced from 0E3A7h
+                                        ; --- START PROC 0E21Bh ---
+E21B: 28 12                      0E21Bh:        jr      z,0E22Fh
+
+                                        ; Referenced from 0E205h, 0E209h, 0E22Dh, 0E257h, 0E4A1h
+                                        ; --- START PROC 0E21Dh ---
+E21D: CD 5D E2                   0E21Dh:        call    0E25Dh
+
+                                        ; Referenced from 0E43Dh
+                                        ; --- START PROC 0E220h ---
+E220: F1                         0E220h:        pop     af
+E221: C1                                pop     bc
+E222: E1                                pop     hl
+E223: DD E1                             pop     ix
+E225: D1                                pop     de
+E226: C9                                ret
+
+                                        ; Referenced from 0E20Dh
+                                        ; --- START PROC 0E227h ---
+E227: CD 6F E2                   0E227h:        call    0E26Fh
+
+                                        ; Referenced from 0E23Fh
+                                        ; --- START PROC 0E22Ah ---
+E22A: DD 75 05                   0E22Ah:        ld      (ix+05h),l
+E22D: 18 EE                             jr      0E21Dh
+
+                                        ; Referenced from 0E1C6h, 0E211h, 0E21Bh, 0E49Ch
+                                        ; --- START PROC 0E22Fh ---
+E22F: CD 77 E2                   0E22Fh:        call    0E277h
+E232: 20 05                             jr      nz,0E239h
+E234: CD 93 E2                          call    0E293h
+E237: 18 03                             jr      0E23Ch
+
+                                        ; Referenced from 0E232h
+                                        ; --- START PROC 0E239h ---
+E239: CD EC E2                   0E239h:        call    0E2ECh
+
+                                        ; Referenced from 0E237h, 0E48Bh
+                                        ; --- START PROC 0E23Ch ---
+E23C: DD 74 06                   0E23Ch:        ld      (ix+06h),h
+
+                                        ; Referenced from 0E1D2h
+E23F: 18 E9                      0E23Fh:        jr      0E22Ah
+
+                                        ; Referenced from 0E1CEh, 0E1D8h, 0E215h
+                                        ; --- START PROC 0E241h ---
+E241: CD 04 E3                   0E241h:        call    0E304h
+
+                                        ; Referenced from 0E252h
+E244: CD BF E2                   0E244h:        call    0E2BFh
+
+                                        ; Referenced from 0E1DDh
+E247: CD 77 E2                   0E247h:        call    0E277h
+E24A: 28 08                             jr      z,0E254h
+E24C: CD EC E2                          call    0E2ECh
+E24F: CD 6F E2                          call    0E26Fh
+E252: 18 F0                             jr      0E244h
+
+                                        ; Referenced from 0E24Ah
+E254: CD 04 E3                   0E254h:        call    0E304h
+E257: 18 C4                             jr      0E21Dh
+
+                                        ; Referenced from 0E1F6h, 0E2C2h, 0E3A1h
+                                        ; --- START PROC 0E259h ---
+E259: 0E 00                      0E259h:        ld      c,00h
+E25B: 18 02                             jr      0E25Fh
+
+                                        ; Referenced from 0E21Dh
+                                        ; --- START PROC 0E25Dh ---
+E25D: 0E 80                      0E25Dh:        ld      c,80h
+
+                                        ; Referenced from 0E25Bh
+                                        ; --- START PROC 0E25Fh ---
+E25F: F5                         0E25Fh:        push    af
+E260: DD 7E 04                          ld      a,(ix+04h)
+E263: E6 80                             and     80h
+E265: A9                                xor     c
+E266: 4F                                ld      c,a
+E267: 7E                                ld      a,(hl)
+E268: E6 7F                             and     7Fh     ; ''
+E26A: B1                                or      c
+E26B: 77                                ld      (hl),a
+E26C: F1                                pop     af
+E26D: C9                                ret
+
+E26E: C9                         0E26Eh:        ret
+
+                                        ; Referenced from 0E227h, 0E24Fh, 0E2A7h, 0E2D8h, 0E4A7h
+                                        ; --- START PROC 0E26Fh ---
+E26F: 7D                         0E26Fh:        ld      a,l
+E270: E6 C0                             and     0C0h
+E272: DD B6 02                          or      (ix+02h)
+E275: 6F                                ld      l,a
+E276: C9                                ret
+
+                                        ; Referenced from 0E22Fh, 0E247h, 0E2AAh
+                                        ; --- START PROC 0E277h ---
+E277: CD 7E E2                   0E277h:        call    0E27Eh
+E27A: DD BE 01                          cp      (ix+01h)
+E27D: C9                                ret
+
+                                        ; Referenced from 0E277h, 0E2E4h, 0E2F0h, 0E478h
+                                        ; --- START PROC 0E27Eh ---
+E27E: E5                         0E27Eh:        push    hl
+E27F: 29                                add     hl,hl
+E280: 29                                add     hl,hl
+E281: 7C                                ld      a,h
+E282: E6 0F                             and     0Fh
+E284: E1                                pop     hl
+E285: C9                                ret
+
+                                        ; Referenced from 0E2B9h, 0E4D1h
+                                        ; --- START PROC 0E286h ---
+E286: DD 7E 02                   0E286h:        ld      a,(ix+02h)
+E289: ED 44                             neg
+E28B: DD 86 03                          add     a,(ix+03h)
+E28E: 3C                                inc     a
+E28F: 4F                                ld      c,a
+E290: 06 00                             ld      b,00h
+E292: C9                                ret
+
+                                        ; Referenced from 0E234h
+                                        ; --- START PROC 0E293h ---
+E293: E5                         0E293h:        push    hl
+E294: CD 04 E3                          call    0E304h
+
+                                        ; Referenced from 0E2ADh
+E297: 00                         0E297h:        nop
+E298: CD C8 E4                          call    0E4C8h
+E29B: 00                                nop
+E29C: 00                                nop
+E29D: 00                                nop
+E29E: 00                                nop
+E29F: 00                                nop
+E2A0: 00                                nop
+E2A1: 00                                nop
+E2A2: 00                                nop
+E2A3: 00                                nop
+E2A4: 00                                nop
+E2A5: 00                                nop
+E2A6: 2B                                dec     hl
+E2A7: CD 6F E2                          call    0E26Fh
+E2AA: CD 77 E2                          call    0E277h
+E2AD: 20 E8                             jr      nz,0E297h
+E2AF: CD CE E4                          call    0E4CEh
+E2B2: E1                                pop     hl
+E2B3: C9                                ret
+
+                                        ; Referenced from 0E4CBh
+                                        ; --- START PROC 0E2B4h ---
+E2B4: EB                         0E2B4h:        ex      de,hl
+E2B5: 21 40 00                          ld      hl,0040h
+E2B8: 19                                add     hl,de
+E2B9: CD 86 E2                          call    0E286h
+E2BC: ED B0                             ldir
+E2BE: C9                                ret
+
+                                        ; Referenced from 0E244h, 0E2C8h, 0E4A4h
+                                        ; --- START PROC 0E2BFh ---
+E2BF: C3 CE E4                   0E2BFh:        jp      0E4CEh
+
+E2C2: CD 59 E2                   0E2C2h:        call    0E259h
+E2C5: CD CB E2                          call    0E2CBh
+E2C8: 20 F5                             jr      nz,0E2BFh
+E2CA: C9                                ret
+
+                                        ; Referenced from 0E2C5h, 0E3A4h, 0E499h, 0E4DEh
+                                        ; --- START PROC 0E2CBh ---
+E2CB: 7D                         0E2CBh:        ld      a,l
+E2CC: E6 3F                             and     3Fh     ; '?'
+E2CE: DD BE 03                          cp      (ix+03h)
+E2D1: 28 05                             jr      z,0E2D8h
+E2D3: DD 34 05                          inc     (ix+05h)
+E2D6: 2C                                inc     l
+E2D7: C9                                ret
+
+                                        ; Referenced from 0E2D1h
+E2D8: CD 6F E2                   0E2D8h:        call    0E26Fh
+E2DB: DD 75 05                          ld      (ix+05h),l
+E2DE: AF                                xor     a
+E2DF: C9                                ret
+
+                                        ; Referenced from 0E454h
+                                        ; --- START PROC 0E2E0h ---
+E2E0: F5                         0E2E0h:        push    af
+E2E1: 11 C0 FF                          ld      de,0FFC0h
+E2E4: CD 7E E2                          call    0E27Eh
+E2E7: DD BE 00                          cp      (ix+00h)
+E2EA: 18 0A                             jr      0E2F6h
+
+                                        ; Referenced from 0E239h, 0E24Ch
+                                        ; --- START PROC 0E2ECh ---
+E2EC: F5                         0E2ECh:        push    af
+E2ED: 11 40 00                          ld      de,0040h
+E2F0: CD 7E E2                          call    0E27Eh
+E2F3: DD BE 01                          cp      (ix+01h)
+
+                                        ; Referenced from 0E2EAh
+                                        ; --- START PROC 0E2F6h ---
+E2F6: 20 03                      0E2F6h:        jr      nz,0E2FBh
+E2F8: 11 00 00                          ld      de,0000h
+
+                                        ; Referenced from 0E2F6h
+E2FB: 19                         0E2FBh:        add     hl,de
+E2FC: DD 75 05                          ld      (ix+05h),l
+E2FF: DD 74 06                          ld      (ix+06h),h
+E302: F1                                pop     af
+E303: C9                                ret
+
+                                        ; Referenced from 0E241h, 0E254h, 0E294h, 0E45Bh
+                                        ; --- START PROC 0E304h ---
+E304: F5                         0E304h:        push    af
+E305: 7C                                ld      a,h
+E306: E6 FC                             and     0FCh
+E308: 67                                ld      h,a
+E309: DD 7E 00                          ld      a,(ix+00h)
+E30C: 6F                                ld      l,a
+E30D: CB 2F                             sra     a
+E30F: CB 2F                             sra     a
+E311: E6 03                             and     03h
+E313: B4                                or      h
+E314: 67                                ld      h,a
+E315: 7D                                ld      a,l
+E316: 1F                                rra
+E317: 1F                                rra
+E318: E6 C0                             and     0C0h
+E31A: DD B6 02                          or      (ix+02h)
+E31D: 6F                                ld      l,a
+E31E: DD 75 05                          ld      (ix+05h),l
+E321: DD 74 06                          ld      (ix+06h),h
+E324: F1                                pop     af
+E325: C9                                ret
+
+                                        ; Referenced from 0E3FDh
+E326: CD E2 E3                   0E326h:        call    0E3E2h
+E329: 21 94 E1                          ld      hl,0E194h
+E32C: CD FA E3                          call    0E3FAh
+E32F: 3E C4                             ld      a,0C4h
+E331: 06 20                             ld      b,20h   ; ' '
+E333: 21 C0 C0                          ld      hl,0C0C0h
+
+                                        ; Referenced from 0E339h
+E336: 70                         0E336h:        ld      (hl),b
+E337: 23                                inc     hl
+E338: BC                                cp      h
+E339: 20 FB                             jr      nz,0E336h
+E33B: AF                                xor     a
+E33C: 06 40                             ld      b,40h   ; '@'
+E33E: 21 C0 C2                          ld      hl,0C2C0h
+E341: 3E 1A                             ld      a,1Ah
+
+                                        ; Referenced from 0E349h
+E343: 77                         0E343h:        ld      (hl),a
+E344: 23                                inc     hl
+E345: C6 80                             add     a,80h
+E347: 00                                nop
+E348: 00                                nop
+E349: 10 F8                             djnz    0E343h
+E34B: 21 80 C1                          ld      hl,0C180h
+E34E: 3E 0B                             ld      a,0Bh
+
+                                        ; Referenced from 0E353h
+E350: 77                         0E350h:        ld      (hl),a
+E351: 23                                inc     hl
+E352: 3C                                inc     a
+E353: 10 FB                             djnz    0E350h
+
+                                        ; Referenced from 0E358h
+E355: CD F1 E3                   0E355h:        call    0E3F1h
+E358: 18 FB                             jr      0E355h
+
+                                        ; Referenced from 0E3E2h
+                                        ; --- START PROC 0E35Ah ---
+E35A: CD 66 E3                   0E35Ah:        call    0E366h
+E35D: 3E 0C                             ld      a,0Ch
+E35F: CD E1 E1                          call    0E1E1h
+E362: CD 6B E3                          call    0E36Bh
+E365: C9                                ret
+
+                                        ; Referenced from 0E35Ah
+                                        ; --- START PROC 0E366h ---
+E366: C3 B4 E3                   0E366h:        jp      0E3B4h
+
+E369: FF                         0E369h:        rst     0x38
+
+E36A: FF                         0E36Ah:        rst     0x38
+
+                                        ; Referenced from 0E362h
+                                        ; --- START PROC 0E36Bh ---
+E36B: C3 AA E3                   0E36Bh:        jp      0E3AAh
+
+E36E: FF                         0E36Eh:        rst     0x38
+
+E36F: FF                         0E36Fh:        rst     0x38
+
+E370: FF                         0E370h:        rst     0x38
+
+E371: FF                         0E371h:        rst     0x38
+
+                                        ; Referenced from 0E3C2h
+                                        ; --- START PROC 0E372h ---
+E372: 01 07 00                   0E372h:        ld      bc,0007h
+E375: ED B0                             ldir
+E377: C9                                ret
+
+E378: E2 7F 00                   0E378h:        jp      po,007Fh
+E37B: 0F                                rrca
+E37C: 00                                nop
+E37D: 3F                                ccf
+E37E: 00                                nop
+E37F: 00                                nop
+E380: C0                                ret     nz
+E381: E2 7F 00                          jp      po,007Fh
+E384: 0F                                rrca
+E385: 00                                nop
+E386: 3F                                ccf
+E387: 00                                nop
+E388: 02                                ld      (bc),a
+E389: C0                                ret     nz
+
+                                        ; Referenced from 0E3D9h
+                                        ; --- START PROC 0E38Ah ---
+E38A: CD E2 E3                   0E38Ah:        call    0E3E2h
+
+                                        ; Referenced from 0E3E5h
+E38D: 3E 00                      0E38Dh:        ld      a,00h
+E38F: D3 77                             out     (77h),a ; 'w'
+E391: 3E FF                             ld      a,0FFh
+E393: D3 5F                             out     (5Fh),a ; '_'
+E395: 3E FB                             ld      a,0FBh
+E397: D3 5F                             out     (5Fh),a ; '_'
+E399: 3E FF                             ld      a,0FFh
+E39B: D3 5E                             out     (5Eh),a ; '^'
+E39D: AF                                xor     a
+E39E: D3 5E                             out     (5Eh),a ; '^'
+E3A0: C9                                ret
+
+                                        ; Referenced from 0E218h
+                                        ; --- START PROC 0E3A1h ---
+E3A1: CD 59 E2                   0E3A1h:        call    0E259h
+E3A4: CD CB E2                          call    0E2CBh
+E3A7: C3 1B E2                          jp      0E21Bh
+
+                                        ; Referenced from 0E36Bh
+                                        ; --- START PROC 0E3AAh ---
+E3AA: 3E 20                      0E3AAh:        ld      a,20h   ; ' '
+E3AC: 32 00 C0                          ld      (0C000h),a
+E3AF: 11 83 E3                          ld      de,0E383h
+E3B2: 18 03                             jr      0E3B7h
+
+                                        ; Referenced from 0E366h
+                                        ; --- START PROC 0E3B4h ---
+E3B4: 11 7A E3                   0E3B4h:        ld      de,0E37Ah
+
+                                        ; Referenced from 0E3B2h
+                                        ; --- START PROC 0E3B7h ---
+E3B7: 2A 03 E0                   0E3B7h:        ld      hl,(0E003h)
+E3BA: 7D                                ld      a,l
+E3BB: 3C                                inc     a
+E3BC: 3C                                inc     a
+E3BD: 77                                ld      (hl),a
+E3BE: 23                                inc     hl
+E3BF: 74                                ld      (hl),h
+E3C0: 23                                inc     hl
+E3C1: EB                                ex      de,hl
+E3C2: C3 72 E3                          jp      0E372h
+
+E3C5: 47                         0E3C5h:        ld      b,a
+E3C6: DD 66 06                          ld      h,(ix+06h)
+
+                                        ; Referenced from 0E3CDh
+E3C9: DB 77                      0E3C9h:        in      a,(77h) ; 'w'
+E3CB: CB 57                             bit     2,a
+E3CD: 20 FA                             jr      nz,0E3C9h
+
+                                        ; Referenced from 0E3D3h
+E3CF: DB 77                      0E3CFh:        in      a,(77h) ; 'w'
+E3D1: CB 57                             bit     2,a
+E3D3: 28 FA                             jr      z,0E3CFh
+E3D5: 78                                ld      a,b
+E3D6: C3 F3 E1                          jp      0E1F3h
+
+                                        ; Referenced from 0E040h
+                                        ; --- START PROC 0E3D9h ---
+E3D9: C3 8A E3                   0E3D9h:        jp      0E38Ah
+
+                                        ; Referenced from 0E163h
+                                        ; --- START PROC 0E3DCh ---
+E3DC: C3 69 E1                   0E3DCh:        jp      0E169h
+
+E3DF: C3 5E E1                   0E3DFh:        jp      0E15Eh
+
+                                        ; Referenced from 0E326h, 0E38Ah
+                                        ; --- START PROC 0E3E2h ---
+E3E2: C3 5A E3                   0E3E2h:        jp      0E35Ah
+
+E3E5: C3 8D E3                   0E3E5h:        jp      0E38Dh
+
+                                        ; Referenced from 0E06Ch, 0E094h, 0E0DFh, 0E0E5h, 0E155h
+                                        ; --- START PROC 0E3E8h ---
+E3E8: C3 BE E0                   0E3E8h:        jp      0E0BEh
+
+                                        ; Referenced from 0E084h, 0E091h, 0EA7Bh
+                                        ; --- START PROC 0E3EBh ---
+E3EB: C3 18 E1                   0E3EBh:        jp      0E118h
+
+                                        ; Referenced from 0E04Ah
+                                        ; --- START PROC 0E3EEh ---
+E3EE: C3 2C E1                   0E3EEh:        jp      0E12Ch
+
+                                        ; Referenced from 0E055h, 0E0A9h, 0E0EEh, 0E355h
+                                        ; --- START PROC 0E3F1h ---
+E3F1: C3 63 E1                   0E3F1h:        jp      0E163h
+
+                                        ; Referenced from 0E052h, 0E10Ah, 0E10Fh, 0E126h, 0E146h, 0E14Bh, 0E166h, 0E17Ch, 0E181h, 0E186h, 0E18Ah
+                                        ; --- START PROC 0E3F4h ---
+E3F4: C3 E1 E1                   0E3F4h:        jp      0E1E1h
+
+                                        ; Referenced from 0E04Dh, 0E129h
+                                        ; --- START PROC 0E3F7h ---
+E3F7: C3 7A E1                   0E3F7h:        jp      0E17Ah
+
+                                        ; Referenced from 0E047h, 0E190h, 0E32Ch, 0EA6Eh, 0EDBAh
+                                        ; --- START PROC 0E3FAh ---
+E3FA: C3 89 E1                   0E3FAh:        jp      0E189h
+
+E3FD: C3 26 E3                   0E3FDh:        jp      0E326h
+
+E400: C3 00 00                   0E400h:        jp      0000h
+
+                                        ; Referenced from 0E7A9h, 0E7E4h, 0EA73h, 0EBA9h, 0EBE4h
+                                        ; --- START PROC 0E403h ---
+E403: C3 E1 E1                   0E403h:        jp      0E1E1h
+
+                                        ; Referenced from 0E0B2h, 0E160h
+                                        ; --- START PROC 0E406h ---
+E406: C3 06 EC                   0E406h:        jp      0EC06h
+
+                                        ; Referenced from 0E15Bh
+E409: C3 09 EC                   0E409h:        jp      0EC09h
+
+E40C: C3 B9 E4                   0E40Ch:        jp      0E4B9h
+
+E40F: C3 00 00                   0E40Fh:        jp      0000h
+
+E412: C3 00 00                   0E412h:        jp      0000h
+
+E415: C3 00 00                   0E415h:        jp      0000h
+
+E418: C3 00 00                   0E418h:        jp      0000h
+
+                                        ; Referenced from 0E1FAh, 0E200h
+                                        ; --- START PROC 0E41Bh ---
+E41B: DD CB 00 7E                0E41Bh:        bit     7,(ix+00h)
+E41F: 28 0A                             jr      z,0E42Bh
+E421: DD CB 00 BE                       res     7,(ix+00h)
+E425: 87                                add     a,a
+E426: 87                                add     a,a
+E427: 87                                add     a,a
+E428: 87                                add     a,a
+E429: 18 0F                             jr      0E43Ah
+
+                                        ; Referenced from 0E41Fh
+E42B: DD CB 00 76                0E42Bh:        bit     6,(ix+00h)
+E42F: 28 0F                             jr      z,0E440h
+E431: DD CB 00 B6                       res     6,(ix+00h)
+E435: DD 7E 04                          ld      a,(ix+04h)
+E438: EE 80                             xor     80h
+
+                                        ; Referenced from 0E429h
+E43A: DD 77 04                   0E43Ah:        ld      (ix+04h),a
+
+                                        ; Referenced from 0E44Ch
+E43D: C3 20 E2                   0E43Dh:        jp      0E220h
+
+                                        ; Referenced from 0E42Fh
+E440: FE 16                      0E440h:        cp      16h
+E442: 20 0A                             jr      nz,0E44Eh
+E444: DD 7E 00                          ld      a,(ix+00h)
+E447: F6 C0                             or      0C0h
+E449: DD 77 00                          ld      (ix+00h),a
+E44C: 18 EF                             jr      0E43Dh
+
+                                        ; Referenced from 0E442h
+E44E: FE 18                      0E44Eh:        cp      18h
+E450: 28 52                             jr      z,0E4A4h
+E452: FE 0F                             cp      0Fh
+E454: CC E0 E2                          call    z,0E2E0h
+E457: 28 48                             jr      z,0E4A1h
+E459: FE 0B                             cp      0Bh
+E45B: CC 04 E3                          call    z,0E304h
+E45E: 28 41                             jr      z,0E4A1h
+E460: FE 0E                             cp      0Eh
+E462: CA 18 E2                          jp      z,0E218h
+E465: FE 08                             cp      08h
+E467: 28 07                             jr      z,0E470h
+E469: FE 09                             cp      09h
+E46B: 28 24                             jr      z,0E491h
+E46D: C3 03 E2                          jp      0E203h
+
+                                        ; Referenced from 0E467h
+E470: 7D                         0E470h:        ld      a,l
+E471: E6 3F                             and     3Fh     ; '?'
+E473: DD BE 02                          cp      (ix+02h)
+E476: 20 16                             jr      nz,0E48Eh
+E478: CD 7E E2                          call    0E27Eh
+E47B: DD BE 00                          cp      (ix+00h)
+E47E: 28 21                             jr      z,0E4A1h
+E480: 7D                                ld      a,l
+E481: E6 C0                             and     0C0h
+E483: DD B6 03                          or      (ix+03h)
+E486: 6F                                ld      l,a
+E487: 01 C0 FF                          ld      bc,0FFC0h
+E48A: 09                                add     hl,bc
+
+                                        ; Referenced from 0E48Fh, 0E4AAh
+E48B: C3 3C E2                   0E48Bh:        jp      0E23Ch
+
+                                        ; Referenced from 0E476h
+E48E: 2D                         0E48Eh:        dec     l
+E48F: 18 FA                             jr      0E48Bh
+
+                                        ; Referenced from 0E46Bh
+E491: 7D                         0E491h:        ld      a,l
+E492: E6 07                             and     07h
+E494: D6 08                             sub     08h
+E496: ED 44                             neg
+E498: 47                                ld      b,a
+
+                                        ; Referenced from 0E49Fh
+E499: CD CB E2                   0E499h:        call    0E2CBh
+E49C: CA 2F E2                          jp      z,0E22Fh
+E49F: 10 F8                             djnz    0E499h
+
+                                        ; Referenced from 0E457h, 0E45Eh, 0E47Eh
+E4A1: C3 1D E2                   0E4A1h:        jp      0E21Dh
+
+                                        ; Referenced from 0E450h
+E4A4: CD BF E2                   0E4A4h:        call    0E2BFh
+E4A7: CD 6F E2                          call    0E26Fh
+E4AA: 18 DF                             jr      0E48Bh
+
+E4AC: FF                         0E4ACh:        rst     0x38
+
+E4AD: FF                         0E4ADh:        rst     0x38
+
+E4AE: FF                         0E4AEh:        rst     0x38
+
+E4AF: FF                         0E4AFh:        rst     0x38
+
+                                        ; Referenced from 0E1F0h
+                                        ; --- START PROC 0E4B0h ---
+E4B0: CD B9 E4                   0E4B0h:        call    0E4B9h
+E4B3: DD 66 06                          ld      h,(ix+06h)
+E4B6: C3 F3 E1                          jp      0E1F3h
+
+                                        ; Referenced from 0E40Ch, 0E4B0h, 0E4C8h, 0E4CEh
+                                        ; --- START PROC 0E4B9h ---
+E4B9: F5                         0E4B9h:        push    af
+
+                                        ; Referenced from 0E4BEh
+E4BA: DB 77                      0E4BAh:        in      a,(77h) ; 'w'
+E4BC: CB 5F                             bit     3,a
+E4BE: 20 FA                             jr      nz,0E4BAh
+
+                                        ; Referenced from 0E4C4h
+E4C0: DB 77                      0E4C0h:        in      a,(77h) ; 'w'
+E4C2: CB 57                             bit     2,a
+E4C4: 28 FA                             jr      z,0E4C0h
+E4C6: F1                                pop     af
+E4C7: C9                                ret
+
+                                        ; Referenced from 0E298h
+                                        ; --- START PROC 0E4C8h ---
+E4C8: CD B9 E4                   0E4C8h:        call    0E4B9h
+E4CB: C3 B4 E2                          jp      0E2B4h
+
+                                        ; Referenced from 0E2AFh, 0E2BFh
+                                        ; --- START PROC 0E4CEh ---
+E4CE: CD B9 E4                   0E4CEh:        call    0E4B9h
+E4D1: CD 86 E2                          call    0E286h
+E4D4: DD 7E 04                          ld      a,(ix+04h)
+E4D7: E6 80                             and     80h
+E4D9: C6 20                             add     a,20h   ; ' '
+E4DB: 47                                ld      b,a
+
+                                        ; Referenced from 0E4E1h
+E4DC: 78                         0E4DCh:        ld      a,b
+E4DD: 77                                ld      (hl),a
+E4DE: CD CB E2                          call    0E2CBh
+E4E1: 20 F9                             jr      nz,0E4DCh
+E4E3: C9                                ret
+
+E4E4: 01 32 86                   0E4E4h:        ld      bc,8632h
+E4E7: 37                                scf
+E4E8: CD 05 29                          call    2905h
+E4EB: 21 FE 36                          ld      hl,36FEh
+E4EE: CB A6                             res     4,(hl)
+E4F0: C9                                ret
+
+E4F1: CB D6                      0E4F1h:        set     2,(hl)
+E4F3: CB 4E                             bit     1,(hl)
+E4F5: 01 08 00                          ld      bc,0008h
+E4F8: 28 0F                             jr      z,0E509h
+E4FA: CB E6                             set     4,(hl)
+E4FC: 21 08 37                          ld      hl,3708h
+E4FF: ED B0                             ldir
+E501: CD 92 35                          call    3592h
+E504: 30 09                             jr      nc,0E50Fh
+E506: EB                                ex      de,hl
+E507: 18 0C                             jr      0E515h
+
+                                        ; Referenced from 0E4F8h
+E509: EB                         0E509h:        ex      de,hl
+E50A: 11 08 37                          ld      de,3708h
+E50D: ED B0                             ldir
+
+                                        ; Referenced from 0E504h
+E50F: 2A 2E 37                   0E50Fh:        ld      hl,(372Eh)
+E512: 2B                                dec     hl
+E513: 18 04                             jr      0E519h
+
+                                        ; Referenced from 0E507h
+E515: 11 07 00                   0E515h:        ld      de,0007h
+E518: 19                                add     hl,de
+
+                                        ; Referenced from 0E513h
+E519: E5                         0E519h:        push    hl
+E51A: 01 07 00                          ld      bc,0007h
+E51D: A7                                and     a
+E51E: ED 42                             sbc     hl,bc
+E520: E5                                push    hl
+E521: ED 4B 20 37                       ld      bc,(3720h)
+E525: ED 42                             sbc     hl,bc
+E527: 4D                                ld      c,l
+E528: 44                                ld      b,h
+E529: E1                                pop     hl
+E52A: 2B                                dec     hl
+E52B: D1                                pop     de
+E52C: 79                                ld      a,c
+E52D: B0                                or      b
+E52E: 28 02                             jr      z,0E532h
+E530: ED B8                             lddr
+
+                                        ; Referenced from 0E52Eh
+E532: 21 0F 37                   0E532h:        ld      hl,370Fh
+E535: 01 08 00                          ld      bc,0008h
+E538: ED B8                             lddr
+E53A: C9                                ret
+
+E53B: 21 FE 36                   0E53Bh:        ld      hl,36FEh
+E53E: CB DE                             set     3,(hl)
+E540: 2A 06 37                          ld      hl,(3706h)
+E543: 01 7F 00                          ld      bc,007Fh
+E546: A7                                and     a
+E547: ED 42                             sbc     hl,bc
+E549: 22 06 37                          ld      (3706h),hl
+E54C: 21 80 37                          ld      hl,3780h
+E54F: CD E9 28                          call    28E9h
+E552: 2A C0 13                          ld      hl,(13C0h)
+E555: ED 4B 20 37                       ld      bc,(3720h)
+E559: AF                                xor     a
+E55A: ED 42                             sbc     hl,bc
+E55C: 06 0A                             ld      b,0Ah
+E55E: 3E 00                             ld      a,00h
+
+                                        ; Referenced from 0E566h
+E560: CB 3C                      0E560h:        srl     h
+E562: CB 1D                             rr      l
+E564: CE 00                             adc     a,00h
+E566: 10 F8                             djnz    0E560h
+E568: 28 01                             jr      z,0E56Bh
+E56A: 2C                                inc     l
+
+                                        ; Referenced from 0E568h
+E56B: 7D                         0E56Bh:        ld      a,l
+E56C: 32 86 37                          ld      (3786h),a
+E56F: 2A 20 37                          ld      hl,(3720h)
+E572: 22 82 37                          ld      (3782h),hl
+
+                                        ; Referenced from 0E67Bh
+E575: 21 80 37                   0E575h:        ld      hl,3780h
+E578: 36 24                             ld      (hl),24h        ; '$'
+E57A: CD 05 29                          call    2905h
+E57D: 2A 2E 37                          ld      hl,(372Eh)
+E580: 22 82 37                          ld      (3782h),hl
+E583: 21 80 37                          ld      hl,3780h
+E586: 36 1A                             ld      (hl),1Ah
+E588: CD 05 29                          call    2905h
+E58B: C9                                ret
+
+E58C: 21 08 37                   0E58Ch:        ld      hl,3708h
+E58F: C3 8A 28                          jp      288Ah
+
+E592: 2A 20 37                   0E592h:        ld      hl,(3720h)
+E595: ED 4B 06 37                       ld      bc,(3706h)
+E599: 18 06                             jr      0E5A1h
+
+E59B: 2A 2E 37                   0E59Bh:        ld      hl,(372Eh)
+E59E: 01 80 00                          ld      bc,0080h
+
+                                        ; Referenced from 0E599h
+E5A1: CD A9 35                   0E5A1h:        call    35A9h
+E5A4: EB                                ex      de,hl
+E5A5: 21 FE 36                          ld      hl,36FEh
+E5A8: C9                                ret
+
+E5A9: 78                         0E5A9h:        ld      a,b
+E5AA: B1                                or      c
+E5AB: C8                                ret     z
+E5AC: C5                                push    bc
+E5AD: 41                                ld      b,c
+E5AE: 3A 08 37                          ld      a,(3708h)
+E5B1: 4F                                ld      c,a
+E5B2: 11 08 00                          ld      de,0008h
+E5B5: D9                                exx
+E5B6: C1                                pop     bc
+E5B7: 04                                inc     b
+
+                                        ; Referenced from 0E5C6h
+E5B8: D9                         0E5B8h:        exx
+
+                                        ; Referenced from 0E5C3h
+E5B9: 7E                         0E5B9h:        ld      a,(hl)
+E5BA: FE FF                             cp      0FFh
+E5BC: C8                                ret     z
+E5BD: 91                                sub     c
+E5BE: E6 7F                             and     7Fh     ; ''
+E5C0: 28 08                             jr      z,0E5CAh
+E5C2: 19                                add     hl,de
+E5C3: 10 F4                             djnz    0E5B9h
+E5C5: D9                                exx
+E5C6: 10 F0                             djnz    0E5B8h
+
+                                        ; Referenced from 0E678h, 0E790h, 0EB90h
+                                        ; --- START PROC 0E5C8h ---
+E5C8: AF                         0E5C8h:        xor     a
+E5C9: C9                                ret
+
+                                        ; Referenced from 0E5C0h
+E5CA: E5                         0E5CAh:        push    hl
+E5CB: D9                                exx
+E5CC: E1                                pop     hl
+E5CD: 23                                inc     hl
+E5CE: C5                                push    bc
+E5CF: 06 05                             ld      b,05h
+E5D1: 11 09 37                          ld      de,3709h
+
+                                        ; Referenced from 0E5DCh
+E5D4: 1A                         0E5D4h:        ld      a,(de)
+E5D5: 96                                sub     (hl)
+E5D6: E6 7F                             and     7Fh     ; ''
+E5D8: 20 08                             jr      nz,0E5E2h
+E5DA: 13                                inc     de
+E5DB: 23                                inc     hl
+E5DC: 10 F6                             djnz    0E5D4h
+E5DE: C1                                pop     bc
+E5DF: 37                                scf
+E5E0: D9                                exx
+E5E1: C9                                ret
+
+                                        ; Referenced from 0E5D8h
+E5E2: C1                         0E5E2h:        pop     bc
+E5E3: D9                                exx
+E5E4: C3 C2 35                          jp      35C2h
+
+E5E7: 54                         0E5E7h:        ld      d,h
+E5E8: 45                                ld      b,l
+E5E9: 53                                ld      d,e
+E5EA: 54                                ld      d,h
+E5EB: 56                                ld      d,(hl)
+E5EC: 20 3A                             jr      nz,0E627h+1     ; reference not aligned to instruction
+E5EE: FE 36                             cp      36h     ; '6'
+E5F0: CB 4F                             bit     1,a
+E5F2: C0                                ret     nz
+E5F3: 21 08 37                          ld      hl,3708h
+E5F6: ED 5B 1E 37                       ld      de,(371Eh)
+E5FA: 01 06 00                          ld      bc,0006h
+E5FD: ED B0                             ldir
+E5FF: 2A 3D 3D                          ld      hl,(3D3Dh)
+E602: 3D                                dec     a
+E603: CB 1F                             rr      a
+E605: CB 17                             rl      a
+E607: C9                                ret
+
+E608: CB 1F                      0E608h:        rr      a
+E60A: CB 17                             rl      a
+E60C: C0                                ret     nz
+E60D: 3C                                inc     a
+E60E: CB 1F                             rr      a
+E610: CB 17                             rl      a
+E612: C9                                ret
+
+E613: CB 1F                      0E613h:        rr      a
+E615: CB 17                             rl      a
+E617: E2 C2 16                          jp      po,16C2h
+E61A: C3 B2 16                          jp      16B2h
+
+E61D: CB 1F                      0E61Dh:        rr      a
+E61F: CB 17                             rl      a
+E621: E2 7F 1B                          jp      po,1B7Fh
+E624: C3 7E 1B                          jp      1B7Eh
+
+                                        ; Referenced from 0E5ECh
+E627: CB 1F                      0E627h:        rr      a
+E629: CB 17                             rl      a
+E62B: E2 9E 1C                          jp      po,1C9Eh
+E62E: C3 B5 1C                          jp      1CB5h
+
+E631: C5                         0E631h:        push    bc
+E632: 47                                ld      b,a
+E633: D6 05                             sub     05h
+E635: CB 1F                             rr      a
+E637: CB 17                             rl      a
+E639: 78                                ld      a,b
+E63A: C1                                pop     bc
+E63B: EA 88 32                          jp      pe,3288h
+E63E: C3 31 32                          jp      3231h
+
+E641: 3E 0D                      0E641h:        ld      a,0Dh
+E643: CD 50 E6                          call    0E650h
+E646: 3E 0A                             ld      a,0Ah
+E648: 00                                nop
+E649: 00                                nop
+E64A: 00                                nop
+E64B: 3E 01                             ld      a,01h
+E64D: C3 C5 0D                          jp      0DC5h
+
+                                        ; Referenced from 0E643h
+                                        ; --- START PROC 0E650h ---
+E650: F5                         0E650h:        push    af
+
+                                        ; Referenced from 0E654h
+E651: DB 5D                      0E651h:        in      a,(5Dh) ; ']'
+E653: 0F                                rrca
+E654: 38 FB                             jr      c,0E651h
+E656: F1                                pop     af
+E657: F5                                push    af
+E658: 00                                nop
+E659: D3 5C                             out     (5Ch),a ; '\'
+E65B: DD 7E 00                          ld      a,(ix+00h)
+E65E: CB 97                             res     2,a
+E660: D3 5D                             out     (5Dh),a ; ']'
+E662: 3E C0                             ld      a,0C0h
+
+                                        ; Referenced from 0E665h
+E664: 3D                         0E664h:        dec     a
+E665: 20 FD                             jr      nz,0E664h
+E667: DD 7E 00                          ld      a,(ix+00h)
+E66A: CB D7                             set     2,a
+E66C: D3 5D                             out     (5Dh),a ; ']'
+E66E: F1                                pop     af
+E66F: C9                                ret
+
+E670: 3A 00 DC                   0E670h:        ld      a,(0DC00h)
+E673: FE C3                             cp      0C3h
+E675: CA 18 DC                          jp      z,0DC18h
+E678: CD C8 E5                          call    0E5C8h
+E67B: C3 77 E5                          jp      0E575h+2        ; reference not aligned to instruction
+
+E67E: FF                         0E67Eh:        rst     0x38
+
+E67F: FF                         0E67Fh:        rst     0x38
+
+                                        ; Referenced from 0E691h, 0E6C8h
+                                        ; --- START PROC 0E680h ---
+E680: 3E 01                      0E680h:        ld      a,01h
+E682: D3 79                             out     (79h),a ; 'y'
+E684: 3E 40                             ld      a,40h   ; '@'
+E686: D3 79                             out     (79h),a ; 'y'
+E688: 3E CD                             ld      a,0CDh
+E68A: D3 79                             out     (79h),a ; 'y'
+E68C: 3E 15                             ld      a,15h
+E68E: D3 79                             out     (79h),a ; 'y'
+E690: C9                                ret
+
+E691: CD 80 E6                   0E691h:        call    0E680h
+
+                                        ; Referenced from 0E694h
+E694: 18 FE                      0E694h:        jr      0E694h
+
+                                        ; Referenced from 0E6ACh, 0E6B1h, 0E6B6h
+                                        ; --- START PROC 0E696h ---
+E696: F5                         0E696h:        push    af
+
+                                        ; Referenced from 0E69Bh
+E697: DB 79                      0E697h:        in      a,(79h) ; 'y'
+E699: CB 57                             bit     2,a
+E69B: 28 FA                             jr      z,0E697h
+E69D: F1                                pop     af
+E69E: D3 78                             out     (78h),a ; 'x'
+E6A0: C9                                ret
+
+                                        ; Referenced from 0E6A5h
+E6A1: DB 79                      0E6A1h:        in      a,(79h) ; 'y'
+E6A3: CB 4F                             bit     1,a
+E6A5: 28 FA                             jr      z,0E6A1h
+E6A7: DB 78                             in      a,(78h) ; 'x'
+E6A9: C9                                ret
+
+E6AA: 3E 0D                      0E6AAh:        ld      a,0Dh
+E6AC: CD 96 E6                          call    0E696h
+E6AF: 3E 0A                             ld      a,0Ah
+E6B1: CD 96 E6                          call    0E696h
+E6B4: 3E 00                             ld      a,00h
+E6B6: CD 96 E6                          call    0E696h
+E6B9: 3E 01                             ld      a,01h
+E6BB: C3 C5 0D                          jp      0DC5h
+
+E6BE: 3E AA                      0E6BEh:        ld      a,0AAh
+E6C0: 32 C2 0D                          ld      (0DC2h),a
+E6C3: 3E 96                             ld      a,96h
+E6C5: 32 84 0D                          ld      (0D84h),a
+E6C8: CD 80 E6                          call    0E680h
+E6CB: C3 00 00                          jp      0000h
+
+E6CE: FF                         0E6CEh:        rst     0x38
+
+E6CF: FF                         0E6CFh:        rst     0x38
+
+E6D0: FF                         0E6D0h:        rst     0x38
+
+E6D1: FF                         0E6D1h:        rst     0x38
+
+E6D2: FF                         0E6D2h:        rst     0x38
+
+E6D3: FF                         0E6D3h:        rst     0x38
+
+E6D4: FF                         0E6D4h:        rst     0x38
+
+E6D5: FF                         0E6D5h:        rst     0x38
+
+E6D6: FF                         0E6D6h:        rst     0x38
+
+E6D7: FF                         0E6D7h:        rst     0x38
+
+E6D8: FF                         0E6D8h:        rst     0x38
+
+E6D9: FF                         0E6D9h:        rst     0x38
+
+E6DA: FF                         0E6DAh:        rst     0x38
+
+E6DB: FF                         0E6DBh:        rst     0x38
+
+E6DC: FF                         0E6DCh:        rst     0x38
+
+E6DD: FF                         0E6DDh:        rst     0x38
+
+E6DE: FF                         0E6DEh:        rst     0x38
+
+E6DF: FF                         0E6DFh:        rst     0x38
+
+                                        ; Referenced from 0E748h, 0E753h, 0EB48h, 0EB53h
+                                        ; --- START PROC 0E6E0h ---
+E6E0: FE 02                      0E6E0h:        cp      02h
+E6E2: C2 35 E7                          jp      nz,0E735h
+E6E5: 7E                                ld      a,(hl)
+E6E6: 23                                inc     hl
+E6E7: 66                                ld      h,(hl)
+E6E8: 6F                                ld      l,a
+E6E9: CD 0C DC                          call    0DC0Ch
+E6EC: C9                                ret
+
+E6ED: FF                         0E6EDh:        rst     0x38
+
+E6EE: FF                         0E6EEh:        rst     0x38
+
+E6EF: FF                         0E6EFh:        rst     0x38
+
+E6F0: FF                         0E6F0h:        rst     0x38
+
+E6F1: FF                         0E6F1h:        rst     0x38
+
+E6F2: FF                         0E6F2h:        rst     0x38
+
+E6F3: FF                         0E6F3h:        rst     0x38
+
+E6F4: FF                         0E6F4h:        rst     0x38
+
+E6F5: FF                         0E6F5h:        rst     0x38
+
+E6F6: FF                         0E6F6h:        rst     0x38
+
+E6F7: FF                         0E6F7h:        rst     0x38
+
+E6F8: FF                         0E6F8h:        rst     0x38
+
+E6F9: FF                         0E6F9h:        rst     0x38
+
+E6FA: FF                         0E6FAh:        rst     0x38
+
+E6FB: FF                         0E6FBh:        rst     0x38
+
+E6FC: FF                         0E6FCh:        rst     0x38
+
+E6FD: FF                         0E6FDh:        rst     0x38
+
+E6FE: FF                         0E6FEh:        rst     0x38
+
+E6FF: FF                         0E6FFh:        rst     0x38
+
+E700: FE 02                      0E700h:        cp      02h
+E702: 20 28                             jr      nz,0E72Ch
+E704: 7E                                ld      a,(hl)
+E705: 23                                inc     hl
+E706: 66                                ld      h,(hl)
+E707: 6F                                ld      l,a
+E708: 29                                add     hl,hl
+E709: 29                                add     hl,hl
+E70A: 29                                add     hl,hl
+E70B: E5                                push    hl
+E70C: E6 1F                             and     1Fh
+E70E: 4F                                ld      c,a
+E70F: CD 06 DC                          call    0DC06h
+E712: E1                                pop     hl
+E713: 7C                                ld      a,h
+E714: C6 07                             add     a,07h
+E716: 4F                                ld      c,a
+E717: FE 4E                             cp      4Eh     ; 'N'
+E719: 21 00 00                          ld      hl,0000h
+E71C: 38 03                             jr      c,0E721h
+E71E: 23                                inc     hl
+E71F: 18 05                             jr      0E726h
+
+                                        ; Referenced from 0E71Ch
+E721: E5                         0E721h:        push    hl
+E722: CD 03 DC                          call    0DC03h
+E725: E1                                pop     hl
+
+                                        ; Referenced from 0E71Fh, 0E751h
+E726: E5                         0E726h:        push    hl
+E727: 2A 06 00                          ld      hl,(0006h)
+E72A: E3                                ex      (sp),hl
+E72B: C9                                ret
+
+                                        ; Referenced from 0E702h, 0E737h
+E72C: 1E 0D                      0E72Ch:        ld      e,0Dh
+
+                                        ; Referenced from 0E733h
+E72E: C3 48 08                   0E72Eh:        jp      0848h
+
+                                        ; Referenced from 0E73Ch
+E731: 1E 06                      0E731h:        ld      e,06h
+E733: 18 F9                             jr      0E72Eh
+
+                                        ; Referenced from 0E6E2h
+E735: FE 03                      0E735h:        cp      03h
+E737: 20 F3                             jr      nz,0E72Ch
+E739: 1A                                ld      a,(de)
+E73A: FE 80                             cp      80h
+E73C: 38 F3                             jr      c,0E731h
+E73E: 13                                inc     de
+E73F: 1A                                ld      a,(de)
+E740: 6F                                ld      l,a
+E741: 13                                inc     de
+E742: 1A                                ld      a,(de)
+E743: 67                                ld      h,a
+E744: CD 0C DC                          call    0DC0Ch
+E747: C9                                ret
+
+E748: CD E0 E6                   0E748h:        call    0E6E0h
+E74B: CD 12 DC                          call    0DC12h
+
+                                        ; Referenced from 0E759h
+E74E: 21 00 00                   0E74Eh:        ld      hl,0000h
+E751: 18 D3                             jr      0E726h
+
+E753: CD E0 E6                   0E753h:        call    0E6E0h
+E756: CD 0F DC                          call    0DC0Fh
+E759: 18 F3                             jr      0E74Eh
+
+E75B: 3E 04                      0E75Bh:        ld      a,04h
+E75D: 32 00 DC                          ld      (0DC00h),a
+E760: C9                                ret
+
+E761: 20 20                      0E761h:        jr      nz,0E783h
+E763: 20 20                             jr      nz,0E785h
+E765: 20 20                             jr      nz,0E786h+1     ; reference not aligned to instruction
+E767: 20 47                             jr      nz,0E7B0h
+E769: 45                                ld      b,l
+E76A: 4E                                ld      c,(hl)
+E76B: 45                                ld      b,l
+E76C: 52                                ld      d,d
+E76D: 41                                ld      b,c
+E76E: 4C                                ld      c,h
+E76F: 20 20                             jr      nz,0E790h+1     ; reference not aligned to instruction
+E771: 50                                ld      d,b
+E772: 52                                ld      d,d
+E773: 4F                                ld      c,a
+E774: 43                                ld      b,e
+E775: 45                                ld      b,l
+E776: 53                                ld      d,e
+E777: 53                                ld      d,e
+E778: 4F                                ld      c,a
+E779: 52                                ld      d,d
+E77A: 20 20                             jr      nz,0E79Ch
+E77C: 2D                                dec     l
+E77D: 20 20                             jr      nz,0E79Fh
+E77F: 46                                ld      b,(hl)
+E780: 49                                ld      c,c
+E781: 52                                ld      d,d
+E782: 45                                ld      b,l
+
+                                        ; Referenced from 0E761h
+E783: 4E                         0E783h:        ld      c,(hl)
+E784: 5A                                ld      e,d
+
+                                        ; Referenced from 0E763h
+E785: 45                         0E785h:        ld      b,l
+
+                                        ; Referenced from 0E765h
+E786: 18 0D                      0E786h:        jr      0E795h
+
+E788: 0A                         0E788h:        ld      a,(bc)
+E789: 00                                nop
+E78A: FF                                rst     0x38
+
+E78B: FF                         0E78Bh:        rst     0x38
+
+E78C: FF                         0E78Ch:        rst     0x38
+
+E78D: FF                         0E78Dh:        rst     0x38
+
+E78E: FF                         0E78Eh:        rst     0x38
+
+E78F: FF                         0E78Fh:        rst     0x38
+
+                                        ; Referenced from 0E76Fh
+E790: CD C8 E5                   0E790h:        call    0E5C8h
+E793: 3E AC                             ld      a,0ACh
+
+                                        ; Referenced from 0E786h
+E795: 06 A0                      0E795h:        ld      b,0A0h
+E797: 21 00 A4                          ld      hl,0A400h
+
+                                        ; Referenced from 0E79Dh
+E79A: 70                         0E79Ah:        ld      (hl),b
+E79B: 23                                inc     hl
+
+                                        ; Referenced from 0E77Ah
+E79C: BC                         0E79Ch:        cp      h
+E79D: 20 FB                             jr      nz,0E79Ah
+
+                                        ; Referenced from 0E77Dh
+E79F: 21 45 A7                   0E79Fh:        ld      hl,0A745h
+E7A2: 22 E7 3F                          ld      (3FE7h),hl
+E7A5: 21 61 E7                          ld      hl,0E761h
+
+                                        ; Referenced from 0E7B0h
+E7A8: 7E                         0E7A8h:        ld      a,(hl)
+E7A9: CD 03 E4                          call    0E403h
+E7AC: B7                                or      a
+E7AD: 28 03                             jr      z,0E7B2h
+E7AF: 23                                inc     hl
+
+                                        ; Referenced from 0E767h
+E7B0: 18 F6                      0E7B0h:        jr      0E7A8h
+
+                                        ; Referenced from 0E7ADh
+E7B2: 21 00 AA                   0E7B2h:        ld      hl,0AA00h
+E7B5: 3E 00                             ld      a,00h
+E7B7: 06 40                             ld      b,40h   ; '@'
+
+                                        ; Referenced from 0E7C1h
+E7B9: 77                         0E7B9h:        ld      (hl),a
+E7BA: 23                                inc     hl
+E7BB: 77                                ld      (hl),a
+E7BC: 23                                inc     hl
+E7BD: 77                                ld      (hl),a
+E7BE: 23                                inc     hl
+E7BF: C6 11                             add     a,11h
+E7C1: 10 F6                             djnz    0E7B9h
+E7C3: 21 40 A4                          ld      hl,0A440h
+E7C6: 3E 0B                             ld      a,0Bh
+
+                                        ; Referenced from 0E7CBh
+E7C8: 77                         0E7C8h:        ld      (hl),a
+E7C9: 23                                inc     hl
+E7CA: 3C                                inc     a
+E7CB: 10 FB                             djnz    0E7C8h
+
+                                        ; Referenced from 0E7D0h
+E7CD: C3 E0 E7                   0E7CDh:        jp      0E7E0h
+
+E7D0: 30 FB                      0E7D0h:        jr      nc,0E7CDh
+E7D2: F1                                pop     af
+E7D3: F5                                push    af
+E7D4: 2F                                cpl
+E7D5: D3 CD                             out     (0CDh),a
+E7D7: 3E FF                             ld      a,0FFh
+E7D9: D3 CC                             out     (0CCh),a
+E7DB: AF                                xor     a
+E7DC: D3 CC                             out     (0CCh),a
+E7DE: F1                                pop     af
+E7DF: C9                                ret
+
+                                        ; Referenced from 0E7CDh, 0E7E7h, 0EBCDh, 0EBE7h
+E7E0: CD EE E7                   0E7E0h:        call    0E7EEh
+E7E3: 47                                ld      b,a
+E7E4: CD 03 E4                          call    0E403h
+E7E7: C3 E0 E7                          jp      0E7E0h
+
+E7EA: FF                         0E7EAh:        rst     0x38
+
+E7EB: FF                         0E7EBh:        rst     0x38
+
+E7EC: FF                         0E7ECh:        rst     0x38
+
+E7ED: FF                         0E7EDh:        rst     0x38
+
+                                        ; Referenced from 0E7E0h, 0E7F1h, 0EBE0h
+                                        ; --- START PROC 0E7EEh ---
+E7EE: DB D8                      0E7EEh:        in      a,(0D8h)
+E7F0: 07                                rlca
+E7F1: 38 FB                             jr      c,0E7EEh
+E7F3: 0F                                rrca
+E7F4: 2F                                cpl
+E7F5: F5                                push    af
+
+                                        ; Referenced from 0E7F9h
+E7F6: DB D8                      0E7F6h:        in      a,(0D8h)
+E7F8: 07                                rlca
+E7F9: 30 FB                             jr      nc,0E7F6h
+E7FB: F1                                pop     af
+E7FC: E6 7F                             and     7Fh     ; ''
+E7FE: C9                                ret
+
+E7FF: A1                         0E7FFh:        and     c
+E800: C3 87 E8                          jp      0E887h
+
+                                        ; Referenced from 0E94Ah
+                                        ; --- START PROC 0E803h ---
+E803: C3 9D E8                   0E803h:        jp      0E89Dh
+
+                                 EPROM_SETSECTOR:                       ; Referenced from 0E94Fh
+E806: C3 98 E8                          jp      EPROM_SETSECTOR1
+
+E809: C3 99 EA                   0E809h:        jp      0EA99h
+
+                                        ; Referenced from 0E93Fh
+                                        ; --- START PROC 0E80Ch ---
+E80C: C3 EF E8                   0E80Ch:        jp      0E8EFh
+
+E80F: C3 F9 E8                   0E80Fh:        jp      0E8F9h
+
+                                        ; Referenced from 0E953h
+                                        ; --- START PROC 0E812h ---
+E812: C3 BC E8                   0E812h:        jp      0E8BCh
+
+E815: C3 5E E9                   0E815h:        jp      0E95Eh
+
+                                        ; Referenced from 0E0BAh
+E818: C3 59 E9                   0E818h:        jp      0E959h
+
+                                        ; Referenced from 0E9B5h, 0EAB6h
+                                        ; --- START PROC 0E81Bh ---
+E81B: C3 63 E9                   0E81Bh:        jp      0E963h
+
+                                        ; Referenced from 0EA8Eh
+                                        ; --- START PROC 0E81Eh ---
+E81E: C3 A9 E8                   0E81Eh:        jp      0E8A9h
+
+E821: C3 C2 E9                   0E821h:        jp      0E9C2h
+
+E824: C3 09 EA                   0E824h:        jp      0EA09h
+
+                                        ; Referenced from 0E887h, 0E89Dh, 0E8EFh, 0EA53h, 0EAC4h
+                                        ; --- START PROC 0E827h ---
+E827: C3 54 E8                   0E827h:        jp      0E854h
+
+                                        ; Referenced from 0E8BCh, 0E966h, 0E998h, 0E9C8h, 0EA99h
+                                        ; --- START PROC 0E82Ah ---
+E82A: C3 50 E8                   0E82Ah:        jp      0E850h
+
+                                        ; Referenced from 0E8F9h, 0EA0Fh
+                                        ; --- START PROC 0E82Dh ---
+E82D: C3 58 E8                   0E82Dh:        jp      0E858h
+
+                                        ; Referenced from 0E8A6h, 0E9A1h, 0EAA2h
+                                        ; --- START PROC 0E830h ---
+E830: C3 6B EA                   0E830h:        jp      0EA6Bh
+
+                                        ; Referenced from 0E892h, 0E8B3h, 0E8E9h, 0E92Dh, 0E992h, 0E9F9h, 0EA40h, 0EA5Ah, 0EACBh
+                                        ; --- START PROC 0E833h ---
+E833: C3 66 E8                   0E833h:        jp      0E866h
+
+                                        ; Referenced from 0E8B7h, 0EA8Bh
+                                        ; --- START PROC 0E836h ---
+E836: C3 8E E8                   0E836h:        jp      0E88Eh
+
+                                        ; Referenced from 0E95Bh, 0E960h
+E839: C3 38 E9                   0E839h:        jp      0E938h
+
+                                        ; Referenced from 0EA68h
+                                        ; --- START PROC 0E83Ch ---
+E83C: C3 4F EA                   0E83Ch:        jp      0EA4Fh
+
+                                        ; Referenced from 0E86Fh
+                                        ; --- START PROC 0E83Fh ---
+E83F: C3 66 EA                   0E83Fh:        jp      0EA66h
+
+                                        ; Referenced from 0E879h
+                                        ; --- START PROC 0E842h ---
+E842: C3 81 EA                   0E842h:        jp      0EA81h
+
+E845: 44                         0E845h:        ld      b,h
+E846: 49                                ld      c,c
+E847: 53                                ld      d,e
+E848: 4B                                ld      c,e
+E849: 20 45                             jr      nz,0E890h
+E84B: 52                                ld      d,d
+E84C: 52                                ld      d,d
+E84D: 4F                                ld      c,a
+E84E: 52                                ld      d,d
+E84F: A0                                and     b
+
+                                        ; Referenced from 0E82Ah
+                                        ; --- START PROC 0E850h ---
+E850: 06 9E                      0E850h:        ld      b,9Eh
+E852: 18 06                             jr      0E85Ah
+
+                                        ; Referenced from 0E827h
+                                        ; --- START PROC 0E854h ---
+E854: 06 98                      0E854h:        ld      b,98h
+E856: 18 02                             jr      0E85Ah
+
+                                        ; Referenced from 0E82Dh
+                                        ; --- START PROC 0E858h ---
+E858: 06 DE                      0E858h:        ld      b,0DEh
+
+                                        ; Referenced from 0E852h, 0E856h
+                                        ; --- START PROC 0E85Ah ---
+E85A: DD 2A 03 E0                0E85Ah:        ld      ix,(0E003h)
+E85E: DD 70 0D                          ld      (ix+0Dh),b
+E861: DD 36 0E 0F                       ld      (ix+0Eh),0Fh
+E865: C9                                ret
+
+                                        ; Referenced from 0E833h, 0E86Ah
+                                        ; --- START PROC 0E866h ---
+E866: DB 3F                      0E866h:        in      a,(3Fh) ; '?'
+E868: CB 77                             bit     6,a
+E86A: 28 FA                             jr      z,0E866h
+E86C: DD 35 0E                          dec     (ix+0Eh)
+E86F: CA 3F E8                          jp      z,0E83Fh
+E872: 3E 07                             ld      a,07h
+E874: DD BE 0E                          cp      (ix+0Eh)
+E877: 20 04                             jr      nz,0E87Dh
+E879: CD 42 E8                          call    0E842h
+E87C: C9                                ret
+
+                                        ; Referenced from 0E877h
+E87D: DB BC                      0E87Dh:        in      a,(0BCh)
+E87F: 2F                                cpl
+E880: DD 77 0F                          ld      (ix+0Fh),a
+E883: DD A6 0D                          and     (ix+0Dh)
+E886: C9                                ret
+
+                                        ; Referenced from 0E800h
+E887: CD 27 E8                   0E887h:        call    0E827h
+E88A: DD 36 0C 00                       ld      (ix+0Ch),00h
+
+                                        ; Referenced from 0E836h, 0E896h
+                                        ; --- START PROC 0E88Eh ---
+E88E: 3E FB                      0E88Eh:        ld      a,0FBh
+
+                                        ; Referenced from 0E849h
+E890: D3 BC                      0E890h:        out     (0BCh),a
+E892: CD 33 E8                          call    0E833h
+E895: C8                                ret     z
+E896: 18 F6                             jr      0E88Eh
+
+                                 EPROM_SETSECTOR1:                        ; Referenced from EPROM_SETSECTOR
+E898: 79                                ld      a,c
+E899: 2F                                cpl
+E89A: D3 BE                             out     (FDCSEC),a
+E89C: C9                                ret
+
+                                        ; Referenced from 0E803h
+                                        ; --- START PROC 0E89Dh ---
+E89D: CD 27 E8                   0E89Dh:        call    0E827h
+E8A0: DD 71 0C                          ld      (ix+0Ch),c
+E8A3: 3E 4C                             ld      a,4Ch   ; 'L'
+E8A5: B9                                cp      c
+E8A6: DA 30 E8                          jp      c,0E830h
+
+                                        ; Referenced from 0E81Eh, 0E8BAh
+                                        ; --- START PROC 0E8A9h ---
+E8A9: DD 7E 0C                   0E8A9h:        ld      a,(ix+0Ch)
+E8AC: 2F                                cpl
+E8AD: D3 BF                             out     (0BFh),a
+E8AF: 3E EB                             ld      a,0EBh
+E8B1: D3 BC                             out     (0BCh),a
+E8B3: CD 33 E8                          call    0E833h
+E8B6: C8                                ret     z
+E8B7: CD 36 E8                          call    0E836h
+E8BA: 18 ED                             jr      0E8A9h
+
+                                        ; Referenced from 0E812h
+                                        ; --- START PROC 0E8BCh ---
+E8BC: CD 2A E8                   0E8BCh:        call    0E82Ah
+
+                                        ; Referenced from 0E8ECh
+E8BF: 0E BF                      0E8BFh:        ld      c,0BFh
+E8C1: DD 66 0B                          ld      h,(ix+0Bh)
+E8C4: DD 6E 0A                          ld      l,(ix+0Ah)
+E8C7: 3E 7F                             ld      a,7Fh   ; ''
+E8C9: D3 BC                             out     (0BCh),a
+E8CB: 18 05                             jr      0E8D2h
+
+E8CD: 00                         0E8CDh:        nop
+E8CE: 00                                nop
+E8CF: 00                                nop
+
+                                        ; Referenced from 0E8D5h, 0E8DAh, 0E8DFh, 0E8E4h
+E8D0: ED A2                      0E8D0h:        ini
+
+                                        ; Referenced from 0E8CBh, 0E8E7h
+E8D2: DB 3F                      0E8D2h:        in      a,(3Fh) ; '?'
+E8D4: 07                                rlca
+E8D5: 38 F9                             jr      c,0E8D0h
+E8D7: DB 3F                             in      a,(3Fh) ; '?'
+E8D9: 07                                rlca
+E8DA: 38 F4                             jr      c,0E8D0h
+E8DC: DB 3F                             in      a,(3Fh) ; '?'
+E8DE: 07                                rlca
+E8DF: 38 EF                             jr      c,0E8D0h
+E8E1: DB 3F                             in      a,(3Fh) ; '?'
+E8E3: 07                                rlca
+E8E4: 38 EA                             jr      c,0E8D0h
+E8E6: 07                                rlca
+E8E7: 30 E9                             jr      nc,0E8D2h
+E8E9: CD 33 E8                          call    0E833h
+E8EC: 20 D1                             jr      nz,0E8BFh
+E8EE: C9                                ret
+
+                                        ; Referenced from 0E80Ch
+                                        ; --- START PROC 0E8EFh ---
+E8EF: CD 27 E8                   0E8EFh:        call    0E827h
+E8F2: DD 75 0A                          ld      (ix+0Ah),l
+E8F5: DD 74 0B                          ld      (ix+0Bh),h
+E8F8: C9                                ret
+
+                                        ; Referenced from 0E80Fh
+E8F9: CD 2D E8                   0E8F9h:        call    0E82Dh
+
+                                        ; Referenced from 0E930h
+E8FC: 0E BF                      0E8FCh:        ld      c,0BFh
+E8FE: DD 6E 0A                          ld      l,(ix+0Ah)
+E901: DD 66 0B                          ld      h,(ix+0Bh)
+E904: 3E 5F                             ld      a,5Fh   ; '_'
+E906: D3 BC                             out     (0BCh),a
+
+                                        ; Referenced from 0E935h
+E908: 18 02                      0E908h:        jr      0E90Ch
+
+                                        ; Referenced from 0E90Fh, 0E914h, 0E919h, 0E91Eh, 0E923h, 0E928h
+E90A: ED A3                      0E90Ah:        outi
+
+                                        ; Referenced from 0E908h, 0E92Bh
+E90C: DB 3F                      0E90Ch:        in      a,(3Fh) ; '?'
+E90E: 07                                rlca
+E90F: 38 F9                             jr      c,0E90Ah
+E911: DB 3F                             in      a,(3Fh) ; '?'
+E913: 07                                rlca
+E914: 38 F4                             jr      c,0E90Ah
+E916: DB 3F                             in      a,(3Fh) ; '?'
+E918: 07                                rlca
+E919: 38 EF                             jr      c,0E90Ah
+E91B: DB 3F                             in      a,(3Fh) ; '?'
+E91D: 07                                rlca
+E91E: 38 EA                             jr      c,0E90Ah
+E920: DB 3F                             in      a,(3Fh) ; '?'
+E922: 07                                rlca
+E923: 38 E5                             jr      c,0E90Ah
+E925: DB 3F                             in      a,(3Fh) ; '?'
+E927: 07                                rlca
+E928: 38 E0                             jr      c,0E90Ah
+E92A: 07                                rlca
+E92B: 30 DF                             jr      nc,0E90Ch
+E92D: CD 33 E8                          call    0E833h
+E930: 20 CA                             jr      nz,0E8FCh
+E932: C9                                ret
+
+E933: 33                         0E933h:        inc     sp
+E934: E8                                ret     pe
+E935: 20 D1                             jr      nz,0E908h
+E937: C9                                ret
+
+                                        ; Referenced from 0E839h
+E938: 3E FE                      0E938h:        ld      a,0FEh
+E93A: D3 3F                             out     (3Fh),a ; '?'
+E93C: 21 00 01                          ld      hl,0100h
+E93F: CD 0C E8                          call    0E80Ch
+E942: DD 75 09                          ld      (ix+09h),l
+E945: 00                                nop
+E946: DD F9                             ld      sp,ix
+E948: 0E 00                             ld      c,00h
+E94A: CD 03 E8                          call    0E803h
+E94D: 0E 01                             ld      c,01h
+E94F: CD 06 E8                          call    EPROM_SETSECTOR
+E952: E5                                push    hl
+E953: CD 12 E8                          call    0E812h
+E956: E1                                pop     hl
+E957: 6B                                ld      l,e
+E958: E9                                jp      (hl)
+
+                                        ; Referenced from 0E818h
+E959: 1E 00                      0E959h:        ld      e,00h
+E95B: C3 39 E8                          jp      0E839h
+
+                                        ; Referenced from 0E815h
+E95E: 1E 03                      0E95Eh:        ld      e,03h
+E960: C3 39 E8                          jp      0E839h
+
+                                        ; Referenced from 0E81Bh
+                                        ; --- START PROC 0E963h ---
+E963: 00                         0E963h:        nop
+E964: 00                                nop
+E965: 00                                nop
+E966: CD 2A E8                          call    0E82Ah
+
+                                        ; Referenced from 0E995h
+E969: DD E5                      0E969h:        push    ix
+E96B: E1                                pop     hl
+E96C: 2E F0                             ld      l,0F0h
+E96E: 0E BF                             ld      c,0BFh
+E970: 3E 3B                             ld      a,3Bh   ; ';'
+E972: D3 BC                             out     (0BCh),a
+E974: 18 05                             jr      0E97Bh
+
+E976: 00                         0E976h:        nop
+E977: 00                                nop
+E978: 00                                nop
+
+                                        ; Referenced from 0E97Eh, 0E983h, 0E988h, 0E98Dh
+E979: ED A2                      0E979h:        ini
+
+                                        ; Referenced from 0E974h
+E97B: DB 3F                      0E97Bh:        in      a,(3Fh) ; '?'
+E97D: 07                                rlca
+E97E: 38 F9                             jr      c,0E979h
+E980: DB 3F                             in      a,(3Fh) ; '?'
+E982: 07                                rlca
+E983: 38 F4                             jr      c,0E979h
+E985: DB 3F                             in      a,(3Fh) ; '?'
+E987: 07                                rlca
+E988: 38 EF                             jr      c,0E979h
+
+                                        ; Referenced from 0E990h
+E98A: DB 3F                      0E98Ah:        in      a,(3Fh) ; '?'
+E98C: 07                                rlca
+E98D: 38 EA                             jr      c,0E979h
+E98F: 07                                rlca
+E990: 30 F8                             jr      nc,0E98Ah
+E992: CD 33 E8                          call    0E833h
+E995: 20 D2                             jr      nz,0E969h
+E997: C9                                ret
+
+E998: CD 2A E8                   0E998h:        call    0E82Ah
+E99B: DD 71 09                          ld      (ix+09h),c
+E99E: 3E 05                             ld      a,05h
+E9A0: B9                                cp      c
+E9A1: DA 30 E8                          jp      c,0E830h
+E9A4: 41                                ld      b,c
+E9A5: CB 18                             rr      b
+E9A7: 04                                inc     b
+E9A8: F6 FF                             or      0FFh
+
+                                        ; Referenced from 0E9ABh
+E9AA: 17                         0E9AAh:        rla
+E9AB: 10 FD                             djnz    0E9AAh
+E9AD: CB 41                             bit     0,c
+E9AF: 28 02                             jr      z,0E9B3h
+E9B1: CB 9F                             res     3,a
+
+                                        ; Referenced from 0E9AFh
+E9B3: D3 3F                      0E9B3h:        out     (3Fh),a ; '?'
+E9B5: CD 1B E8                          call    0E81Bh
+E9B8: DD 7E 10                          ld      a,(ix+10h)
+E9BB: D3 BD                             out     (0BDh),a
+E9BD: 2F                                cpl
+E9BE: DD 77 0C                          ld      (ix+0Ch),a
+E9C1: C9                                ret
+
+                                        ; Referenced from 0E821h
+E9C2: 00                         0E9C2h:        nop
+E9C3: 00                                nop
+E9C4: 00                                nop
+E9C5: 00                                nop
+E9C6: 00                                nop
+E9C7: 00                                nop
+E9C8: CD 2A E8                          call    0E82Ah
+E9CB: DD CB 0D A6                       res     4,(ix+0Dh)
+
+                                        ; Referenced from 0E9FCh, 0EA06h
+E9CF: 0E BF                      0E9CFh:        ld      c,0BFh
+E9D1: DD 66 0B                          ld      h,(ix+0Bh)
+E9D4: DD 6E 0A                          ld      l,(ix+0Ah)
+E9D7: 3E 6F                             ld      a,6Fh   ; 'o'
+E9D9: D3 BC                             out     (0BCh),a
+E9DB: 18 05                             jr      0E9E2h
+
+E9DD: 00                         0E9DDh:        nop
+E9DE: 00                                nop
+E9DF: 00                                nop
+
+                                        ; Referenced from 0E9E5h, 0E9EAh, 0E9EFh, 0E9F4h
+E9E0: ED A2                      0E9E0h:        ini
+
+                                        ; Referenced from 0E9DBh
+E9E2: DB 3F                      0E9E2h:        in      a,(3Fh) ; '?'
+E9E4: 07                                rlca
+E9E5: 38 F9                             jr      c,0E9E0h
+E9E7: DB 3F                             in      a,(3Fh) ; '?'
+E9E9: 07                                rlca
+E9EA: 38 F4                             jr      c,0E9E0h
+E9EC: DB 3F                             in      a,(3Fh) ; '?'
+E9EE: 07                                rlca
+E9EF: 38 EF                             jr      c,0E9E0h
+
+                                        ; Referenced from 0E9F7h
+E9F1: DB 3F                      0E9F1h:        in      a,(3Fh) ; '?'
+E9F3: 07                                rlca
+E9F4: 38 EA                             jr      c,0E9E0h
+E9F6: 07                                rlca
+E9F7: 30 F8                             jr      nc,0E9F1h
+E9F9: CD 33 E8                          call    0E833h
+E9FC: 20 D1                             jr      nz,0E9CFh
+E9FE: DB BE                             in      a,(FDCSEC)
+EA00: FE E5                             cp      0E5h
+EA02: C8                                ret     z
+EA03: DD 35 0E                          dec     (ix+0Eh)
+EA06: 18 C7                             jr      0E9CFh
+
+EA08: 00                         0EA08h:        nop
+
+                                        ; Referenced from 0E824h
+EA09: 00                         0EA09h:        nop
+EA0A: 00                                nop
+EA0B: 00                                nop
+EA0C: 00                                nop
+EA0D: 00                                nop
+EA0E: 00                                nop
+EA0F: CD 2D E8                          call    0E82Dh
+EA12: DD CB 0D A6                       res     4,(ix+0Dh)
+
+                                        ; Referenced from 0EA43h, 0EA4Dh
+EA16: 0E BF                      0EA16h:        ld      c,0BFh
+EA18: DD 66 0B                          ld      h,(ix+0Bh)
+EA1B: DD 6E 0A                          ld      l,(ix+0Ah)
+EA1E: 3E 4F                             ld      a,4Fh   ; 'O'
+EA20: D3 BC                             out     (0BCh),a
+EA22: 18 05                             jr      0EA29h
+
+EA24: 00                         0EA24h:        nop
+EA25: 00                                nop
+EA26: 00                                nop
+
+                                        ; Referenced from 0EA2Ch, 0EA31h, 0EA36h, 0EA3Bh
+EA27: ED A3                      0EA27h:        outi
+
+                                        ; Referenced from 0EA22h
+EA29: DB 3F                      0EA29h:        in      a,(3Fh) ; '?'
+EA2B: 07                                rlca
+EA2C: 38 F9                             jr      c,0EA27h
+EA2E: DB 3F                             in      a,(3Fh) ; '?'
+EA30: 07                                rlca
+EA31: 38 F4                             jr      c,0EA27h
+EA33: DB 3F                             in      a,(3Fh) ; '?'
+EA35: 07                                rlca
+EA36: 38 EF                             jr      c,0EA27h
+
+                                        ; Referenced from 0EA3Eh
+EA38: DB 3F                      0EA38h:        in      a,(3Fh) ; '?'
+EA3A: 07                                rlca
+EA3B: 38 EA                             jr      c,0EA27h
+EA3D: 07                                rlca
+EA3E: 30 F8                             jr      nc,0EA38h
+EA40: CD 33 E8                          call    0E833h
+EA43: 20 D1                             jr      nz,0EA16h
+EA45: DB BE                             in      a,(FDCSEC)
+EA47: FE E5                             cp      0E5h
+EA49: C8                                ret     z
+EA4A: DD 35 0E                          dec     (ix+0Eh)
+EA4D: 18 C7                             jr      0EA16h
+
+                                        ; Referenced from 0E83Ch
+                                        ; --- START PROC 0EA4Fh ---
+EA4F: DB BD                      0EA4Fh:        in      a,(0BDh)
+EA51: D3 BF                             out     (0BFh),a
+EA53: CD 27 E8                          call    0E827h
+EA56: 3E E4                             ld      a,0E4h
+EA58: D3 BC                             out     (0BCh),a
+EA5A: CD 33 E8                          call    0E833h
+
+                                        ; Referenced from 0EA61h
+EA5D: DB 3F                      0EA5Dh:        in      a,(3Fh) ; '?'
+EA5F: CB 67                             bit     4,a
+EA61: 28 FA                             jr      z,0EA5Dh
+EA63: 3E FF                             ld      a,0FFh
+EA65: C9                                ret
+
+                                        ; Referenced from 0E83Fh
+                                        ; --- START PROC 0EA66h ---
+EA66: CB 7F                      0EA66h:        bit     7,a
+EA68: C2 3C E8                          jp      nz,0E83Ch
+
+                                        ; Referenced from 0E830h
+                                        ; --- START PROC 0EA6Bh ---
+EA6B: 21 45 E8                   0EA6Bh:        ld      hl,0E845h
+EA6E: CD FA E3                          call    0E3FAh
+EA71: 3E 20                             ld      a,20h   ; ' '
+EA73: CD 03 E4                          call    0E403h
+EA76: DD E5                             push    ix
+EA78: C1                                pop     bc
+EA79: 0E EF                             ld      c,0EFh
+EA7B: CD EB E3                          call    0E3EBh
+EA7E: C3 00 E0                          jp      0E000h
+
+                                        ; Referenced from 0E842h
+EA81: DD 7E 0D                   0EA81h:        ld      a,(ix+0Dh)
+EA84: DD 77 16                          ld      (ix+16h),a
+EA87: DD 36 0D 98                       ld      (ix+0Dh),98h
+EA8B: CD 36 E8                          call    0E836h
+EA8E: CD 1E E8                          call    0E81Eh
+EA91: DD 7E 16                          ld      a,(ix+16h)
+EA94: DD 77 0D                          ld      (ix+0Dh),a
+EA97: 3C                                inc     a
+EA98: C9                                ret
+
+                                        ; Referenced from 0E809h
+EA99: CD 2A E8                   0EA99h:        call    0E82Ah
+EA9C: DD 71 09                          ld      (ix+09h),c
+EA9F: 3E 05                             ld      a,05h
+EAA1: B9                                cp      c
+EAA2: DA 30 E8                          jp      c,0E830h
+EAA5: 41                                ld      b,c
+EAA6: CB 18                             rr      b
+EAA8: 04                                inc     b
+EAA9: F6 FF                             or      0FFh
+
+                                        ; Referenced from 0EAACh
+EAAB: 17                         0EAABh:        rla
+EAAC: 10 FD                             djnz    0EAABh
+EAAE: CB 41                             bit     0,c
+EAB0: 28 02                             jr      z,0EAB4h
+EAB2: CB 9F                             res     3,a
+
+                                        ; Referenced from 0EAB0h
+EAB4: D3 3F                      0EAB4h:        out     (3Fh),a ; '?'
+EAB6: CD 1B E8                          call    0E81Bh
+EAB9: DD 7E 10                          ld      a,(ix+10h)
+EABC: D3 BD                             out     (0BDh),a
+EABE: D3 BF                             out     (0BFh),a
+EAC0: 2F                                cpl
+EAC1: DD 77 0C                          ld      (ix+0Ch),a
+EAC4: CD 27 E8                          call    0E827h
+
+                                        ; Referenced from 0EACEh
+EAC7: 3E E8                      0EAC7h:        ld      a,0E8h
+EAC9: D3 BC                             out     (0BCh),a
+EACB: CD 33 E8                          call    0E833h
+EACE: 20 F7                             jr      nz,0EAC7h
+EAD0: C9                                ret
+
+EAD1: 39                         0EAD1h:        add     hl,sp
+EAD2: 00                                nop
+EAD3: 39                                add     hl,sp
+EAD4: 00                                nop
+EAD5: 39                                add     hl,sp
+EAD6: 00                                nop
+EAD7: 39                                add     hl,sp
+EAD8: 00                                nop
+EAD9: 39                                add     hl,sp
+EADA: 00                                nop
+EADB: 39                                add     hl,sp
+EADC: 00                                nop
+EADD: 39                                add     hl,sp
+EADE: 00                                nop
+EADF: 39                                add     hl,sp
+EAE0: 00                                nop
+EAE1: 39                                add     hl,sp
+EAE2: 00                                nop
+EAE3: 39                                add     hl,sp
+EAE4: 00                                nop
+EAE5: 39                                add     hl,sp
+EAE6: 00                                nop
+EAE7: 39                                add     hl,sp
+EAE8: 00                                nop
+EAE9: 39                                add     hl,sp
+EAEA: 00                                nop
+EAEB: 39                                add     hl,sp
+EAEC: 00                                nop
+EAED: 39                                add     hl,sp
+EAEE: 00                                nop
+EAEF: 39                                add     hl,sp
+EAF0: 00                                nop
+EAF1: 39                                add     hl,sp
+EAF2: 00                                nop
+EAF3: 39                                add     hl,sp
+EAF4: 00                                nop
+EAF5: 39                                add     hl,sp
+EAF6: 00                                nop
+EAF7: 39                                add     hl,sp
+EAF8: 00                                nop
+EAF9: 39                                add     hl,sp
+EAFA: 00                                nop
+EAFB: 39                                add     hl,sp
+EAFC: 00                                nop
+EAFD: 39                                add     hl,sp
+EAFE: 00                                nop
+EAFF: 39                                add     hl,sp
+EB00: 00                                nop
+EB01: 39                                add     hl,sp
+EB02: 00                                nop
+EB03: 39                                add     hl,sp
+EB04: 00                                nop
+EB05: 02                                ld      (bc),a
+EB06: 20 28                             jr      nz,0EB2Eh+2     ; reference not aligned to instruction
+EB08: 7E                                ld      a,(hl)
+EB09: 23                                inc     hl
+EB0A: 29                                add     hl,hl
+EB0B: E5                                push    hl
+EB0C: E6 1F                             and     1Fh
+EB0E: 4F                                ld      c,a
+EB0F: CD 06 DC                          call    0DC06h
+EB12: E1                                pop     hl
+EB13: 7C                                ld      a,h
+EB14: C6 07                             add     a,07h
+EB16: 4F                                ld      c,a
+EB17: FE 4E                             cp      4Eh     ; 'N'
+EB19: 21 00 00                          ld      hl,0000h
+EB1C: 38 03                             jr      c,0EB21h
+EB1E: 23                                inc     hl
+EB1F: 18 05                             jr      0EB26h
+
+                                        ; Referenced from 0EB1Ch
+EB21: E5                         0EB21h:        push    hl
+EB22: CD 03 DC                          call    0DC03h
+EB25: E1                                pop     hl
+
+                                        ; Referenced from 0EB1Fh, 0EB51h
+EB26: E5                         0EB26h:        push    hl
+EB27: 2A 06 00                          ld      hl,(0006h)
+EB2A: E3                                ex      (sp),hl
+EB2B: C9                                ret
+
+                                        ; Referenced from 0EB37h
+EB2C: 1E 0D                      0EB2Ch:        ld      e,0Dh
+
+                                        ; Referenced from 0EB06h, 0EB33h
+EB2E: C3 48 08                   0EB2Eh:        jp      0848h
+
+                                        ; Referenced from 0EB3Ch
+EB31: 1E 06                      0EB31h:        ld      e,06h
+EB33: 18 F9                             jr      0EB2Eh
+
+EB35: FE 03                      0EB35h:        cp      03h
+EB37: 20 F3                             jr      nz,0EB2Ch
+EB39: 1A                                ld      a,(de)
+EB3A: FE 80                             cp      80h
+EB3C: 38 F3                             jr      c,0EB31h
+EB3E: 13                                inc     de
+EB3F: 1A                                ld      a,(de)
+EB40: 6F                                ld      l,a
+EB41: 13                                inc     de
+EB42: 1A                                ld      a,(de)
+EB43: 67                                ld      h,a
+EB44: CD 0C DC                          call    0DC0Ch
+EB47: C9                                ret
+
+EB48: CD E0 E6                   0EB48h:        call    0E6E0h
+EB4B: CD 12 DC                          call    0DC12h
+
+                                        ; Referenced from 0EB59h
+EB4E: 21 00 00                   0EB4Eh:        ld      hl,0000h
+EB51: 18 D3                             jr      0EB26h
+
+EB53: CD E0 E6                   0EB53h:        call    0E6E0h
+EB56: CD 0F DC                          call    0DC0Fh
+EB59: 18 F3                             jr      0EB4Eh
+
+EB5B: 3E 04                      0EB5Bh:        ld      a,04h
+EB5D: 32 00 DC                          ld      (0DC00h),a
+EB60: C9                                ret
+
+EB61: 20 20                      0EB61h:        jr      nz,0EB83h
+EB63: 20 20                             jr      nz,0EB85h
+EB65: 20 20                             jr      nz,0EB86h+1     ; reference not aligned to instruction
+EB67: 20 47                             jr      nz,0EBB0h
+EB69: 45                                ld      b,l
+EB6A: 4E                                ld      c,(hl)
+EB6B: 45                                ld      b,l
+EB6C: 52                                ld      d,d
+EB6D: 41                                ld      b,c
+EB6E: 4C                                ld      c,h
+EB6F: 20 20                             jr      nz,0EB90h+1     ; reference not aligned to instruction
+EB71: 50                                ld      d,b
+EB72: 52                                ld      d,d
+EB73: 4F                                ld      c,a
+EB74: 43                                ld      b,e
+EB75: 45                                ld      b,l
+EB76: 53                                ld      d,e
+EB77: 53                                ld      d,e
+EB78: 4F                                ld      c,a
+EB79: 52                                ld      d,d
+EB7A: 20 20                             jr      nz,0EB9Ch
+EB7C: 2D                                dec     l
+EB7D: 20 20                             jr      nz,0EB9Fh
+EB7F: 46                                ld      b,(hl)
+EB80: 49                                ld      c,c
+EB81: 52                                ld      d,d
+EB82: 45                                ld      b,l
+
+                                        ; Referenced from 0EB61h
+EB83: 4E                         0EB83h:        ld      c,(hl)
+EB84: 5A                                ld      e,d
+
+                                        ; Referenced from 0EB63h
+EB85: 45                         0EB85h:        ld      b,l
+
+                                        ; Referenced from 0EB65h
+EB86: 18 0D                      0EB86h:        jr      0EB95h
+
+EB88: 0A                         0EB88h:        ld      a,(bc)
+EB89: 00                                nop
+EB8A: FF                                rst     0x38
+
+EB8B: FF                         0EB8Bh:        rst     0x38
+
+EB8C: FF                         0EB8Ch:        rst     0x38
+
+EB8D: FF                         0EB8Dh:        rst     0x38
+
+EB8E: FF                         0EB8Eh:        rst     0x38
+
+EB8F: FF                         0EB8Fh:        rst     0x38
+
+                                        ; Referenced from 0EB6Fh
+EB90: CD C8 E5                   0EB90h:        call    0E5C8h
+EB93: 3E AC                             ld      a,0ACh
+
+                                        ; Referenced from 0EB86h
+EB95: 06 A0                      0EB95h:        ld      b,0A0h
+EB97: 21 00 A4                          ld      hl,0A400h
+
+                                        ; Referenced from 0EB9Dh
+EB9A: 70                         0EB9Ah:        ld      (hl),b
+EB9B: 23                                inc     hl
+
+                                        ; Referenced from 0EB7Ah
+EB9C: BC                         0EB9Ch:        cp      h
+EB9D: 20 FB                             jr      nz,0EB9Ah
+
+                                        ; Referenced from 0EB7Dh
+EB9F: 21 45 A7                   0EB9Fh:        ld      hl,0A745h
+EBA2: 22 E7 7F                          ld      (7FE7h),hl
+EBA5: 21 61 E7                          ld      hl,0E761h
+
+                                        ; Referenced from 0EBB0h
+EBA8: 7E                         0EBA8h:        ld      a,(hl)
+EBA9: CD 03 E4                          call    0E403h
+EBAC: B7                                or      a
+EBAD: 28 03                             jr      z,0EBB2h
+EBAF: 23                                inc     hl
+
+                                        ; Referenced from 0EB67h
+EBB0: 18 F6                      0EBB0h:        jr      0EBA8h
+
+                                        ; Referenced from 0EBADh
+EBB2: 21 00 AA                   0EBB2h:        ld      hl,0AA00h
+EBB5: 3E 00                             ld      a,00h
+EBB7: 06 40                             ld      b,40h   ; '@'
+
+                                        ; Referenced from 0EBC1h
+EBB9: 77                         0EBB9h:        ld      (hl),a
+EBBA: 23                                inc     hl
+EBBB: 77                                ld      (hl),a
+EBBC: 23                                inc     hl
+EBBD: 77                                ld      (hl),a
+EBBE: 23                                inc     hl
+EBBF: C6 11                             add     a,11h
+EBC1: 10 F6                             djnz    0EBB9h
+EBC3: 21 40 A4                          ld      hl,0A440h
+EBC6: 3E 0B                             ld      a,0Bh
+
+                                        ; Referenced from 0EBCBh
+EBC8: 77                         0EBC8h:        ld      (hl),a
+EBC9: 23                                inc     hl
+EBCA: 3C                                inc     a
+EBCB: 10 FB                             djnz    0EBC8h
+
+                                        ; Referenced from 0EBD0h
+EBCD: C3 E0 E7                   0EBCDh:        jp      0E7E0h
+
+EBD0: 30 FB                      0EBD0h:        jr      nc,0EBCDh
+EBD2: F1                                pop     af
+EBD3: F5                                push    af
+EBD4: 2F                                cpl
+EBD5: D3 CD                             out     (0CDh),a
+EBD7: 3E FF                             ld      a,0FFh
+EBD9: D3 CC                             out     (0CCh),a
+EBDB: AF                                xor     a
+EBDC: D3 CC                             out     (0CCh),a
+EBDE: F1                                pop     af
+EBDF: C9                                ret
+
+EBE0: CD EE E7                   0EBE0h:        call    0E7EEh
+EBE3: 47                                ld      b,a
+EBE4: CD 03 E4                          call    0E403h
+EBE7: C3 E0 E7                          jp      0E7E0h
+
+EBEA: FF                         0EBEAh:        rst     0x38
+
+EBEB: FF                         0EBEBh:        rst     0x38
+
+EBEC: FF                         0EBECh:        rst     0x38
+
+EBED: FF                         0EBEDh:        rst     0x38
+
+                                        ; Referenced from 0EBF1h
+EBEE: DB D8                      0EBEEh:        in      a,(0D8h)
+EBF0: 07                                rlca
+EBF1: 38 FB                             jr      c,0EBEEh
+EBF3: 0F                                rrca
+EBF4: 2F                                cpl
+EBF5: F5                                push    af
+
+                                        ; Referenced from 0EBF9h
+EBF6: DB D8                      0EBF6h:        in      a,(0D8h)
+EBF8: 07                                rlca
+EBF9: 30 FB                             jr      nc,0EBF6h
+EBFB: F1                                pop     af
+EBFC: E6 7F                             and     7Fh     ; ''
+EBFE: C9                                ret
+
+EBFF: FF                         0EBFFh:        rst     0x38
+
+EC00: C3 60 EE                   0EC00h:        jp      0EE60h
+
+EC03: C3 50 EE                   0EC03h:        jp      0EE4Fh+1    ; reference not aligned to instruction
+
+                                        ; Referenced from 0E406h, 0EF98h
+                                        ; --- START PROC 0EC06h ---
+EC06: C3 80 EE                   0EC06h:        jp      0EE80h
+
+                                        ; Referenced from 0E409h, 0EF7Bh
+                                        ; --- START PROC 0EC09h ---
+EC09: C3 70 EE                   0EC09h:        jp      0EE70h
+
+EC0C: C3 FF FF                   0EC0Ch:        jp      0FFFFh
+
+EC0F: C3 FF FF                   0EC0Fh:        jp      0FFFFh
+
+EC12: C3 FF FF                   0EC12h:        jp      0FFFFh
+
+EC15: C3 FF FF                   0EC15h:        jp      0FFFFh
+
+EC18: 00                         0EC18h:        nop
+EC19: 01 00 00                          ld      bc,0000h
+EC1C: 01 01 00                          ld      bc,0001h
+
+                                        ; Referenced from 0EE5Ah, 0EE73h
+EC1F: 01 37 1F                   0EC1Fh:        ld      bc,1F37h
+EC22: E6 FA                             and     0FAh
+EC24: 32 FF BF                          ld      (0BFFFh),a
+EC27: CD 94 EC                          call    0EC94h
+EC2A: D5                                push    de
+EC2B: C5                                push    bc
+EC2C: 3A FF BF                          ld      a,(0BFFFh)
+EC2F: CB 5F                             bit     3,a
+EC31: 20 51                             jr      nz,0EC84h
+EC33: 1E 04                             ld      e,04h
+
+                                        ; Referenced from 0EC39h
+EC35: CD C0 EC                   0EC35h:        call    0ECC0h
+EC38: 1D                                dec     e
+EC39: 20 FA                             jr      nz,0EC35h
+
+                                        ; Referenced from 0EC89h
+EC3B: 37                         0EC3Bh:        scf
+EC3C: CD 2C ED                          call    0ED2Ch
+EC3F: AF                                xor     a
+EC40: 32 FE BF                          ld      (0BFFEh),a
+EC43: C1                                pop     bc
+EC44: CD CB EC                          call    0ECCBh
+EC47: D1                                pop     de
+EC48: 4B                                ld      c,e
+EC49: CD CB EC                          call    0ECCBh
+EC4C: 4A                                ld      c,d
+EC4D: CD CB EC                          call    0ECCBh
+EC50: D5                                push    de
+EC51: 4D                                ld      c,l
+EC52: CD CB EC                          call    0ECCBh
+EC55: 4C                                ld      c,h
+EC56: CD CB EC                          call    0ECCBh
+EC59: FD E1                             pop     iy
+EC5B: CD 8B EC                          call    0EC8Bh
+EC5E: 5F                                ld      e,a
+
+                                        ; Referenced from 0EC70h, 0EC73h
+EC5F: FD 4E 00                   0EC5Fh:        ld      c,(iy+00h)
+EC62: CD CB EC                          call    0ECCBh
+EC65: 1C                                inc     e
+EC66: 20 04                             jr      nz,0EC6Ch
+EC68: CD 8B EC                          call    0EC8Bh
+EC6B: 57                                ld      d,a
+
+                                        ; Referenced from 0EC66h
+EC6C: FD 23                      0EC6Ch:        inc     iy
+EC6E: 2B                                dec     hl
+EC6F: B4                                or      h
+EC70: 20 ED                             jr      nz,0EC5Fh
+EC72: B5                                or      l
+EC73: 20 EA                             jr      nz,0EC5Fh
+EC75: CD 8B EC                          call    0EC8Bh
+EC78: CD A6 EC                          call    0ECA6h
+EC7B: 3A FF BF                          ld      a,(0BFFFh)
+EC7E: CB 4F                             bit     1,a
+EC80: C0                                ret     nz
+EC81: C3 CA ED                          jp      0EDCAh
+
+                                        ; Referenced from 0EC31h
+EC84: 16 57                      0EC84h:        ld      d,57h   ; 'W'
+EC86: CD C2 EC                          call    0ECC2h
+EC89: 18 B0                             jr      0EC3Bh
+
+                                        ; Referenced from 0EC5Bh, 0EC68h, 0EC75h
+                                        ; --- START PROC 0EC8Bh ---
+EC8B: 3A FE BF                   0EC8Bh:        ld      a,(0BFFEh)
+EC8E: 4F                                ld      c,a
+EC8F: 0C                                inc     c
+EC90: CD D2 EC                          call    0ECD2h
+EC93: C9                                ret
+
+                                        ; Referenced from 0EC27h
+                                        ; --- START PROC 0EC94h ---
+EC94: 37                         0EC94h:        scf
+EC95: 3F                                ccf
+EC96: ED 52                             sbc     hl,de
+EC98: 23                                inc     hl
+
+                                        ; Referenced from 0ED39h
+                                        ; --- START PROC 0EC99h ---
+EC99: 3E FF                      0EC99h:        ld      a,0FFh
+EC9B: 00                                nop
+EC9C: 00                                nop
+EC9D: 3E 02                             ld      a,02h
+EC9F: 00                                nop
+ECA0: 00                                nop
+ECA1: 3E 99                             ld      a,99h
+ECA3: 00                                nop
+ECA4: 00                                nop
+ECA5: C9                                ret
+
+                                        ; Referenced from 0EC78h
+                                        ; --- START PROC 0ECA6h ---
+ECA6: 3A FD BF                   0ECA6h:        ld      a,(0BFFDh)
+ECA9: D3 77                             out     (77h),a ; 'w'
+ECAB: CB 67                             bit     4,a
+ECAD: 0E 0C                             ld      c,0Ch
+ECAF: 20 02                             jr      nz,0ECB3h
+ECB1: 0E 64                             ld      c,64h   ; 'd'
+
+                                        ; Referenced from 0ECAFh, 0ECBDh
+ECB3: 3E 1E                      0ECB3h:        ld      a,1Eh
+
+                                        ; Referenced from 0ECBAh
+ECB5: 06 00                      0ECB5h:        ld      b,00h
+
+                                        ; Referenced from 0ECB7h
+ECB7: 10 FE                      0ECB7h:        djnz    0ECB7h
+ECB9: 3D                                dec     a
+ECBA: 20 F9                             jr      nz,0ECB5h
+ECBC: 0D                                dec     c
+ECBD: 20 F4                             jr      nz,0ECB3h
+ECBF: C9                                ret
+
+                                        ; Referenced from 0EC35h
+                                        ; --- START PROC 0ECC0h ---
+ECC0: 16 00                      0ECC0h:        ld      d,00h
+
+                                        ; Referenced from 0EC86h, 0ECC8h
+                                        ; --- START PROC 0ECC2h ---
+ECC2: 0E 00                      0ECC2h:        ld      c,00h
+ECC4: CD D2 EC                          call    0ECD2h
+ECC7: 15                                dec     d
+ECC8: 20 F8                             jr      nz,0ECC2h
+ECCA: C9                                ret
+
+                                        ; Referenced from 0EC44h, 0EC49h, 0EC4Dh, 0EC52h, 0EC56h, 0EC62h
+                                        ; --- START PROC 0ECCBh ---
+ECCB: 3A FE BF                   0ECCBh:        ld      a,(0BFFEh)
+ECCE: 81                                add     a,c
+ECCF: 32 FE BF                          ld      (0BFFEh),a
+
+                                        ; Referenced from 0EC90h, 0ECC4h
+                                        ; --- START PROC 0ECD2h ---
+ECD2: 37                         0ECD2h:        scf
+ECD3: CB 19                             rr      c
+
+                                        ; Referenced from 0ECDAh
+ECD5: CD DD EC                   0ECD5h:        call    0ECDDh
+ECD8: CB 39                             srl     c
+ECDA: 20 F9                             jr      nz,0ECD5h
+ECDC: C9                                ret
+
+                                        ; Referenced from 0ECD5h
+                                        ; --- START PROC 0ECDDh ---
+ECDD: DA ED EC                   0ECDDh:        jp      c,0ECEDh
+ECE0: CD FA EC                          call    0ECFAh
+ECE3: CD 0F ED                          call    0ED0Fh
+ECE6: CD FA EC                          call    0ECFAh
+ECE9: CD 0F ED                          call    0ED0Fh
+ECEC: C9                                ret
+
+                                        ; Referenced from 0ECDDh
+ECED: CD FA EC                   0ECEDh:        call    0ECFAh
+ECF0: CD FA EC                          call    0ECFAh
+ECF3: CD 0F ED                          call    0ED0Fh
+ECF6: CD FA EC                          call    0ECFAh
+ECF9: C9                                ret
+
+                                        ; Referenced from 0ECE0h, 0ECE6h, 0ECEDh, 0ECF0h, 0ECF6h, 0ED2Ch, 0ED2Fh
+                                        ; --- START PROC 0ECFAh ---
+ECFA: 3A FD BF                   0ECFAh:        ld      a,(0BFFDh)
+ECFD: E6 0A                             and     0Ah
+ECFF: F6 05                             or      05h
+ED01: CD 24 ED                          call    0ED24h
+ED04: 3A FD BF                          ld      a,(0BFFDh)
+ED07: E6 0A                             and     0Ah
+ED09: F6 04                             or      04h
+ED0B: CD 24 ED                          call    0ED24h
+ED0E: C9                                ret
+
+                                        ; Referenced from 0ECE3h, 0ECE9h, 0ECF3h
+                                        ; --- START PROC 0ED0Fh ---
+ED0F: 3A FD BF                   0ED0Fh:        ld      a,(0BFFDh)
+ED12: E6 0A                             and     0Ah
+ED14: F6 00                             or      00h
+ED16: CD 24 ED                          call    0ED24h
+ED19: 3A FD BF                          ld      a,(0BFFDh)
+ED1C: E6 0A                             and     0Ah
+ED1E: F6 00                             or      00h
+ED20: CD 24 ED                          call    0ED24h
+ED23: C9                                ret
+
+                                        ; Referenced from 0ED01h, 0ED0Bh, 0ED16h, 0ED20h
+                                        ; --- START PROC 0ED24h ---
+ED24: 06 17                      0ED24h:        ld      b,17h
+ED26: D3 77                             out     (77h),a ; 'w'
+
+                                        ; Referenced from 0ED28h
+ED28: 10 FE                      0ED28h:        djnz    0ED28h
+ED2A: AF                                xor     a
+ED2B: C9                                ret
+
+                                        ; Referenced from 0EC3Ch
+                                        ; --- START PROC 0ED2Ch ---
+ED2C: CD FA EC                   0ED2Ch:        call    0ECFAh
+ED2F: CD FA EC                          call    0ECFAh
+ED32: C9                                ret
+
+                                        ; Referenced from 0EE62h, 0EE83h
+                                        ; --- START PROC 0ED33h ---
+ED33: CB 3F                      0ED33h:        srl     a
+ED35: 32 FF BF                          ld      (0BFFFh),a
+ED38: D5                                push    de
+ED39: CD 99 EC                          call    0EC99h
+ED3C: 3A FD BF                          ld      a,(0BFFDh)
+ED3F: D3 77                             out     (77h),a ; 'w'
+ED41: 69                                ld      l,c
+
+                                        ; Referenced from 0ED58h
+ED42: CD D1 ED                   0ED42h:        call    0EDD1h
+ED45: AF                                xor     a
+ED46: 32 FE BF                          ld      (0BFFEh),a
+ED49: CD 0F EE                          call    0EE0Fh
+ED4C: CD E8 ED                          call    0EDE8h
+ED4F: 3A FF BF                          ld      a,(0BFFFh)
+ED52: CB 47                             bit     0,a
+ED54: 20 04                             jr      nz,0ED5Ah
+ED56: 79                                ld      a,c
+ED57: 95                                sub     l
+ED58: 20 E8                             jr      nz,0ED42h
+
+                                        ; Referenced from 0ED54h
+ED5A: CD E8 ED                   0ED5Ah:        call    0EDE8h
+ED5D: 69                                ld      l,c
+ED5E: CD E8 ED                          call    0EDE8h
+ED61: 61                                ld      h,c
+ED62: D1                                pop     de
+ED63: 3A FF BF                          ld      a,(0BFFFh)
+ED66: CB 67                             bit     4,a
+ED68: 28 01                             jr      z,0ED6Bh
+ED6A: EB                                ex      de,hl
+
+                                        ; Referenced from 0ED68h
+ED6B: E5                         0ED6Bh:        push    hl
+ED6C: FD E1                             pop     iy
+ED6E: CD E8 ED                          call    0EDE8h
+ED71: 69                                ld      l,c
+ED72: CD E8 ED                          call    0EDE8h
+ED75: 61                                ld      h,c
+ED76: 37                                scf
+ED77: CD A4 ED                          call    0EDA4h
+ED7A: 30 3B                             jr      nc,0EDB7h
+
+                                        ; Referenced from 0ED91h, 0ED94h
+ED7C: D5                         0ED7Ch:        push    de
+ED7D: CD E8 ED                          call    0EDE8h
+ED80: D1                                pop     de
+ED81: FD 71 00                          ld      (iy+00h),c
+ED84: 1C                                inc     e
+ED85: 37                                scf
+ED86: CC A4 ED                          call    z,0EDA4h
+ED89: 30 2C                             jr      nc,0EDB7h
+ED8B: FD 23                             inc     iy
+ED8D: 2B                                dec     hl
+ED8E: 3E 00                             ld      a,00h
+ED90: B4                                or      h
+ED91: 20 E9                             jr      nz,0ED7Ch
+ED93: B5                                or      l
+ED94: 20 E6                             jr      nz,0ED7Ch
+ED96: CD A4 ED                          call    0EDA4h
+ED99: D4 B7 ED                          call    nc,0EDB7h
+ED9C: 3A FF BF                          ld      a,(0BFFFh)
+ED9F: CB 57                             bit     2,a
+EDA1: C0                                ret     nz
+EDA2: 18 26                             jr      0EDCAh
+
+                                        ; Referenced from 0ED77h, 0ED86h, 0ED96h
+                                        ; --- START PROC 0EDA4h ---
+EDA4: 1E 08                      0EDA4h:        ld      e,08h
+
+                                        ; Referenced from 0EDACh
+EDA6: CD 15 EE                   0EDA6h:        call    0EE15h
+EDA9: CB 19                             rr      c
+EDAB: 1D                                dec     e
+EDAC: 20 F8                             jr      nz,0EDA6h
+EDAE: 3A FE BF                          ld      a,(0BFFEh)
+EDB1: 3C                                inc     a
+EDB2: 91                                sub     c
+EDB3: 37                                scf
+EDB4: C8                                ret     z
+EDB5: 3F                                ccf
+EDB6: C9                                ret
+
+                                        ; Referenced from 0ED7Ah, 0ED89h, 0ED99h
+                                        ; --- START PROC 0EDB7h ---
+EDB7: 21 C0 ED                   0EDB7h:        ld      hl,0EDC0h
+EDBA: CD FA E3                          call    0E3FAh
+EDBD: C3 CA ED                          jp      0EDCAh
+
+EDC0: 0D                         0EDC0h:        dec     c
+EDC1: 0A                                ld      a,(bc)
+EDC2: 52                                ld      d,d
+EDC3: 64                                ld      h,h
+EDC4: 20 65                             jr      nz,0EE2Bh
+EDC6: 72                                ld      (hl),d
+EDC7: 72                                ld      (hl),d
+EDC8: A0                                and     b
+EDC9: 7F                                ld      a,a
+
+                                        ; Referenced from 0EC81h, 0EDA2h, 0EDBDh
+                                        ; --- START PROC 0EDCAh ---
+EDCA: 3E 00                      0EDCAh:        ld      a,00h
+EDCC: D3 77                             out     (77h),a ; 'w'
+EDCE: 00                                nop
+EDCF: 00                                nop
+EDD0: C9                                ret
+
+                                        ; Referenced from 0ED42h, 0EDE2h
+                                        ; --- START PROC 0EDD1h ---
+EDD1: 26 00                      0EDD1h:        ld      h,00h
+EDD3: 3A FF BF                          ld      a,(0BFFFh)
+EDD6: CB 5F                             bit     3,a
+EDD8: 28 02                             jr      z,0EDDCh
+EDDA: 26 28                             ld      h,28h   ; '('
+
+                                        ; Referenced from 0EDD8h, 0EDE5h
+EDDC: CD E8 ED                   0EDDCh:        call    0EDE8h
+EDDF: 3E 00                             ld      a,00h
+EDE1: 81                                add     a,c
+EDE2: 20 ED                             jr      nz,0EDD1h
+EDE4: 25                                dec     h
+EDE5: 20 F5                             jr      nz,0EDDCh
+EDE7: C9                                ret
+
+                                        ; Referenced from 0ED4Ch, 0ED5Ah, 0ED5Eh, 0ED6Eh, 0ED72h, 0ED7Dh, 0EDDCh
+                                        ; --- START PROC 0EDE8h ---
+EDE8: 1E 08                      0EDE8h:        ld      e,08h
+
+                                        ; Referenced from 0EDF0h
+EDEA: CD 15 EE                   0EDEAh:        call    0EE15h
+EDED: CB 19                             rr      c
+EDEF: 1D                                dec     e
+EDF0: 20 F8                             jr      nz,0EDEAh
+EDF2: 3A FE BF                          ld      a,(0BFFEh)
+EDF5: 81                                add     a,c
+EDF6: 32 FE BF                          ld      (0BFFEh),a
+EDF9: C9                                ret
+
+                                        ; Referenced from 0EDFEh, 0EE0Fh, 0EE16h
+                                        ; --- START PROC 0EDFAh ---
+EDFA: DB 77                      0EDFAh:        in      a,(77h) ; 'w'
+EDFC: CB 4F                             bit     1,a
+EDFE: 20 FA                             jr      nz,0EDFAh
+
+                                        ; Referenced from 0EE04h
+EE00: DB 77                      0EE00h:        in      a,(77h) ; 'w'
+EE02: CB 4F                             bit     1,a
+EE04: 28 FA                             jr      z,0EE00h
+EE06: 06 48                             ld      b,48h   ; 'H'
+
+                                        ; Referenced from 0EE08h
+EE08: 10 FE                      0EE08h:        djnz    0EE08h
+EE0A: DB 77                             in      a,(77h) ; 'w'
+EE0C: 0F                                rrca
+EE0D: 0F                                rrca
+EE0E: C9                                ret
+
+                                        ; Referenced from 0ED49h, 0EE12h
+                                        ; --- START PROC 0EE0Fh ---
+EE0F: CD FA ED                   0EE0Fh:        call    0EDFAh
+EE12: 30 FB                             jr      nc,0EE0Fh
+EE14: C9                                ret
+
+                                        ; Referenced from 0EDA6h, 0EDEAh
+                                        ; --- START PROC 0EE15h ---
+EE15: E5                         0EE15h:        push    hl
+EE16: CD FA ED                          call    0EDFAh
+EE19: 2E 03                             ld      l,03h
+EE1B: CB 15                             rl      l
+EE1D: 06 37                             ld      b,37h   ; '7'
+
+                                        ; Referenced from 0EE1Fh
+EE1F: 10 FE                      0EE1Fh:        djnz    0EE1Fh
+EE21: DB 77                             in      a,(77h) ; 'w'
+EE23: 0F                                rrca
+EE24: 0F                                rrca
+EE25: CB 15                             rl      l
+EE27: 06 3D                             ld      b,3Dh   ; '='
+
+                                        ; Referenced from 0EE29h
+EE29: 10 FE                      0EE29h:        djnz    0EE29h
+
+                                        ; Referenced from 0EDC4h
+EE2B: DB 77                      0EE2Bh:        in      a,(77h) ; 'w'
+EE2D: 0F                                rrca
+EE2E: 0F                                rrca
+EE2F: CB 15                             rl      l
+EE31: 26 EC                             ld      h,0ECh
+EE33: 7E                                ld      a,(hl)
+EE34: 0F                                rrca
+EE35: E1                                pop     hl
+EE36: C9                                ret
+
+                                        ; Referenced from 0EE70h, 0EE80h
+                                        ; --- START PROC 0EE37h ---
+EE37: F5                         0EE37h:        push    af
+EE38: 37                                scf
+EE39: 1F                                rra
+EE3A: CB 77                             bit     6,a
+EE3C: CB 9F                             res     3,a
+EE3E: 20 02                             jr      nz,0EE42h
+EE40: CB DF                             set     3,a
+
+                                        ; Referenced from 0EE3Eh
+EE42: CB 6F                      0EE42h:        bit     5,a
+EE44: CB 8F                             res     1,a
+EE46: 20 02                             jr      nz,0EE4Ah
+EE48: CB CF                             set     1,a
+
+                                        ; Referenced from 0EE46h
+EE4A: 32 FD BF                   0EE4Ah:        ld      (0BFFDh),a
+EE4D: F1                                pop     af
+EE4E: C9                                ret
+
+                                        ; Referenced from 0EC03h
+EE4F: 20 3E                      0EE4Fh:        jr      nz,0EE8Fh
+EE51: 80                                add     a,b
+EE52: 0E BA                             ld      c,0BAh
+EE54: 11 00 00                          ld      de,0000h
+EE57: 21 00 3F                          ld      hl,3F00h
+EE5A: CD 20 EC                          call    0EC1Fh+1        ; reference not aligned to instruction
+
+                                        ; Referenced from 0EE5Dh
+EE5D: C3 5D EE                   0EE5Dh:        jp      0EE5Dh
+
+                                        ; Referenced from 0EC00h
+EE60: 3E 42                      0EE60h:        ld      a,42h   ; 'B'
+EE62: CD 33 ED                          call    0ED33h
+
+                                        ; Referenced from 0EE65h
+EE65: 18 FE                      0EE65h:        jr      0EE65h
+
+EE67: FF                         0EE67h:        rst     0x38
+
+EE68: FF                         0EE68h:        rst     0x38
+
+EE69: FF                         0EE69h:        rst     0x38
+
+EE6A: FF                         0EE6Ah:        rst     0x38
+
+EE6B: FF                         0EE6Bh:        rst     0x38
+
+EE6C: FF                         0EE6Ch:        rst     0x38
+
+EE6D: FF                         0EE6Dh:        rst     0x38
+
+EE6E: FF                         0EE6Eh:        rst     0x38
+
+EE6F: FF                         0EE6Fh:        rst     0x38
+
+                                        ; Referenced from 0EC09h
+                                        ; --- START PROC 0EE70h ---
+EE70: CD 37 EE                   0EE70h:        call    0EE37h
+EE73: C3 20 EC                          jp      0EC1Fh+1        ; reference not aligned to instruction
+
+EE76: FF                         0EE76h:        rst     0x38
+
+EE77: FF                         0EE77h:        rst     0x38
+
+EE78: FF                         0EE78h:        rst     0x38
+
+EE79: FF                         0EE79h:        rst     0x38
+
+EE7A: FF                         0EE7Ah:        rst     0x38
+
+EE7B: FF                         0EE7Bh:        rst     0x38
+
+EE7C: FF                         0EE7Ch:        rst     0x38
+
+EE7D: FF                         0EE7Dh:        rst     0x38
+
+EE7E: FF                         0EE7Eh:        rst     0x38
+
+EE7F: FF                         0EE7Fh:        rst     0x38
+
+                                        ; Referenced from 0EC06h
+                                        ; --- START PROC 0EE80h ---
+EE80: CD 37 EE                   0EE80h:        call    0EE37h
+EE83: C3 33 ED                          jp      0ED33h
+
+EE86: FF                         0EE86h:        rst     0x38
+
+EE87: FF                         0EE87h:        rst     0x38
+
+EE88: FF                         0EE88h:        rst     0x38
+
+EE89: FF                         0EE89h:        rst     0x38
+
+EE8A: FF                         0EE8Ah:        rst     0x38
+
+EE8B: FF                         0EE8Bh:        rst     0x38
+
+EE8C: FF                         0EE8Ch:        rst     0x38
+
+EE8D: FF                         0EE8Dh:        rst     0x38
+
+EE8E: FF                         0EE8Eh:        rst     0x38
+
+                                        ; Referenced from 0EE4Fh
+EE8F: FF                         0EE8Fh:        rst     0x38
+
+EE90: FF                         0EE90h:        rst     0x38
+
+EE91: FF                         0EE91h:        rst     0x38
+
+EE92: FF                         0EE92h:        rst     0x38
+
+EE93: FF                         0EE93h:        rst     0x38
+
+EE94: FF                         0EE94h:        rst     0x38
+
+EE95: FF                         0EE95h:        rst     0x38
+
+EE96: FF                         0EE96h:        rst     0x38
+
+EE97: FF                         0EE97h:        rst     0x38
+
+EE98: FF                         0EE98h:        rst     0x38
+
+EE99: FF                         0EE99h:        rst     0x38
+
+EE9A: FF                         0EE9Ah:        rst     0x38
+
+EE9B: FF                         0EE9Bh:        rst     0x38
+
+EE9C: FF                         0EE9Ch:        rst     0x38
+
+EE9D: FF                         0EE9Dh:        rst     0x38
+
+EE9E: FF                         0EE9Eh:        rst     0x38
+
+EE9F: FF                         0EE9Fh:        rst     0x38
+
+EEA0: FF                         0EEA0h:        rst     0x38
+
+EEA1: FF                         0EEA1h:        rst     0x38
+
+EEA2: FF                         0EEA2h:        rst     0x38
+
+EEA3: FF                         0EEA3h:        rst     0x38
+
+EEA4: FF                         0EEA4h:        rst     0x38
+
+EEA5: FF                         0EEA5h:        rst     0x38
+
+EEA6: FF                         0EEA6h:        rst     0x38
+
+EEA7: FF                         0EEA7h:        rst     0x38
+
+EEA8: FF                         0EEA8h:        rst     0x38
+
+EEA9: FF                         0EEA9h:        rst     0x38
+
+EEAA: FF                         0EEAAh:        rst     0x38
+
+EEAB: FF                         0EEABh:        rst     0x38
+
+EEAC: FF                         0EEACh:        rst     0x38
+
+EEAD: FF                         0EEADh:        rst     0x38
+
+EEAE: FF                         0EEAEh:        rst     0x38
+
+EEAF: FF                         0EEAFh:        rst     0x38
+
+EEB0: FF                         0EEB0h:        rst     0x38
+
+EEB1: FF                         0EEB1h:        rst     0x38
+
+EEB2: FF                         0EEB2h:        rst     0x38
+
+EEB3: FF                         0EEB3h:        rst     0x38
+
+EEB4: FF                         0EEB4h:        rst     0x38
+
+EEB5: FF                         0EEB5h:        rst     0x38
+
+EEB6: FF                         0EEB6h:        rst     0x38
+
+EEB7: FF                         0EEB7h:        rst     0x38
+
+EEB8: FF                         0EEB8h:        rst     0x38
+
+EEB9: FF                         0EEB9h:        rst     0x38
+
+EEBA: FF                         0EEBAh:        rst     0x38
+
+EEBB: FF                         0EEBBh:        rst     0x38
+
+EEBC: FF                         0EEBCh:        rst     0x38
+
+EEBD: FF                         0EEBDh:        rst     0x38
+
+EEBE: FF                         0EEBEh:        rst     0x38
+
+EEBF: FF                         0EEBFh:        rst     0x38
+
+EEC0: FF                         0EEC0h:        rst     0x38
+
+EEC1: FF                         0EEC1h:        rst     0x38
+
+EEC2: FF                         0EEC2h:        rst     0x38
+
+EEC3: FF                         0EEC3h:        rst     0x38
+
+EEC4: FF                         0EEC4h:        rst     0x38
+
+EEC5: FF                         0EEC5h:        rst     0x38
+
+EEC6: FF                         0EEC6h:        rst     0x38
+
+EEC7: FF                         0EEC7h:        rst     0x38
+
+EEC8: FF                         0EEC8h:        rst     0x38
+
+EEC9: FF                         0EEC9h:        rst     0x38
+
+EECA: FF                         0EECAh:        rst     0x38
+
+EECB: FF                         0EECBh:        rst     0x38
+
+EECC: FF                         0EECCh:        rst     0x38
+
+EECD: FF                         0EECDh:        rst     0x38
+
+EECE: FF                         0EECEh:        rst     0x38
+
+EECF: FF                         0EECFh:        rst     0x38
+
+EED0: FF                         0EED0h:        rst     0x38
+
+EED1: FF                         0EED1h:        rst     0x38
+
+EED2: FF                         0EED2h:        rst     0x38
+
+EED3: FF                         0EED3h:        rst     0x38
+
+EED4: FF                         0EED4h:        rst     0x38
+
+EED5: FF                         0EED5h:        rst     0x38
+
+EED6: FF                         0EED6h:        rst     0x38
+
+EED7: FF                         0EED7h:        rst     0x38
+
+EED8: FF                         0EED8h:        rst     0x38
+
+EED9: FF                         0EED9h:        rst     0x38
+
+EEDA: FF                         0EEDAh:        rst     0x38
+
+EEDB: FF                         0EEDBh:        rst     0x38
+
+EEDC: FF                         0EEDCh:        rst     0x38
+
+EEDD: FF                         0EEDDh:        rst     0x38
+
+EEDE: FF                         0EEDEh:        rst     0x38
+
+EEDF: FF                         0EEDFh:        rst     0x38
+
+EEE0: FF                         0EEE0h:        rst     0x38
+
+EEE1: FF                         0EEE1h:        rst     0x38
+
+EEE2: FF                         0EEE2h:        rst     0x38
+
+EEE3: FF                         0EEE3h:        rst     0x38
+
+EEE4: FF                         0EEE4h:        rst     0x38
+
+EEE5: FF                         0EEE5h:        rst     0x38
+
+EEE6: FF                         0EEE6h:        rst     0x38
+
+EEE7: FF                         0EEE7h:        rst     0x38
+
+EEE8: FF                         0EEE8h:        rst     0x38
+
+EEE9: FF                         0EEE9h:        rst     0x38
+
+EEEA: FF                         0EEEAh:        rst     0x38
+
+EEEB: FF                         0EEEBh:        rst     0x38
+
+EEEC: FF                         0EEECh:        rst     0x38
+
+EEED: FF                         0EEEDh:        rst     0x38
+
+EEEE: FF                         0EEEEh:        rst     0x38
+
+EEEF: FF                         0EEEFh:        rst     0x38
+
+EEF0: FF                         0EEF0h:        rst     0x38
+
+EEF1: FF                         0EEF1h:        rst     0x38
+
+EEF2: FF                         0EEF2h:        rst     0x38
+
+EEF3: FF                         0EEF3h:        rst     0x38
+
+EEF4: FF                         0EEF4h:        rst     0x38
+
+EEF5: FF                         0EEF5h:        rst     0x38
+
+EEF6: FF                         0EEF6h:        rst     0x38
+
+EEF7: FF                         0EEF7h:        rst     0x38
+
+EEF8: FF                         0EEF8h:        rst     0x38
+
+EEF9: FF                         0EEF9h:        rst     0x38
+
+EEFA: FF                         0EEFAh:        rst     0x38
+
+EEFB: FF                         0EEFBh:        rst     0x38
+
+EEFC: FF                         0EEFCh:        rst     0x38
+
+EEFD: FF                         0EEFDh:        rst     0x38
+
+EEFE: FF                         0EEFEh:        rst     0x38
+
+EEFF: FF                         0EEFFh:        rst     0x38
+
+EF00: FF                         0EF00h:        rst     0x38
+
+EF01: FF                         0EF01h:        rst     0x38
+
+EF02: FF                         0EF02h:        rst     0x38
+
+EF03: FF                         0EF03h:        rst     0x38
+
+EF04: FF                         0EF04h:        rst     0x38
+
+EF05: FF                         0EF05h:        rst     0x38
+
+EF06: FF                         0EF06h:        rst     0x38
+
+EF07: FF                         0EF07h:        rst     0x38
+
+EF08: FF                         0EF08h:        rst     0x38
+
+EF09: FF                         0EF09h:        rst     0x38
+
+EF0A: FF                         0EF0Ah:        rst     0x38
+
+EF0B: FF                         0EF0Bh:        rst     0x38
+
+EF0C: FF                         0EF0Ch:        rst     0x38
+
+EF0D: FF                         0EF0Dh:        rst     0x38
+
+EF0E: FF                         0EF0Eh:        rst     0x38
+
+EF0F: FF                         0EF0Fh:        rst     0x38
+
+EF10: FF                         0EF10h:        rst     0x38
+
+EF11: FF                         0EF11h:        rst     0x38
+
+EF12: FF                         0EF12h:        rst     0x38
+
+EF13: FF                         0EF13h:        rst     0x38
+
+EF14: FF                         0EF14h:        rst     0x38
+
+EF15: FF                         0EF15h:        rst     0x38
+
+EF16: FF                         0EF16h:        rst     0x38
+
+EF17: FF                         0EF17h:        rst     0x38
+
+EF18: FF                         0EF18h:        rst     0x38
+
+EF19: FF                         0EF19h:        rst     0x38
+
+EF1A: FF                         0EF1Ah:        rst     0x38
+
+EF1B: FF                         0EF1Bh:        rst     0x38
+
+EF1C: FF                         0EF1Ch:        rst     0x38
+
+EF1D: FF                         0EF1Dh:        rst     0x38
+
+EF1E: FF                         0EF1Eh:        rst     0x38
+
+EF1F: FF                         0EF1Fh:        rst     0x38
+
+EF20: FF                         0EF20h:        rst     0x38
+
+EF21: FF                         0EF21h:        rst     0x38
+
+EF22: FF                         0EF22h:        rst     0x38
+
+EF23: FF                         0EF23h:        rst     0x38
+
+EF24: FF                         0EF24h:        rst     0x38
+
+EF25: FF                         0EF25h:        rst     0x38
+
+EF26: FF                         0EF26h:        rst     0x38
+
+EF27: FF                         0EF27h:        rst     0x38
+
+EF28: FF                         0EF28h:        rst     0x38
+
+EF29: FF                         0EF29h:        rst     0x38
+
+EF2A: FF                         0EF2Ah:        rst     0x38
+
+                                        ; Referenced from 0EFA8h, 0EFADh
+                                        ; --- START PROC 0EF2Bh ---
+EF2B: CD E8 EF                   0EF2Bh:        call    0EFE8h
+EF2E: F5                                push    af
+EF2F: 3E FF                             ld      a,0FFh
+EF31: 00                                nop
+EF32: 00                                nop
+EF33: D3 77                             out     (77h),a ; 'w'
+EF35: F1                                pop     af
+EF36: C9                                ret
+
+                                        ; Referenced from 0EF9Eh
+                                        ; --- START PROC 0EF37h ---
+EF37: 1E 22                      0EF37h:        ld      e,22h   ; '"'
+EF39: C3 48 08                          jp      0848h
+
+EF3C: E5                         0EF3Ch:        push    hl
+EF3D: 21 00 C0                          ld      hl,0C000h
+EF40: 22 E9 BF                          ld      (0BFE9h),hl
+EF43: E1                                pop     hl
+EF44: F5                                push    af
+EF45: 3E A4                             ld      a,0A4h
+EF47: 32 EB BF                          ld      (0BFEBh),a
+EF4A: F1                                pop     af
+EF4B: CA 88 10                          jp      z,1088h
+EF4E: C3 15 23                          jp      2315h
+
+                                        ; Referenced from 0EFA5h
+EF51: 3A EB BF                   0EF51h:        ld      a,(0BFEBh)
+EF54: E6 DB                             and     0DBh
+EF56: 32 EB BF                          ld      (0BFEBh),a
+EF59: CD 74 EF                          call    0EF74h
+EF5C: E1                                pop     hl
+EF5D: C9                                ret
+
+EF5E: F5                         0EF5Eh:        push    af
+EF5F: 3E 62                             ld      a,62h   ; 'b'
+EF61: 32 EB BF                          ld      (0BFEBh),a
+EF64: CD 91 EF                          call    0EF91h
+EF67: F1                                pop     af
+EF68: CA 86 10                          jp      z,1086h
+EF6B: C3 4E 23                          jp      234Eh
+
+EF6E: CD E8 EF                   0EF6Eh:        call    0EFE8h
+EF71: C3 B5 23                          jp      23B5h
+
+                                        ; Referenced from 0EF59h, 0EFCFh
+                                        ; --- START PROC 0EF74h ---
+EF74: E5                         0EF74h:        push    hl
+EF75: D5                                push    de
+EF76: C5                                push    bc
+EF77: F5                                push    af
+EF78: CD B6 EF                          call    0EFB6h
+EF7B: CD 09 EC                          call    0EC09h
+EF7E: CD E8 EF                          call    0EFE8h
+EF81: 3E B4                             ld      a,0B4h
+
+                                        ; Referenced from 0EFA1h
+                                        ; --- START PROC 0EF83h ---
+EF83: 32 EB BF                   0EF83h:        ld      (0BFEBh),a
+EF86: 21 00 C0                          ld      hl,0C000h
+EF89: 22 E9 BF                          ld      (0BFE9h),hl
+EF8C: F1                                pop     af
+EF8D: C1                                pop     bc
+EF8E: D1                                pop     de
+EF8F: E1                                pop     hl
+EF90: C9                                ret
+
+                                        ; Referenced from 0EF64h, 0EFE2h
+                                        ; --- START PROC 0EF91h ---
+EF91: E5                         0EF91h:        push    hl
+EF92: D5                                push    de
+EF93: C5                                push    bc
+EF94: F5                                push    af
+EF95: CD B6 EF                          call    0EFB6h
+EF98: CD 06 EC                          call    0EC06h
+EF9B: 00                                nop
+EF9C: 3E 7A                             ld      a,7Ah   ; 'z'
+EF9E: D2 37 EF                          jp      nc,0EF37h
+EFA1: C3 83 EF                          jp      0EF83h
+
+EFA4: F1                         0EFA4h:        pop     af
+EFA5: F2 51 EF                          jp      p,0EF51h
+EFA8: CD 2B EF                          call    0EF2Bh
+EFAB: E1                                pop     hl
+EFAC: C9                                ret
+
+EFAD: CD 2B EF                   0EFADh:        call    0EF2Bh
+EFB0: 22 5B 07                          ld      (075Bh),hl
+EFB3: C3 A8 23                          jp      23A8h
+
+                                        ; Referenced from 0EF78h, 0EF95h
+                                        ; --- START PROC 0EFB6h ---
+EFB6: 3A EB BF                   0EFB6h:        ld      a,(0BFEBh)
+EFB9: 0E DB                             ld      c,0DBh
+EFBB: 11 00 C0                          ld      de,0C000h
+EFBE: 21 BF C0                          ld      hl,0C0BFh
+EFC1: C9                                ret
+
+EFC2: E5                         0EFC2h:        push    hl
+EFC3: F5                                push    af
+EFC4: 2A E9 BF                          ld      hl,(0BFE9h)
+EFC7: 77                                ld      (hl),a
+EFC8: 23                                inc     hl
+EFC9: 3E C0                             ld      a,0C0h
+EFCB: 22 E9 BF                          ld      (0BFE9h),hl
+EFCE: BD                                cp      l
+EFCF: CC 74 EF                          call    z,0EF74h
+EFD2: F1                                pop     af
+EFD3: E1                                pop     hl
+EFD4: C9                                ret
+
+EFD5: E5                         0EFD5h:        push    hl
+EFD6: 2A E9 BF                          ld      hl,(0BFE9h)
+EFD9: 7E                                ld      a,(hl)
+EFDA: F5                                push    af
+EFDB: 23                                inc     hl
+EFDC: 3E C0                             ld      a,0C0h
+EFDE: 22 E9 BF                          ld      (0BFE9h),hl
+EFE1: BD                                cp      l
+EFE2: CC 91 EF                          call    z,0EF91h
+EFE5: F1                                pop     af
+EFE6: E1                                pop     hl
+EFE7: C9                                ret
+
+                                        ; Referenced from 0EF2Bh, 0EF6Eh, 0EF7Eh
+                                        ; --- START PROC 0EFE8h ---
+EFE8: E5                         0EFE8h:        push    hl
+EFE9: C5                                push    bc
+EFEA: F5                                push    af
+EFEB: 0E A0                             ld      c,0A0h
+EFED: 21 00 C0                          ld      hl,0C000h
+EFF0: 00                                nop
+EFF1: 00                                nop
+EFF2: 00                                nop
+EFF3: 00                                nop
+EFF4: 00                                nop
+EFF5: 00                                nop
+EFF6: 06 C0                             ld      b,0C0h
+
+                                        ; Referenced from 0EFFAh
+EFF8: 71                         0EFF8h:        ld      (hl),c
+EFF9: 23                                inc     hl
+EFFA: 10 FC                             djnz    0EFF8h
+EFFC: F1                                pop     af
+EFFD: C1                                pop     bc
+EFFE: E1                                pop     hl
+EFFF: C9                                ret
+
+                                        ; Referenced from 0EC0Ch, 0EC0Fh, 0EC12h, 0EC15h
+FFFF: 76                         0FFFFh:        halt
+
+
+
+
+; **************************************************************************************
+; **************************************************************************************
+; **************************************************************************************
+; **************************************************************************************
+; **************************************************************************************
+; **************************************************************************************
+; **************************************************************************************
+
+
+
+
+references to external address 0000h:
+        0E0B5h jp 0000h
+        0E0BEh ld hl,0000h
+        0E2F8h ld de,0000h
+        0E400h jp 0000h
+        0E40Fh jp 0000h
+        0E412h jp 0000h
+        0E415h jp 0000h
+        0E418h jp 0000h
+        0E6CBh jp 0000h
+        0E719h ld hl,0000h
+        0E74Eh ld hl,0000h
+        0EB19h ld hl,0000h
+        0EB4Eh ld hl,0000h
+        0EC19h ld bc,0000h
+        0EE54h ld de,0000h
+
+references to external address 0006h:
+        0E5FAh ld bc,0006h
+        0E727h ld hl,(0006h)
+        0EB27h ld hl,(0006h)
+
+references to external address 007Fh:
+        0E378h jp po,007Fh
+        0E381h jp po,007Fh
+        0E543h ld bc,007Fh
+
+references to external address 075Bh:
+        0EFB0h ld (075Bh),hl
+
+references to external address 0848h:
+        0E72Eh jp 0848h
+        0EB2Eh jp 0848h
+        0EF39h jp 0848h
+
+references to external address 0D84h:
+        0E6C5h ld (0D84h),a
+
+references to external address 0DC2h:
+        0E6C0h ld (0DC2h),a
+
+references to external address 0DC5h:
+        0E64Dh jp 0DC5h
+        0E6BBh jp 0DC5h
+
+references to external address 1086h:
+        0EF68h jp z,1086h
+
+references to external address 1088h:
+        0EF4Bh jp z,1088h
+
+references to external address 13C0h:
+        0E552h ld hl,(13C0h)
+
+references to external address 16B2h:
+        0E61Ah jp 16B2h
+
+references to external address 16C2h:
+        0E617h jp po,16C2h
+
+references to external address 1B7Eh:
+        0E624h jp 1B7Eh
+
+references to external address 1B7Fh:
+        0E621h jp po,1B7Fh
+
+references to external address 1C9Eh:
+        0E62Bh jp po,1C9Eh
+
+references to external address 1CB5h:
+        0E62Eh jp 1CB5h
+
+references to external address 2315h:
+        0EF4Eh jp 2315h
+
+references to external address 234Eh:
+        0EF6Bh jp 234Eh
+
+references to external address 23A8h:
+        0EFB3h jp 23A8h
+
+references to external address 23B5h:
+        0EF71h jp 23B5h
+
+references to external address 288Ah:
+        0E58Fh jp 288Ah
+
+references to external address 28E9h:
+        0E54Fh call 28E9h
+
+references to external address 2905h:
+        0E4E8h call 2905h
+        0E57Ah call 2905h
+        0E588h call 2905h
+
+references to external address 3231h:
+        0E63Eh jp 3231h
+
+references to external address 3288h:
+        0E63Bh jp pe,3288h
+
+references to external address 3592h:
+        0E501h call 3592h
+
+references to external address 35A9h:
+        0E5A1h call 35A9h
+
+references to external address 35C2h:
+        0E5E4h jp 35C2h
+
+references to external address 3706h:
+        0E540h ld hl,(3706h)
+        0E549h ld (3706h),hl
+        0E595h ld bc,(3706h)
+
+references to external address 3708h:
+        0E4FCh ld hl,3708h
+        0E50Ah ld de,3708h
+        0E58Ch ld hl,3708h
+        0E5AEh ld a,(3708h)
+        0E5F3h ld hl,3708h
+
+references to external address 371Eh:
+        0E5F6h ld de,(371Eh)
+
+references to external address 3720h:
+        0E521h ld bc,(3720h)
+        0E555h ld bc,(3720h)
+        0E56Fh ld hl,(3720h)
+        0E592h ld hl,(3720h)
+
+references to external address 372Eh:
+        0E50Fh ld hl,(372Eh)
+        0E57Dh ld hl,(372Eh)
+        0E59Bh ld hl,(372Eh)
+
+references to external address 3782h:
+        0E572h ld (3782h),hl
+        0E580h ld (3782h),hl
+
+references to external address 3786h:
+        0E56Ch ld (3786h),a
+
+references to external address 3D3Dh:
+        0E5FFh ld hl,(3D3Dh)
+
+references to external address 3FE7h:
+        0E7A2h ld (3FE7h),hl
+
+references to external address 7FE7h:
+        0EBA2h ld (7FE7h),hl
+
+references to external address 0BFE9h:
+        0EF40h ld (0BFE9h),hl
+        0EF89h ld (0BFE9h),hl
+        0EFC4h ld hl,(0BFE9h)
+        0EFCBh ld (0BFE9h),hl
+        0EFD6h ld hl,(0BFE9h)
+        0EFDEh ld (0BFE9h),hl
+
+references to external address 0BFEBh:
+        0EF47h ld (0BFEBh),a
+        0EF51h ld a,(0BFEBh)
+        0EF56h ld (0BFEBh),a
+        0EF61h ld (0BFEBh),a
+        0EF83h ld (0BFEBh),a
+        0EFB6h ld a,(0BFEBh)
+
+references to external address 0BFFDh:
+        0ECA6h ld a,(0BFFDh)
+        0ECFAh ld a,(0BFFDh)
+        0ED04h ld a,(0BFFDh)
+        0ED0Fh ld a,(0BFFDh)
+        0ED19h ld a,(0BFFDh)
+        0ED3Ch ld a,(0BFFDh)
+        0EE4Ah ld (0BFFDh),a
+
+references to external address 0BFFEh:
+        0EC40h ld (0BFFEh),a
+        0EC8Bh ld a,(0BFFEh)
+        0ECCBh ld a,(0BFFEh)
+        0ECCFh ld (0BFFEh),a
+        0ED46h ld (0BFFEh),a
+        0EDAEh ld a,(0BFFEh)
+        0EDF2h ld a,(0BFFEh)
+        0EDF6h ld (0BFFEh),a
+
+references to external address 0BFFFh:
+        0EC24h ld (0BFFFh),a
+        0EC2Ch ld a,(0BFFFh)
+        0EC7Bh ld a,(0BFFFh)
+        0ED35h ld (0BFFFh),a
+        0ED4Fh ld a,(0BFFFh)
+        0ED63h ld a,(0BFFFh)
+        0ED9Ch ld a,(0BFFFh)
+        0EDD3h ld a,(0BFFFh)
+
+references to external address 0C000h:
+        0E3ACh ld (0C000h),a
+        0EF3Dh ld hl,0C000h
+        0EF86h ld hl,0C000h
+        0EFBBh ld de,0C000h
+        0EFEDh ld hl,0C000h
+
+references to external address 0DC00h:
+        0E670h ld a,(0DC00h)
+        0E75Dh ld (0DC00h),a
+        0EB5Dh ld (0DC00h),a
+
+references to external address 0DC03h:
+        0E722h call 0DC03h
+        0EB22h call 0DC03h
+
+references to external address 0DC06h:
+        0E70Fh call 0DC06h
+        0EB0Fh call 0DC06h
+
+references to external address 0DC0Ch:
+        0E6E9h call 0DC0Ch
+        0E744h call 0DC0Ch
+        0EB44h call 0DC0Ch
+
+references to external address 0DC0Fh:
+        0E756h call 0DC0Fh
+        0EB56h call 0DC0Fh
+
+references to external address 0DC12h:
+        0E74Bh call 0DC12h
+        0EB4Bh call 0DC12h
+
+references to external address 0DC18h:
+        0E675h jp z,0DC18h
+
+possible references to internal address 0E005h:
+        0E05Dh ld hl,0E005h
+
+possible references to internal address 0E04Dh:
+        0E062h ld bc,0E04Dh
+
+possible references to internal address 0E194h:
+        0E044h ld hl,0E194h
+        0E329h ld hl,0E194h
+
+possible references to internal address 0E37Ah:
+        0E3B4h ld de,0E37Ah
+
+possible references to internal address 0E383h:
+        0E3AFh ld de,0E383h
+
+possible references to internal address 0E761h:
+        0E7A5h ld hl,0E761h
+        0EBA5h ld hl,0E761h
+
+possible references to internal address 0E845h:
+        0EA6Bh ld hl,0E845h
+
+possible references to internal address 0EDC0h:
+        0EDB7h ld hl,0EDC0h
+
+possible references to internal address 0FFC0h:
+        0E2E1h ld de,0FFC0h
+        0E487h ld bc,0FFC0h
+
+possible references to external address 0000h:
+        0E0BEh ld hl,0000h
+        0E2F8h ld de,0000h
+        0E719h ld hl,0000h
+        0E74Eh ld hl,0000h
+        0EB19h ld hl,0000h
+        0EB4Eh ld hl,0000h
+        0EC19h ld bc,0000h
+        0EE54h ld de,0000h
+        ----------
+        0E0B5h jp 0000h
+        0E400h jp 0000h
+        0E40Fh jp 0000h
+        0E412h jp 0000h
+        0E415h jp 0000h
+        0E418h jp 0000h
+        0E6CBh jp 0000h
+
+possible references to external address 0001h:
+        0EC1Ch ld bc,0001h
+
+possible references to external address 0006h:
+        0E5FAh ld bc,0006h
+        ----------
+        0E727h ld hl,(0006h)
+        0EB27h ld hl,(0006h)
+
+possible references to external address 0007h:
+        0E372h ld bc,0007h
+        0E515h ld de,0007h
+        0E51Ah ld bc,0007h
+
+possible references to external address 0008h:
+        0E4F5h ld bc,0008h
+        0E535h ld bc,0008h
+        0E5B2h ld de,0008h
+
+possible references to external address 0040h:
+        0E2B5h ld hl,0040h
+        0E2EDh ld de,0040h
+
+possible references to external address 007Fh:
+        0E543h ld bc,007Fh
+        ----------
+        0E378h jp po,007Fh
+        0E381h jp po,007Fh
+
+possible references to external address 0080h:
+        0E59Eh ld bc,0080h
+
+possible references to external address 0100h:
+        0E93Ch ld hl,0100h
+
+possible references to external address 1F37h:
+        0EC1Fh ld bc,1F37h
+
+possible references to external address 36FEh:
+        0E4EBh ld hl,36FEh
+        0E53Bh ld hl,36FEh
+        0E5A5h ld hl,36FEh
+
+possible references to external address 3708h:
+        0E4FCh ld hl,3708h
+        0E50Ah ld de,3708h
+        0E58Ch ld hl,3708h
+        0E5F3h ld hl,3708h
+        ----------
+        0E5AEh ld a,(3708h)
+
+possible references to external address 3709h:
+        0E5D1h ld de,3709h
+
+possible references to external address 370Fh:
+        0E532h ld hl,370Fh
+
+possible references to external address 3780h:
+        0E54Ch ld hl,3780h
+        0E575h ld hl,3780h
+        0E583h ld hl,3780h
+
+possible references to external address 3F00h:
+        0EE57h ld hl,3F00h
+
+possible references to external address 8632h:
+        0E4E4h ld bc,8632h
+
+possible references to external address 0A400h:
+        0E797h ld hl,0A400h
+        0EB97h ld hl,0A400h
+
+possible references to external address 0A440h:
+        0E7C3h ld hl,0A440h
+        0EBC3h ld hl,0A440h
+
+possible references to external address 0A745h:
+        0E79Fh ld hl,0A745h
+        0EB9Fh ld hl,0A745h
+
+possible references to external address 0AA00h:
+        0E7B2h ld hl,0AA00h
+        0EBB2h ld hl,0AA00h
+
+possible references to external address 0C000h:
+        0EF3Dh ld hl,0C000h
+        0EF86h ld hl,0C000h
+        0EFBBh ld de,0C000h
+        0EFEDh ld hl,0C000h
+        ----------
+        0E3ACh ld (0C000h),a
+
+possible references to external address 0C0BFh:
+        0EFBEh ld hl,0C0BFh
+
+possible references to external address 0C0C0h:
+        0E333h ld hl,0C0C0h
+
+possible references to external address 0C180h:
+        0E34Bh ld hl,0C180h
+
+possible references to external address 0C2C0h:
+        0E33Eh ld hl,0C2C0h
+
+references to port 3Fh
+        0E866h in a,(3Fh)
+        0E8D2h in a,(3Fh)
+        0E8D7h in a,(3Fh)
+        0E8DCh in a,(3Fh)
+        0E8E1h in a,(3Fh)
+        0E90Ch in a,(3Fh)
+        0E911h in a,(3Fh)
+        0E916h in a,(3Fh)
+        0E91Bh in a,(3Fh)
+        0E920h in a,(3Fh)
+        0E925h in a,(3Fh)
+        0E97Bh in a,(3Fh)
+        0E980h in a,(3Fh)
+        0E985h in a,(3Fh)
+        0E98Ah in a,(3Fh)
+        0E9E2h in a,(3Fh)
+        0E9E7h in a,(3Fh)
+        0E9ECh in a,(3Fh)
+        0E9F1h in a,(3Fh)
+        0EA29h in a,(3Fh)
+        0EA2Eh in a,(3Fh)
+        0EA33h in a,(3Fh)
+        0EA38h in a,(3Fh)
+        0EA5Dh in a,(3Fh)
+        0E93Ah out (3Fh),a
+        0E9B3h out (3Fh),a
+        0EAB4h out (3Fh),a
+
+references to port 5Ch
+        0E659h out (5Ch),a
+
+references to port 5Dh
+        0E651h in a,(5Dh)
+        0E660h out (5Dh),a
+        0E66Ch out (5Dh),a
+
+references to port 5Eh
+        0E39Bh out (5Eh),a
+        0E39Eh out (5Eh),a
+
+references to port 5Fh
+        0E393h out (5Fh),a
+        0E397h out (5Fh),a
+
+references to port 77h
+        0E3C9h in a,(77h)
+        0E3CFh in a,(77h)
+        0E4BAh in a,(77h)
+        0E4C0h in a,(77h)
+        0EDFAh in a,(77h)
+        0EE00h in a,(77h)
+        0EE0Ah in a,(77h)
+        0EE21h in a,(77h)
+        0EE2Bh in a,(77h)
+        0E38Fh out (77h),a
+        0ECA9h out (77h),a
+        0ED26h out (77h),a
+        0ED3Fh out (77h),a
+        0EDCCh out (77h),a
+        0EF33h out (77h),a
+
+references to port 78h
+        0E6A7h in a,(78h)
+        0E69Eh out (78h),a
+
+references to port 79h
+        0E697h in a,(79h)
+        0E6A1h in a,(79h)
+        0E682h out (79h),a
+        0E686h out (79h),a
+        0E68Ah out (79h),a
+        0E68Eh out (79h),a
+
+references to port 0BCh
+        0E87Dh in a,(0BCh)
+        0E890h out (0BCh),a
+        0E8B1h out (0BCh),a
+        0E8C9h out (0BCh),a
+        0E906h out (0BCh),a
+        0E972h out (0BCh),a
+        0E9D9h out (0BCh),a
+        0EA20h out (0BCh),a
+        0EA58h out (0BCh),a
+        0EAC9h out (0BCh),a
+
+references to port 0BDh
+        0EA4Fh in a,(0BDh)
+        0E9BBh out (0BDh),a
+        0EABCh out (0BDh),a
+
+references to port 0BEh
+        0E9FEh in a,(FDCSEC)
+        0EA45h in a,(FDCSEC)
+        0E89Ah out (FDCSEC),a
+
+references to port 0BFh
+        0E8ADh out (0BFh),a
+        0EA51h out (0BFh),a
+        0EABEh out (0BFh),a
+
+references to port 0CCh
+        0E7D9h out (0CCh),a
+        0E7DCh out (0CCh),a
+        0EBD9h out (0CCh),a
+        0EBDCh out (0CCh),a
+
+references to port 0CDh
+        0E7D5h out (0CDh),a
+        0EBD5h out (0CDh),a
+
+references to port 0D8h
+        0E7EEh in a,(0D8h)
+        0E7F6h in a,(0D8h)
+        0EBEEh in a,(0D8h)
+        0EBF6h in a,(0D8h)
+
+references to port 0FFh
+        0E025h in a,(0FFh)
+        0E169h in a,(0FFh)
+        0E171h in a,(0FFh)
+
+Procedures (139):
+  Proc  Length  References Dependants
+  0E000h  006C            1          6
+  0E0BEh  0021            1          1
+  0E0DFh  0006            1          1
+  0E0E5h  0006            2          1
+  0E0EBh  0003            1          0
+  0E0EEh  0016            2          2
+  0E104h  000E            6          1
+  0E112h  0006            1          0
+  0E118h  0011            1          2
+  0E129h  0004            2          2
+  0E12Ch  0022            1          2
+  0E163h  0006            1          2
+  0E169h  0011            2          0
+  0E17Ah  000F            1          1
+  0E189h  000B            1          2
+  0E1E1h  0012            3          1
+  0E1F3h  0066            2         10
+  0E203h  0018            2          5
+  0E218h  0003            1          1
+  0E21Bh  0005            1          2
+  0E21Dh  0004            5          2
+  0E220h  0007            1          0
+  0E227h  0006            1          2
+  0E22Ah  0005            1          1
+  0E22Fh  0010            4          5
+  0E239h  0006            1          2
+  0E23Ch  0005            2          1
+  0E241h  0018            3          6
+  0E259h  0004            3          1
+  0E25Dh  0003            1          1
+  0E25Fh  000F            1          0
+  0E26Fh  0008            5          0
+  0E277h  0007            3          1
+  0E27Eh  0008            4          0
+  0E286h  000D            2          0
+  0E293h  0021            1          5
+  0E2B4h  000B            1          1
+  0E2BFh  0003            3          1
+  0E2CBh  0015            4          1
+  0E2E0h  000C            1          2
+  0E2ECh  0018            2          1
+  0E2F6h  000E            1          0
+  0E304h  0022            4          0
+  0E35Ah  000C            1          3
+  0E366h  0003            1          1
+  0E36Bh  0003            1          1
+  0E372h  0006            1          0
+  0E38Ah  0017            1          1
+  0E3A1h  0009            1          3
+  0E3AAh  000A            1          1
+  0E3B4h  0011            1          1
+  0E3B7h  000E            1          1
+  0E3D9h  0003            1          1
+  0E3DCh  0003            1          1
+  0E3E2h  0003            2          1
+  0E3E8h  0003            5          1
+  0E3EBh  0003            3          1
+  0E3EEh  0003            1          1
+  0E3F1h  0003            4          1
+  0E3F4h  0003           11          1
+  0E3F7h  0003            2          1
+  0E3FAh  0003            5          1
+  0E403h  0003            5          1
+  0E406h  0003            2          1
+  0E41Bh  0091            2         12
+  0E4B0h  0009            1          2
+  0E4B9h  000F            4          0
+  0E4C8h  0006            1          2
+  0E4CEh  0016            2          3
+  0E5C8h  0002            3          0
+  0E650h  0020            1          0
+  0E680h  0011            2          0
+  0E696h  000B            3          0
+  0E6E0h  0068            4          1
+  0E7EEh  0011            3          0
+  0E803h  0003            1          1
+  EPROM_SETSECTOR  0003            1          1
+  0E80Ch  0003            1          1
+  0E812h  0003            1          1
+  0E81Bh  0003            2          1
+  0E81Eh  0003            1          1
+  0E827h  0003            5          1
+  0E82Ah  0003            5          1
+  0E82Dh  0003            2          1
+  0E830h  0003            3          1
+  0E833h  0003            9          1
+  0E836h  0003            2          1
+  0E83Ch  0003            1          1
+  0E83Fh  0003            1          1
+  0E842h  0257            1          2
+  0E850h  0004            1          1
+  0E854h  0004            1          1
+  0E858h  0006            1          1
+  0E85Ah  000C            2          0
+  0E866h  0021            2          2
+  0E88Eh  000A            2          1
+  EPROM_SETSECTOR1  0005            1          0
+  0E89Dh  000F            1          3
+  0E8A9h  0013            2          2
+  0E8BCh  0033            1          2
+  0E8EFh  000A            1          1
+  0E963h  0035            1          2
+  0EA4Fh  0017            1          2
+  0EA66h  0008            1          2
+  0EA6Bh  0016            1          4
+  0EC06h  0003            2          1
+  0EC09h  0003            2          1
+  0EC8Bh  0009            3          1
+  0EC94h  0007            1          1
+  0EC99h  000D            1          0
+  0ECA6h  001A            1          0
+  0ECC0h  0004            1          1
+  0ECC2h  0009            2          1
+  0ECCBh  0008            6          1
+  0ECD2h  000B            2          1
+  0ECDDh  001D            1          2
+  0ECFAh  0015            7          1
+  0ED0Fh  0015            3          1
+  0ED24h  0008            4          0
+  0ED2Ch  0007            1          1
+  0ED33h  0071            2          7
+  0EDA4h  0013            3          1
+  0EDB7h  001A            3          1
+  0EDCAh  0007            3          0
+  0EDD1h  0017            2          1
+  0EDE8h  0012            7          1
+  0EDFAh  0015            3          0
+  0EE0Fh  0006            2          1
+  0EE15h  0022            2          1
+  0EE37h  0018            2          0
+  0EE70h  0006            1          2
+  0EE80h  0006            1          2
+  0EF2Bh  000C            2          1
+  0EF37h  0005            1          1
+  0EF74h  001D            2          3
+  0EF83h  000E            1          0
+  0EF91h  0013            2          4
+  0EFB6h  000C            2          0
+  0EFE8h  0018            3          0
+
+Call Graph:
