@@ -1678,8 +1678,8 @@ E806: C3 98 E8                          jp      EPROM_SETSECTOR1
 E809: C3 99 EA                   0E809h:        jp      0EA99h
 
                                         ; Referenced from 0E93Fh
-                                        ; --- START PROC 0E80Ch ---
-E80C: C3 EF E8                   0E80Ch:        jp      0E8EFh
+                                        ; --- START PROC EPROM_SETDMA ---
+E80C: C3 EF E8                   EPROM_SETDMA:        jp      0E8EFh
 
 E80F: C3 F9 E8                   0E80Fh:        jp      0E8F9h
 
@@ -1772,7 +1772,7 @@ E858: 06 DE                      0E858h:        ld      b,0DEh
                                         ; --- START PROC 0E85Ah ---
 E85A: DD 2A 03 E0                0E85Ah:        ld      ix,(0E003h)
 E85E: DD 70 0D                          ld      (ix+0Dh),b
-E861: DD 36 0E 0F                       ld      (ix+0Eh),0Fh
+E861: DD 36 0E 0F                       ld      (ix+0Eh),0Fh          ; 0Fh = 00 negato
 E865: C9                                ret
 
                                         ; Referenced from 0E833h, 0E86Ah
@@ -1873,7 +1873,7 @@ E8E9: CD 33 E8                          call    0E833h
 E8EC: 20 D1                             jr      nz,0E8BFh
 E8EE: C9                                ret
 
-                                        ; Referenced from 0E80Ch
+                                        ; Referenced from EPROM_SETDMA
                                         ; --- START PROC 0E8EFh ---
 E8EF: CD 27 E8                   0E8EFh:        call    0E827h
 E8F2: DD 75 0A                          ld      (ix+0Ah),l
@@ -1930,7 +1930,7 @@ E937: C9                                ret
 E938: 3E FE                      0E938h:        ld      a,0FEh
 E93A: D3 3F                             out     (3Fh),a ; '?'
 E93C: 21 00 01                          ld      hl,0100h
-E93F: CD 0C E8                          call    0E80Ch
+E93F: CD 0C E8                          call    EPROM_SETDMA
 E942: DD 75 09                          ld      (ix+09h),l
 E945: 00                                nop
 E946: DD F9                             ld      sp,ix
@@ -4066,7 +4066,7 @@ Procedures (139):
   0E7EEh  0011            3          0
   0E803h  0003            1          1
   EPROM_SETSECTOR  0003            1          1
-  0E80Ch  0003            1          1
+  EPROM_SETDMA  0003            1          1
   0E812h  0003            1          1
   0E81Bh  0003            2          1
   0E81Eh  0003            1          1

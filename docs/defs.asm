@@ -35,11 +35,14 @@ VDDTABLE    EQU $BFE0  ; start of VDD table, usually loaded into IX. Also pointe
 LAST_TRACK  EQU $BFEC  ; last used track
 VIDEORAM    EQU $C000  ; start of video RAM
 
-; VDD TABLE IX+00h .. IX+10h where IX usually is $BFE0
+; **** VDD TABLE **** IX+00h .. IX+10h where IX usually is $BFE0
 
-;
 EPROM_CURRDRIVE EQU $09  ; current drive for eprom routines
-;
+EPROM_DSKBUFPTR EQU $0A  ; (word) pointer disk sector buffer
+EPROM_TRKNUMNEG EQU $0C  ; stores track number NEGATED
+EPROM_U1        EQU $0D  ;
+EPROM_SECNUMNEG EQU $0E  ; stores sector number NEGATED
+EPROM_TRKNUM    EQU $10  ; stores track number
 
 ; **** EPROM ****
 
@@ -52,9 +55,11 @@ TMONLOAD          EQU $E3DF    ; T-MON "L"
 INIZV             EQU $E3E2    ; inizializza il video
 INIZO             EQU $E3E5    ; inizializza le porte I/O
 RDNUM             EQU $E3E8    ; read HEX number from keyboard ant put in HL, D=0 exit with "." or "/"
-PTBTE             EQU $E3EB    ; stampa BC in esadecimale (BC destroyed)
+PTBTE             EQU $E3EB    ; stampa il numero puntato da BC con spazio
 PRTAD0            EQU $E3EE    ; stampa BC in esadecimale con ":"
+PRTHEX            EQU $E104    ; stamp cifra esadecimale in A
 RDCHR             EQU $E3F1    ; read char con echo
+PUTCHAR           EQU $E3F4    ; stampa carattere in A
 CRLF              EQU $E3F7    ; stampa CR+LF
 WRSTG             EQU $E3FA    ; prints string in HL until char with 7 bit on
 TMONTEST          EQU $E3FD    ; T-MON "T"
@@ -67,9 +72,11 @@ NOBLK             EQU $E40C    ; attende il sincronismo video per evitare il "br
 ;??                EQU $E800    ; used by CBIOS
 ;??                EQU $E80C    ; used by CBIOS
 ;??                EQU $E82A    ; used by CBIOS
+EPROM_INITD       EQU $E800    ; initialize the disk routines
 EPROM_SETDRIVE    EQU $E809    ; drive in C
 EPROM_SETTRACK    EQU $E803    ; track in C
 EPROM_SETSECTOR   EQU $E806    ; sector in C
+EPROM_SETDMA      EQU $E80C    ; set DMA buffer at HL, writes also in EPROM_U1, EPROM_U2
 EPROM_WRITESECTOR EQU $E80F
 EPROM_READSECTOR  EQU $E812
 BOOT_FROM_DISK    EQU $EB1C
