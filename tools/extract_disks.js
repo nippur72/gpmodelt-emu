@@ -1,5 +1,5 @@
 const fs = require('fs');
-const getpos = require("./fdc-pos");
+const { FDC_getpos: getpos } = require("./fdc-pos");
 
 // read all disks
 let disk_path = "../software";
@@ -27,7 +27,7 @@ function extract_ccp(disk_name, side) {
     let ccp = [];
 
     let t=0; s=2;
-    let howmany = 50; // 55 => 7168 files that fits from A400 to BFFF
+    let howmany = 55; // 55 => 7168 files that fits from A400 to BFFF
     for(let ns=0; ns<=howmany; ns++) {
         let start = getpos(side, t, s);
         let sector = disk.slice(start,start+128).map(e=>(~e & 0xFF));

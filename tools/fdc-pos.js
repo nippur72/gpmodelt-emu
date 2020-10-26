@@ -31,5 +31,28 @@ function FDC_getpos_geometry(side, track, sector, geometry) {
    return pos;
 }
 
-module.exports = { FDC_getpos, FDC_getpos_geometry };
+function invert(array) {
+   return array.map(e=>(~e & 0xFF));
+}
+
+function write({disk, source, side, track, sector, geometry}) {
+   let pos = FDC_getpos_geometry(side, track, sector, geometry);
+   for(let t=0; t<source.length; t++) {
+      disk[t+pos] = source[t];
+   }
+}
+
+function emptydisk(geometry) {
+   let disksize = geometry.NSIDES * geometry.NTRACKS * geometry.NSECTORS * geometry.SECTORSIZE;
+   const disk = new Uint8Array(disksize).fill(0xE5);
+   return disk;
+}
+
+module.exports = {
+   FDC_getpos,
+   FDC_getpos_geometry,
+   invert,
+   write,
+   emptydisk
+};
 
