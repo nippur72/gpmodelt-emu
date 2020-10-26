@@ -1,3 +1,9 @@
+
+[m[32m]9;8;"USERNAME"\@]9;8;"COMPUTERNAME"\ [92mC:\Users\Nino1\Desktop\USB\GitHub\gpmodelt-emu\docs\ccp[90m
+[90m$[m ]9;12\rem ..\..\..\..\z80\yazd\yazd.exe --addr:0xA400 --xref --lst --lowercase --mwr GP16_IMD.dsk.side0.ccp.bin 
+
+[m[32m]9;8;"USERNAME"\@]9;8;"COMPUTERNAME"\ [92mC:\Users\Nino1\Desktop\USB\GitHub\gpmodelt-emu\docs\ccp[90m
+[90m$[m ]9;12\..\..\..\..\z80\yazd\yazd.exe --addr:0xA400 --xref --lst --lowercase --mwr ccp.patched.bin 
                                         ; Referenced from A7D2, BB4D
 A400: C3 5C A7                   LA400: jp      LA75C
 
@@ -303,13 +309,13 @@ A51F: 87                                add     a,a
 A520: 87                                add     a,a
 A521: 21 EF AB                          ld      hl,0ABEFh
 A524: B6                                or      (hl)
-A525: 32 04 00                          ld      (DEFDRIVE),a
+A525: 32 04 00                          ld      (0004h),a
 A528: C9                                ret
 
                                         ; Referenced from A5A4, AABB, AB62
                                         ; --- START PROC LA529 ---
 A529: 3A EF AB                   LA529: ld      a,(LABEF)
-A52C: 32 04 00                          ld      (DEFDRIVE),a
+A52C: 32 04 00                          ld      (0004h),a
 A52F: C9                                ret
 
                                         ; Referenced from A5B2
@@ -791,7 +797,7 @@ A7CE: AA                                xor     d
                                         ; --- START PROC LA7CF ---
 A7CF: 21 F3 76                   LA7CF: ld      hl,76F3h
 A7D2: 22 00 A4                          ld      (LA400),hl
-A7D5: 21 00 A4                          ld      hl,STARTCCP
+A7D5: 21 00 A4                          ld      hl,0A400h
 A7D8: E9                                jp      (hl)
 
                                         ; Referenced from A9A4
@@ -1287,7 +1293,7 @@ AAEC: C2 01 AB                          jp      nz,LAB01
 AAEF: E1                                pop     hl
 AAF0: 11 80 00                          ld      de,0080h
 AAF3: 19                                add     hl,de
-AAF4: 11 00 A4                          ld      de,STARTCCP
+AAF4: 11 00 A4                          ld      de,0A400h
 AAF7: 7D                                ld      a,l
 AAF8: 93                                sub     e
 AAF9: 7C                                ld      a,h
@@ -2054,7 +2060,7 @@ AEE4: CA 91 B9                          jp      z,LB991
 AEE7: CD 09 BA                          call    LBA09
 AEEA: C3 01 AF                          jp      LAF01
 
-AEED: 3A 03 00                   LAEED: ld      a,(IOBYTE)
+AEED: 3A 03 00                   LAEED: ld      a,(0003h)
 AEF0: C3 01 AF                          jp      LAF01
 
 AEF3: 21 03 00                   LAEF3: ld      hl,0003h
@@ -3549,7 +3555,7 @@ B6D0: 0E 02                             ld      c,02h
                                         ; Referenced from B6CB
 B6D2: 00                         LB6D2: nop
 B6D3: 00                                nop
-B6D4: 21 00 A4                          ld      hl,STARTCCP
+B6D4: 21 00 A4                          ld      hl,0A400h
 B6D7: F5                                push    af
 B6D8: CD 69 B1                          call    LB169
 B6DB: E6 7F                             and     7Fh     ; ''
@@ -4164,212 +4170,264 @@ B9FC: 00                                nop
 B9FD: 00                                nop
 B9FE: 00                                nop
 B9FF: 00                                nop
+BA00: C3 12 BB                          jp      LBB12
 
-                                 ;
-                                 ; **** BIOS ****
-                                 ;
+BA03: C3 D1 BA                   LBA03: jp      LBAD1
 
-BA00: C3 12 BB                          jp      BOOT            ;ARRIVE HERE FROM COLD START LOAD  ;
-BA03: C3 D1 BA                   LBA03: jp      WBOOT           ;ARRIVE HERE FOR WARM START        ;
-BA06: C3 7B BB                   LBA06: jp      CONST           ;CHECK FOR CONSOLE CHAR READY      ; Referenced from AD2A, AEDA, AEE0
-BA09: C3 59 BD                   LBA09: jp      CONIN           ;READ CONSOLE CHARACTER IN         ; Referenced from AD03, AD30, AD38, AEE7, BD69
-BA0C: C3 DE BB                   LBA0C: jp      CONOUT          ;WRITE CONSOLE CHARACTER OUT       ; Referenced from AD55, ADA9, ADAE, AEDD
-BA0F: C3 03 BC                   LBA0F: jp      LIST            ;WRITE LISTING CHARACTER OUT       ; Referenced from AD5E
-BA12: C3 03 BC                   LBA12: jp      LIST            ;WRITE CHARACTER TO PUNCH DEVICE   ;
-BA15: C3 C8 BB                   LBA15: jp      READER          ;READ READER DEVICE                ; Referenced from AECE
-BA18: C3 1D BC                   LBA18: jp      HOME            ;MOVE TO TRACK 00 ON SELECTED DISK ; Referenced from AFA1
-BA1B: C3 26 BC                   LBA1B: jp      SELDSK          ;SELECT DISK DRIVE                 ; Referenced from AF5D
-BA1E: C3 3F BC                   LBA1E: jp      SETTRK          ;SET TRACK NUMBER                  ; Referenced from B01A
-BA21: C3 44 BC                   LBA21: jp      SETSEC          ;SET SECTOR NUMBER                 ; Referenced from B03B
-BA24: C3 4F BC                   LBA24: jp      SETDMA          ;SET DMA ADDRESS                   ; Referenced from B1E6
-BA27: C3 54 BC                   LBA27: jp      READ            ;READ SELECTED SECTOR              ; Referenced from AFB2
-BA2A: C3 63 BC                   LBA2A: jp      WRITE           ;WRITE SELECTED SECTOR             ; Referenced from AFB8
-BA2D: C3 A2 BB                   LBA2D: jp      LISTST          ;RETURN LIST STATUS                ;
-BA30: C3 49 BC                   LBA30: jp      SECTRAN         ;SECTOR TRANSLATE SUBROUTINE       ; Referenced from B036
+                                        ; Referenced from AD2A, AEDA, AEE0
+                                        ; --- START PROC LBA06 ---
+BA06: C3 7B BB                   LBA06: jp      LBB7B
+
+                                        ; Referenced from AD03, AD30, AD38, AEE7, BD69
+                                        ; --- START PROC LBA09 ---
+BA09: C3 59 BD                   LBA09: jp      LBD59
+
+                                        ; Referenced from AD55, ADA9, ADAE, AEDD
+                                        ; --- START PROC LBA0C ---
+BA0C: C3 DE BB                   LBA0C: jp      LBBDE
+
+                                        ; Referenced from AD5E
+                                        ; --- START PROC LBA0F ---
+BA0F: C3 03 BC                   LBA0F: jp      LBC03
+
+BA12: C3 03 BC                   LBA12: jp      LBC03
+
+                                        ; Referenced from AECE
+                                        ; --- START PROC LBA15 ---
+BA15: C3 C8 BB                   LBA15: jp      LBBC8
+
+                                        ; Referenced from AFA1
+                                        ; --- START PROC LBA18 ---
+BA18: C3 1D BC                   LBA18: jp      LBC1D
+
+                                        ; Referenced from AF5D
+                                        ; --- START PROC LBA1B ---
+BA1B: C3 26 BC                   LBA1B: jp      LBC26
+
+                                        ; Referenced from B01A
+                                        ; --- START PROC LBA1E ---
+BA1E: C3 3F BC                   LBA1E: jp      LBC3F
+
+                                        ; Referenced from B03B
+                                        ; --- START PROC LBA21 ---
+BA21: C3 44 BC                   LBA21: jp      LBC44
+
+                                        ; Referenced from B1E6
+                                        ; --- START PROC LBA24 ---
+BA24: C3 4F BC                   LBA24: jp      LBC4F
+
+                                        ; Referenced from AFB2
+                                        ; --- START PROC LBA27 ---
+BA27: C3 54 BC                   LBA27: jp      LBC54
+
+                                        ; Referenced from AFB8
+                                        ; --- START PROC LBA2A ---
+BA2A: C3 63 BC                   LBA2A: jp      LBC63
+
+BA2D: C3 A2 BB                   LBA2D: jp      LBBA2
+
+                                        ; Referenced from B036
+                                        ; --- START PROC LBA30 ---
+BA30: C3 49 BC                   LBA30: jp      LBC49
+
 BA33: C3 00 00                   LBA33: jp      0000h
+
 BA36: C3 00 00                   LBA36: jp      0000h
+
 BA39: C3 00 00                   LBA39: jp      0000h
+
 BA3C: C3 00 00                   LBA3C: jp      0000h
+
 BA3F: C3 00 00                   LBA3F: jp      0000h
+
 BA42: C3 00 00                   LBA42: jp      0000h
+
 BA45: C3 00 00                   LBA45: jp      0000h
+
 BA48: C3 00 00                   LBA48: jp      0000h
+
 BA4B: C3 00 00                   LBA4B: jp      0000h
-BA4E: C3 50 E6                   LBA4E: jp      0E650h               ; Referenced from BC18
-BA51: C3 44 BD                   LBA51: jp      GETCURSORADDR
+
+                                        ; Referenced from BC18
+                                        ; --- START PROC LBA4E ---
+BA4E: C3 50 E6                   LBA4E: jp      0E650h
+
+BA51: C3 44 BD                   LBA51: jp      LBD44
 
                                         ; Referenced from BC69, BC73
-                                 NUM_RETRY:
-BA54: 05
-BA55: 31
-                                 INIT_PORT_7A:
-BA56: 01
-BA57: 00
-BA58: 02
-BA59: 00
-BA5A: 03
-BA5B: C1
-BA5C: 04
-BA5D: 44
-BA5E: 05
-BA5F: 68
+BA54: 05                         LBA54: dec     b
+BA55: 31 01 00                          ld      sp,0001h
+BA58: 02                                ld      (bc),a
+BA59: 00                                nop
+BA5A: 03                                inc     bc
+BA5B: C1                                pop     bc
+BA5C: 04                                inc     b
+BA5D: 44                                ld      b,h
+BA5E: 05                                dec     b
+BA5F: 68                                ld      l,b
+BA60: 00                                nop
+BA61: 00                                nop
+BA62: 00                                nop
+BA63: 00                                nop
+BA64: 00                                nop
+BA65: 00                                nop
+BA66: 00                                nop
+BA67: 00                                nop
+BA68: A8                                xor     b
+BA69: BA                                cp      d
+BA6A: 00                                nop
+BA6B: 00                                nop
+BA6C: 00                                nop
+BA6D: 00                                nop
+BA6E: 00                                nop
+BA6F: 00                                nop
+BA70: 25                                dec     h
+BA71: BE                                cp      (hl)
+BA72: C2 BA 21                          jp      nz,21BAh
+BA75: BF                                cp      a
+BA76: A5                                and     l
+BA77: BE                                cp      (hl)
+BA78: A8                                xor     b
+BA79: BA                                cp      d
+BA7A: 00                                nop
+BA7B: 00                                nop
+BA7C: 00                                nop
+BA7D: 00                                nop
+BA7E: 00                                nop
+BA7F: 00                                nop
+BA80: 25                                dec     h
+BA81: BE                                cp      (hl)
+BA82: C2 BA 31                          jp      nz,31BAh
+BA85: BF                                cp      a
+BA86: C4 BE A8                          call    nz,LA8BE
+BA89: BA                                cp      d
+BA8A: 00                                nop
+BA8B: 00                                nop
+BA8C: 00                                nop
+BA8D: 00                                nop
+BA8E: 00                                nop
+BA8F: 00                                nop
+BA90: 25                                dec     h
+BA91: BE                                cp      (hl)
+BA92: C2 BA 41                          jp      nz,41BAh
+BA95: BF                                cp      a
+BA96: E3                                ex      (sp),hl
+BA97: BE                                cp      (hl)
+BA98: A8                                xor     b
+BA99: BA                                cp      d
+BA9A: 00                                nop
+BA9B: 00                                nop
+BA9C: 00                                nop
+BA9D: 00                                nop
+BA9E: 00                                nop
+BA9F: 00                                nop
+BAA0: 25                                dec     h
+BAA1: BE                                cp      (hl)
+BAA2: C2 BA 51                          jp      nz,51BAh
+BAA5: BF                                cp      a
+BAA6: 02                                ld      (bc),a
+BAA7: BF                                cp      a
+BAA8: 01 07 0D                          ld      bc,0D07h
+BAAB: 13                                inc     de
+BAAC: 19                                add     hl,de
+BAAD: 05                                dec     b
+BAAE: 0B                                dec     bc
+BAAF: 11 17 03                          ld      de,0317h
+BAB2: 09                                add     hl,bc
+BAB3: 0F                                rrca
+BAB4: 15                                dec     d
+BAB5: 02                                ld      (bc),a
+BAB6: 08                                ex      af,af'
+BAB7: 0E 14                             ld      c,14h
+BAB9: 1A                                ld      a,(de)
+BABA: 06 0C                             ld      b,0Ch
+BABC: 12                                ld      (de),a
+BABD: 18 04                             jr      LBAC2+1 ; reference not aligned to instruction
 
-BA60: 00
-BA61: 00
-BA62: 00
-BA63: 00
-BA64: 00
-BA65: 00
-BA66: 00
-BA67: 00
+BABF: 0A                         LBABF: ld      a,(bc)
+BAC0: 10 16                             djnz    LBAD6+2 ; reference not aligned to instruction
 
-BA68: A8
-BA69: BA
-BA6A: 00
-BA6B: 00
-BA6C: 00
-BA6D: 00
-BA6E: 00
-BA6F: 00
-BA70: 25
-BA71: BE
-BA72: C2 BA 21
-BA75: BF
-BA76: A5
-BA77: BE
-BA78: A8
-BA79: BA
-BA7A: 00
-BA7B: 00
-BA7C: 00
-BA7D: 00
-BA7E: 00
-BA7F: 00
-BA80: 25
-BA81: BE
-BA82: C2 BA 31
-BA85: BF
-BA86: C4 BE A8
-BA89: BA
-BA8A: 00
-BA8B: 00
-BA8C: 00
-BA8D: 00
-BA8E: 00
-BA8F: 00
-BA90: 25
-BA91: BE
-BA92: C2 BA 41
-BA95: BF
-BA96: E3
-BA97: BE
-BA98: A8
-BA99: BA
-BA9A: 00
-BA9B: 00
-BA9C: 00
-BA9D: 00
-BA9E: 00
-BA9F: 00
-BAA0: 25
-BAA1: BE
-BAA2: C2 BA 51
-BAA5: BF
-BAA6: 02
-BAA7: BF
-BAA8: 01 07 0D
-BAAB: 13
-BAAC: 19
-BAAD: 05
-BAAE: 0B
-BAAF: 11 17 03
-BAB2: 09
-BAB3: 0F
-BAB4: 15
-BAB5: 02
-BAB6: 08
-BAB7: 0E 14
-BAB9: 1A
-BABA: 06 0C
-BABC: 12
-BABD: 18 04
-BABF: 0A
-BAC0: 10 16
+                                        ; Referenced from BABD
+BAC2: 10 00                      LBAC2: djnz    LBAC4
 
-                                 DISK_PARAMETER_BLOCK:
-BAC2: 1A
-BAC3: 00
-BAC4: 03
-BAC5: 07
-BAC6: 00
-BAC7: F2 00 3F
-BACA: 00
-BACB: C0
-BACC: 00
-BACD: 10 00
-BACF: 02
-BAD0: 00
+                                        ; Referenced from BAC2
+BAC4: 03                         LBAC4: inc     bc
+BAC5: 07                                rlca
+BAC6: 00                                nop
+BAC7: 47                                ld      b,a
+BAC8: 00                                nop
+BAC9: 3F                                ccf
+BACA: 00                                nop
+BACB: C0                                ret     nz
+BACC: 00                                nop
+BACD: 10 00                             djnz    LBACF
 
-BAD1: 31 80 00                   WBOOT: ld      sp,0080h                   ; Referenced from BA03
+                                        ; Referenced from BACD
+BACF: 04                         LBACF: inc     b
+BAD0: 00                                nop
+
+                                        ; Referenced from BA03
+BAD1: 31 80 00                   LBAD1: ld      sp,0080h
 BAD4: 0E 00                             ld      c,00h
-BAD6: CD 09 E8                          call    EPROM_SETDRIVE
+
+                                        ; Referenced from BAC0
+BAD6: CD 09 E8                   LBAD6: call    0E809h
 BAD9: CD 00 E8                          call    0E800h
-BADC: 06 2C                             ld      b,2Ch   ; ','              ; reads 44 sectors (only CCP)
+BADC: 06 2C                             ld      b,2Ch   ; ','
 BADE: 0E 00                             ld      c,00h
-BAE0: 16 02                             ld      d,02h                      ; starting from sector 2
-BAE2: 21 00 A4                          ld      hl,STARTCCP
+BAE0: 16 02                             ld      d,02h
+BAE2: 21 00 A4                          ld      hl,0A400h
 
-
-                                 WBOOTLOOP:                                ; Referenced from BB02, BB10
-BAE5: C5                                push    bc
+                                        ; Referenced from BB02, BB10
+BAE5: C5                         LBAE5: push    bc
 BAE6: D5                                push    de
 BAE7: E5                                push    hl
 BAE8: 4A                                ld      c,d
-BAE9: CD 06 E8                          call    EPROM_SETSECTOR
+BAE9: CD 06 E8                          call    0E806h
 BAEC: E1                                pop     hl
 BAED: E5                                push    hl
 BAEE: CD 0C E8                          call    0E80Ch
-BAF1: CD 12 E8                          call    EPROM_READSECTOR
+BAF1: CD 12 E8                          call    0E812h
 BAF4: E1                                pop     hl
 BAF5: 11 80 00                          ld      de,0080h
 BAF8: 19                                add     hl,de
 BAF9: D1                                pop     de
 BAFA: C1                                pop     bc
 BAFB: 05                                dec     b
-BAFC: 28 1B                             jr      z,WBOOTENDLOOP
+BAFC: 28 1B                             jr      z,LBB19
 BAFE: 14                                inc     d
 BAFF: 7A                                ld      a,d
-BB00: FE 1B                             cp      1Bh
-BB02: 38 E1                             jr      c,WBOOTLOOP
+BB00: FE 11                             cp      11h
+BB02: 38 E1                             jr      c,LBAE5
 BB04: 16 01                             ld      d,01h
 BB06: 0C                                inc     c
 BB07: C5                                push    bc
 BB08: D5                                push    de
 BB09: E5                                push    hl
-BB0A: CD 03 E8                          call    EPROM_SETTRACK
+BB0A: CD 03 E8                          call    0E803h
 BB0D: E1                                pop     hl
 BB0E: D1                                pop     de
 BB0F: C1                                pop     bc
-BB10: 18 D3                             jr      WBOOTLOOP
+BB10: 18 D3                             jr      LBAE5
 
-BB12: AF                         BOOT:  xor     a                      ; Referenced from BA00
-BB13: 32 03 00                          ld      (IOBYTE),a
-BB16: 32 04 00                          ld      (DEFDRIVE),a
+                                        ; Referenced from BA00
+BB12: AF                         LBB12: xor     a
+BB13: 32 03 00                          ld      (0003h),a
+BB16: 32 04 00                          ld      (0004h),a
 
-                                 WBOOTENDLOOP:                         ; Referenced from BAFC
-BB19: 21 50 BB                          ld      hl,MESSAGE_DOS_22
-BB1C: CD FA E3                          call    WRSTG
+                                        ; Referenced from BAFC
+BB19: 21 50 BB                   LBB19: ld      hl,0BB50h
+BB1C: CD FA E3                          call    0E3FAh
 BB1F: C5                                push    bc
 BB20: 06 0A                             ld      b,0Ah
-BB22: 21 56 BA                          ld      hl,INIT_PORT_7A
+BB22: 21 56 BA                          ld      hl,0BA56h
 
-                                 INIT_7A_LOOP:                         ; Referenced from BB2A
-BB25: 7E                                ld      a,(hl)
+                                        ; Referenced from BB2A
+BB25: 7E                         LBB25: ld      a,(hl)
 BB26: D3 7A                             out     (7Ah),a ; 'z'
 BB28: 23                                inc     hl
 BB29: 05                                dec     b
-BB2A: C2 25 BB                          jp      nz,INIT_7A_LOOP
-
+BB2A: C2 25 BB                          jp      nz,LBB25
 BB2D: C1                                pop     bc
 BB2E: 3E C3                             ld      a,0C3h
 BB30: 32 00 00                          ld      (0000h),a
@@ -4378,38 +4436,36 @@ BB36: 22 01 00                          ld      (0001h),hl
 BB39: 32 05 00                          ld      (0005h),a
 BB3C: 21 06 AC                          ld      hl,0AC06h
 BB3F: 22 06 00                          ld      (0006h),hl
-BB42: 21 A5 BD                          ld      hl,BUFEPROM
+BB42: 21 A5 BD                          ld      hl,0BDA5h
 BB45: CD 0C E8                          call    0E80Ch
 BB48: FB                                ei
-BB49: 3A 04 00                          ld      a,(DEFDRIVE)
+BB49: 3A 04 00                          ld      a,(0004h)
 BB4C: 4F                                ld      c,a
-BB4D: C3 00 A4                          jp      STARTCCP
+BB4D: C3 00 A4                          jp      LA400
 
-
-                                 MESSAGE_DOS_22:
-BB50: 0D
-BB51: 0A
-BB52: 44
-BB53: 4F
-BB54: 53
-BB55: 20 32
-BB57: 2E 32
-BB59: 20 34
-BB5B: 38 6B
-BB5D: 0D
-BB5E: 0A
-BB5F: 72
-BB60: 65
-BB61: 76
-BB62: 2E 20
-BB64: 64
-BB65: 69
-BB66: 63
-BB67: 2F
-BB68: 38 31
-BB6A: 0D
-BB6B: 0A
-BB6C: A0
+BB50: 0D                         LBB50: dec     c
+BB51: 0A                                ld      a,(bc)
+BB52: 44                                ld      b,h
+BB53: 4F                                ld      c,a
+BB54: 53                                ld      d,e
+BB55: 20 32                             jr      nz,LBB89
+BB57: 2E 32                             ld      l,32h   ; '2'
+BB59: 20 34                             jr      nz,LBB8F
+BB5B: 38 6B                             jr      c,LBBC8
+BB5D: 0D                                dec     c
+BB5E: 0A                                ld      a,(bc)
+BB5F: 72                                ld      (hl),d
+BB60: 65                                ld      h,l
+BB61: 76                                halt
+BB62: 2E 20                             ld      l,20h   ; ' '
+BB64: 64                                ld      h,h
+BB65: 69                                ld      l,c
+BB66: 63                                ld      h,e
+BB67: 2F                                cpl
+BB68: 38 31                             jr      c,LBB9A+1       ; reference not aligned to instruction
+BB6A: 0D                                dec     c
+BB6B: 0A                                ld      a,(bc)
+BB6C: A0                                and     b
 
                                         ; Referenced from BBCF
                                         ; --- START PROC LBB6D ---
@@ -4422,35 +4478,47 @@ BB77: CD 03 E4                          call    0E403h
 BB7A: C9                                ret
 
                                         ; Referenced from BA06
-                                        ; --- START PROC CONST ---
-BB7B: 3A 03 00                   CONST: ld      a,(IOBYTE)
+                                        ; --- START PROC LBB7B ---
+BB7B: 3A 03 00                   LBB7B: ld      a,(0003h)
 BB7E: E6 03                             and     03h
 BB80: FE 01                             cp      01h
 BB82: 28 08                             jr      z,LBB8C
 BB84: DB FF                             in      a,(0FFh)
 BB86: 07                                rlca
-BB87: 3E FF                      LBB87: ld      a,0FFh                     ; Referenced from BB94, BB97, BBC6
-BB89: D0                         LBB89: ret     nc                         ; Referenced from BB55
+
+                                        ; Referenced from BB94, BB97, BBC6
+BB87: 3E FF                      LBB87: ld      a,0FFh
+
+                                        ; Referenced from BB55
+BB89: D0                         LBB89: ret     nc
 BB8A: AF                                xor     a
 BB8B: C9                                ret
 
-BB8C: AF                         LBB8C: xor     a                          ; Referenced from BB82
+                                        ; Referenced from BB82
+BB8C: AF                         LBB8C: xor     a
 BB8D: D3 7A                             out     (7Ah),a ; 'z'
-BB8F: DB 7A                      LBB8F: in      a,(7Ah) ; 'z'              ; Referenced from BB59
+
+                                        ; Referenced from BB59
+BB8F: DB 7A                      LBB8F: in      a,(7Ah) ; 'z'
 BB91: E6 01                             and     01h
-BB93: 37                         LBB93: scf                                ; Referenced from BBA0
+
+                                        ; Referenced from BBA0
+BB93: 37                         LBB93: scf
 BB94: 28 F1                             jr      z,LBB87
 BB96: 3F                                ccf
 BB97: 18 EE                             jr      LBB87
 
-BB99: AF                         LBB99: xor     a                          ; Referenced from BBAB
-BB9A: D3 7A                      LBB9A: out     (7Ah),a ; 'z'              ; Referenced from BB68
+                                        ; Referenced from BBAB
+BB99: AF                         LBB99: xor     a
+
+                                        ; Referenced from BB68
+BB9A: D3 7A                      LBB9A: out     (7Ah),a ; 'z'
 BB9C: DB 7A                             in      a,(7Ah) ; 'z'
 BB9E: E6 04                             and     04h
 BBA0: 18 F1                             jr      LBB93
 
-                                LISTST:                                    ; Referenced from BA2D
-BBA2: 3A 03 00                          ld      a,(IOBYTE)
+                                        ; Referenced from BA2D
+BBA2: 3A 03 00                   LBBA2: ld      a,(0003h)
 BBA5: E6 C0                             and     0C0h
 BBA7: 28 0B                             jr      z,LBBB4
 BBA9: FE 40                             cp      40h     ; '@'
@@ -4476,8 +4544,8 @@ BBC5: 2F                         LBBC5: cpl
 BBC6: 18 BF                             jr      LBB87
 
                                         ; Referenced from BA15, BB5B
-                                        ; --- START PROC READER ---
-BBC8: 3A 03 00                   READER: ld      a,(IOBYTE)
+                                        ; --- START PROC LBBC8 ---
+BBC8: 3A 03 00                   LBBC8: ld      a,(0003h)
 BBCB: E6 03                             and     03h
 BBCD: FE 01                             cp      01h
 BBCF: 20 9C                             jr      nz,LBB6D
@@ -4492,9 +4560,9 @@ BBDB: DB 78                             in      a,(78h) ; 'x'
 BBDD: C9                                ret
 
                                         ; Referenced from BA0C
-                                        ; --- START PROC CONOUT ---
-BBDE: CD 91 BC                   CONOUT: call    SAVE_REGS
-BBE1: 3A 03 00                          ld      a,(IOBYTE)
+                                        ; --- START PROC LBBDE ---
+BBDE: CD 91 BC                   LBBDE: call    LBC91
+BBE1: 3A 03 00                          ld      a,(0003h)
 BBE4: E6 03                             and     03h
 BBE6: FE 01                             cp      01h
 BBE8: 28 0A                             jr      z,LBBF4
@@ -4519,9 +4587,9 @@ BBFF: D3 78                             out     (78h),a ; 'x'
 BC01: 18 18                             jr      LBC1B
 
                                         ; Referenced from BA0F, BA12
-                                        ; --- START PROC LIST ---
-BC03: CD 91 BC                   LIST:  call    SAVE_REGS
-BC06: 3A 03 00                          ld      a,(IOBYTE)
+                                        ; --- START PROC LBC03 ---
+BC03: CD 91 BC                   LBC03: call    LBC91
+BC06: 3A 03 00                          ld      a,(0003h)
 BC09: E6 C0                             and     0C0h
 BC0B: 28 0A                             jr      z,LBC17
 BC0D: FE 40                             cp      40h     ; '@'
@@ -4537,167 +4605,170 @@ BC18: CD 4E BA                          call    LBA4E
 
                                         ; Referenced from BBF2, BC01
                                         ; --- START PROC LBC1B ---
-BC1B: 18 70                      LBC1B: jr      LOAD_REGS2
+BC1B: 18 70                      LBC1B: jr      LBC8D
 
-
-BC1D: 0E 00                      HOME:  ld      c,00h                    ; Referenced from BA18
-BC1F: CD 3F BC                          call    SETTRK
+                                        ; Referenced from BA18
+                                        ; --- START PROC LBC1D ---
+BC1D: 0E 00                      LBC1D: ld      c,00h
+BC1F: CD 3F BC                          call    LBC3F
 BC22: 0E 00                             ld      c,00h
-BC24: 18 1E                             jr      SETSEC
+BC24: 18 1E                             jr      LBC44
 
-
-                                        ; returns the address of a Disc Parameter Header in HL. 
-                                        ; The exact format of a DPH varies between CP/M versions; 
-                                        ; If the disc could not be selected it returns HL=0.
-                                 SELDSK:                                 ; Referenced from BA1B
-BC26: 21 00 00                          ld      hl,0000h
+                                        ; Referenced from BA1B
+                                        ; --- START PROC LBC26 ---
+BC26: 21 00 00                   LBC26: ld      hl,0000h
 BC29: 79                                ld      a,c
-BC2A: 32 DC BF                          ld      (CURRDRIVE),a
+BC2A: 32 DC BF                          ld      (LBFDC),a
 BC2D: FE 04                             cp      04h
 BC2F: D0                                ret     nc
-BC30: 3A DC BF                          ld      a,(CURRDRIVE)
+BC30: 3A DC BF                          ld      a,(LBFDC)
 BC33: 6F                                ld      l,a
 BC34: 26 00                             ld      h,00h
 BC36: 29                                add     hl,hl
 BC37: 29                                add     hl,hl
 BC38: 29                                add     hl,hl
 BC39: 29                                add     hl,hl
-BC3A: 11 68 BA                          ld      de,DPH_TABLE
-BC3D: 19                                add     hl,de                      ; hl = DPH_TABLE[CURRDRIVE*16]
+BC3A: 11 68 BA                          ld      de,0BA68h
+BC3D: 19                                add     hl,de
 BC3E: C9                                ret
 
-                                 SETTRK:                                   ; Referenced from BA1E, BC1F
-BC3F: 79                                ld      a,c
-BC40: 32 DA BF                          ld      (CURRTRACK),a
+                                        ; Referenced from BA1E, BC1F
+                                        ; --- START PROC LBC3F ---
+BC3F: 79                         LBC3F: ld      a,c
+BC40: 32 DA BF                          ld      (LBFDA),a
 BC43: C9                                ret
 
-
-                                 SETSEC:                                   ; Referenced from BA21, BC24
-BC44: 79                                ld      a,c
-BC45: 32 DB BF                          ld      (CURRSEC),a
+                                        ; Referenced from BA21, BC24
+                                        ; --- START PROC LBC44 ---
+BC44: 79                         LBC44: ld      a,c
+BC45: 32 DB BF                          ld      (LBFDB),a
 BC48: C9                                ret
 
-                                        ; Translate sector numbers to take account of skewing.
-                                        ; On entry, BC=logical sector number (zero based) and DE=address 
-                                        ; of translation table. On exit, HL contains physical sector number. 
-                                        ; On a system with hardware skewing, this would normally ignore DE 
-                                        ; and return either BC or BC+1.
-                                 SECTRAN:                                 ; Referenced from BA30
-BC49: EB                                ex      de,hl
-BC4A: 09                                add     hl,bc
-BC4B: 6E                                ld      l,(hl)
-BC4C: 26 00                             ld      h,00h                     ; hl = DE[BC]
+                                        ; Referenced from BA30
+                                        ; --- START PROC LBC49 ---
+BC49: 7C                         LBC49: ld      a,h
+BC4A: 2D                                dec     l
+BC4B: C9                                ret
+
+BC4C: 26 00                      LBC4C: ld      h,00h
 BC4E: C9                                ret
 
-                                 SETDMA:                                  ; Referenced from BA24
-BC4F: ED 43 DE BF                       ld      (BUFADDR),bc
+                                        ; Referenced from BA24
+                                        ; --- START PROC LBC4F ---
+BC4F: ED 43 DE BF                LBC4F: ld      (LBFDE),bc
 BC53: C9                                ret
 
-                                        ;
-                                        ; Read the currently set track and sector at the current DMA address. 
-                                        ; Returns A=0 for OK, 1 for unrecoverable error, 0FFh if media changed.
-                                        ;
-BC54: CD 91 BC                   READ:  call    SAVE_REGS                 ; Referenced from BA27
-BC57: CD D4 BC                          call    CHECK_CHANGED_TRKSEC
-BC5A: CD 12 E8                          call    EPROM_READSECTOR
-BC5D: CD C3 BC                          call    DISKBUF_TO_CPMBUF
+                                        ; Referenced from BA27
+                                        ; --- START PROC LBC54 ---
+BC54: CD 91 BC                   LBC54: call    LBC91
+BC57: CD D4 BC                          call    LBCD4
+BC5A: CD 12 E8                          call    0E812h
+BC5D: CD C3 BC                          call    LBCC3
 BC60: AF                                xor     a
-BC61: 18 2A                             jr      LOAD_REGS2
+BC61: 18 2A                             jr      LBC8D
 
-
-BC63: CD 91 BC                   WRITE: call    SAVE_REGS                 ; Referenced from BA2A
-BC66: CD D4 BC                          call    CHECK_CHANGED_TRKSEC
-BC69: 3A 54 BA                          ld      a,(NUM_RETRY)
+                                        ; Referenced from BA2A
+                                        ; --- START PROC LBC63 ---
+BC63: CD 91 BC                   LBC63: call    LBC91
+BC66: CD D4 BC                          call    LBCD4
+BC69: 3A 54 BA                          ld      a,(LBA54)
 BC6C: F5                                push    af
 
-
-                                 WRITE_RETRY:                             ; Referenced from BC89
-BC6D: CD BB BC                          call    CPMBUF_TO_DISKBUF
-BC70: CD 0F E8                          call    EPROM_WRITESECTOR
-BC73: 3A 54 BA                          ld      a,(NUM_RETRY)
-BC76: FE 00                             cp      00h                   ; do not verify if 0
-BC78: 28 12                             jr      z,WRITE_RETRY_EXIT    ;
-BC7A: CD F6 BC                          call    VERIFY_SECTOR         ; possible verify
+                                        ; Referenced from BC89
+BC6D: CD BB BC                   LBC6D: call    LBCBB
+BC70: CD 0F E8                          call    0E80Fh
+BC73: 3A 54 BA                          ld      a,(LBA54)
+BC76: FE 00                             cp      00h
+BC78: 28 12                             jr      z,LBC8C
+BC7A: CD F6 BC                          call    LBCF6
 BC7D: B7                                or      a
-BC7E: 28 0C                             jr      z,WRITE_RETRY_EXIT    ; verify ok => exit
-BC80: 21 30 BD                          ld      hl,MSGRETRY           ; prints error message
-BC83: CD FA E3                          call    WRSTG                 ;
+BC7E: 28 0C                             jr      z,LBC8C
+BC80: 21 30 BD                          ld      hl,0BD30h
+BC83: CD FA E3                          call    0E3FAh
 BC86: F1                                pop     af
-BC87: 3D                                dec     a                     ; decrease number of attempts
+BC87: 3D                                dec     a
 BC88: F5                                push    af
-BC89: 20 E2                             jr      nz,WRITE_RETRY        ; retry
+BC89: 20 E2                             jr      nz,LBC6D
 BC8B: 3C                                inc     a
 
-                                 WRITE_RETRY_EXIT:                    ; Referenced from BC78, BC7E
-BC8C: C1                                pop     bc
+                                        ; Referenced from BC78, BC7E
+                                        ; --- START PROC LBC8C ---
+BC8C: C1                         LBC8C: pop     bc
 
-                                 LOAD_REGS2:                          ; Referenced from BC1B, BC61
-BC8D: CD A9 BC                          call    LOAD_REGS
+                                        ; Referenced from BC1B, BC61
+                                        ; --- START PROC LBC8D ---
+BC8D: CD A9 BC                   LBC8D: call    LBCA9
 BC90: C9                                ret
 
-                                 SAVE_REGS:                           ; Referenced from BBDE, BC03, BC54, BC63
-BC91: ED 73 D0 BF                       ld      (0BFD0h),sp
-BC95: 22 D2 BF                          ld      (0BFD2h),hl
-BC98: ED 53 D4 BF                       ld      (0BFD4h),de
-BC9C: ED 43 D6 BF                       ld      (0BFD6h),bc
-BCA0: 32 D8 BF                          ld      (0BFD8h),a
+                                        ; Referenced from BBDE, BC03, BC54, BC63
+                                        ; --- START PROC LBC91 ---
+BC91: ED 73 D0 BF                LBC91: ld      (LBFD0),sp
+BC95: 22 D2 BF                          ld      (LBFD2),hl
+BC98: ED 53 D4 BF                       ld      (LBFD4),de
+BC9C: ED 43 D6 BF                       ld      (LBFD6),bc
+BCA0: 32 D8 BF                          ld      (LBFD8),a
 BCA3: D1                                pop     de
 BCA4: 31 D0 BF                          ld      sp,0BFD0h
 BCA7: D5                                push    de
 BCA8: C9                                ret
 
-                                 LOAD_REGS:                          ; Referenced from BC8D
-BCA9: E1                                pop     hl
-BCAA: ED 7B D0 BF                       ld      sp,(0BFD0h)
+                                        ; Referenced from BC8D
+                                        ; --- START PROC LBCA9 ---
+BCA9: E1                         LBCA9: pop     hl
+BCAA: ED 7B D0 BF                       ld      sp,(LBFD0)
 BCAE: E3                                ex      (sp),hl
-BCAF: ED 4B D6 BF                       ld      bc,(0BFD6h)
-BCB3: ED 5B D4 BF                       ld      de,(0BFD4h)
-BCB7: 2A D2 BF                          ld      hl,(0BFD2h)
+BCAF: ED 4B D6 BF                       ld      bc,(LBFD6)
+BCB3: ED 5B D4 BF                       ld      de,(LBFD4)
+BCB7: 2A D2 BF                          ld      hl,(LBFD2)
 BCBA: C9                                ret
 
-                                CPMBUF_TO_DISKBUF:                  ; Referenced from BC6D
-BCBB: 11 A5 BD                          ld      de,BUFEPROM
-BCBE: 2A DE BF                          ld      hl,(BUFADDR)
-BCC1: 18 07                             jr      START_COPYBUF
+                                        ; Referenced from BC6D
+                                        ; --- START PROC LBCBB ---
+BCBB: 11 A5 BD                   LBCBB: ld      de,0BDA5h
+BCBE: 2A DE BF                          ld      hl,(LBFDE)
+BCC1: 18 07                             jr      LBCCA
 
-                                DISKBUF_TO_CPMBUF:                  ; Referenced from BC5D
-BCC3: 11 A5 BD                          ld      de,BUFEPROM
-BCC6: 2A DE BF                          ld      hl,(BUFADDR)
+                                        ; Referenced from BC5D
+                                        ; --- START PROC LBCC3 ---
+BCC3: 11 A5 BD                   LBCC3: ld      de,0BDA5h
+BCC6: 2A DE BF                          ld      hl,(LBFDE)
 BCC9: EB                                ex      de,hl
 
-BCCA: 06 80                      START_COPYBUF:
-                                        ld      b,80h
-                                 COPY_LOOP:
-BCCC: 7E                                ld      a,(hl)
-BCCD: 2F                                cpl                   ; invert data from WDC 1791 /D0-/D7
+                                        ; Referenced from BCC1
+                                        ; --- START PROC LBCCA ---
+BCCA: 06 80                      LBCCA: ld      b,80h
+
+                                        ; Referenced from BCD1
+BCCC: 7E                         LBCCC: ld      a,(hl)
+BCCD: 2F                                cpl
 BCCE: 12                                ld      (de),a
 BCCF: 23                                inc     hl
 BCD0: 13                                inc     de
-BCD1: 10 F9                             djnz    COPY_LOOP
+BCD1: 10 F9                             djnz    LBCCC
 BCD3: C9                                ret
 
-
-                                 CHECK_CHANGED_TRKSEC:                     ; Referenced from BC57, BC66
-BCD4: 3A DC BF                          ld      a,(CURRDRIVE)
+                                        ; Referenced from BC57, BC66
+                                        ; --- START PROC LBCD4 ---
+BCD4: 3A DC BF                   LBCD4: ld      a,(LBFDC)
 BCD7: 4F                                ld      c,a
-BCD8: 3A DD BF                          ld      a,(LAST_DRIVE)
+BCD8: 3A DD BF                          ld      a,(LBFDD)
 BCDB: B9                                cp      c
 BCDC: 79                                ld      a,c
-BCDD: 32 DD BF                          ld      (LAST_DRIVE),a
-BCE0: C4 09 E8                          call    nz,EPROM_SETDRIVE
-BCE3: 3A DB BF                          ld      a,(CURRSEC)
+BCDD: 32 DD BF                          ld      (LBFDD),a
+BCE0: C4 09 E8                          call    nz,0E809h
+BCE3: 3A DB BF                          ld      a,(LBFDB)
 BCE6: 4F                                ld      c,a
-BCE7: CD 06 E8                          call    EPROM_SETSECTOR
-BCEA: 3A DA BF                          ld      a,(CURRTRACK)
+BCE7: CD 06 E8                          call    0E806h
+BCEA: 3A DA BF                          ld      a,(LBFDA)
 BCED: 4F                                ld      c,a
-BCEE: 3A EC BF                          ld      a,(LAST_TRACK)
+BCEE: 3A EC BF                          ld      a,(LBFEC)
 BCF1: B9                                cp      c
-BCF2: C4 03 E8                          call    nz,EPROM_SETTRACK
+BCF2: C4 03 E8                          call    nz,0E803h
 BCF5: C9                                ret
 
                                         ; Referenced from BC7A
-                                 VERIFY_SECTOR:
-BCF6: CD 2A E8                   VERIFY_SECTOR: call    0E82Ah
+                                        ; --- START PROC LBCF6 ---
+BCF6: CD 2A E8                   LBCF6: call    0E82Ah
 BCF9: 0E BF                             ld      c,0BFh
 BCFB: DD 66 0B                          ld      h,(ix+0Bh)
 BCFE: DD 6E 0A                          ld      l,(ix+0Ah)
@@ -4708,7 +4779,8 @@ BD05: 18 02                             jr      LBD09
                                         ; Referenced from BD0C, BD11, BD16, BD1B
 BD07: ED A2                      LBD07: ini
 
-BD09: DB 3F                      LBD09: in      a,(3Fh) ; '?'               ; Referenced from BD05, BD1E
+                                        ; Referenced from BD05, BD1E
+BD09: DB 3F                      LBD09: in      a,(3Fh) ; '?'
 BD0B: 07                                rlca
 BD0C: 38 F9                             jr      c,LBD07
 BD0E: DB 3F                             in      a,(3Fh) ; '?'
@@ -4723,7 +4795,8 @@ BD1B: 38 EA                             jr      c,LBD07
 BD1D: 07                                rlca
 BD1E: 30 E9                             jr      nc,LBD09
 
-BD20: DB 3F                      LBD20: in      a,(3Fh) ; '?'              ; Referenced from BD24
+                                        ; Referenced from BD24
+BD20: DB 3F                      LBD20: in      a,(3Fh) ; '?'
 BD22: CB 77                             bit     6,a
 BD24: 28 FA                             jr      z,LBD20
 BD26: DB BC                             in      a,(0BCh)
@@ -4732,33 +4805,27 @@ BD29: DD 77 0F                          ld      (ix+0Fh),a
 BD2C: DD A6 0D                          and     (ix+0Dh)
 BD2F: C9                                ret
 
-                                        MSGRETRY:
-                                        ; Message "\r\nDISK WRITE RETRY\r", $A0
-BD30: 0D
-BD31: 0A
-BD32: 44
-BD33: 49
-BD34: 53
-BD35: 4B
-BD36: 20 57
-BD38: 52
-BD39: 49
-BD3A: 54
-BD3B: 45
-BD3C: 20 52
-BD3E: 45
-BD3F: 54
-BD40: 52
-BD41: 59
-BD42: 0A
-BD43: A0
-                                        ;
-                                        ; gets cursor address in HL
-                                        ; by reading it from the pointer
-                                        ; stored in the VDD table
-                                        ;
-                                 GETCURSORADDR:                       ; Referenced from BA51
-BD44: DD 21 E0 BF                       ld      ix,VDDTABLE
+BD30: 0D                         LBD30: dec     c
+BD31: 0A                                ld      a,(bc)
+BD32: 44                                ld      b,h
+BD33: 49                                ld      c,c
+BD34: 53                                ld      d,e
+BD35: 4B                                ld      c,e
+BD36: 20 57                             jr      nz,LBD8F
+BD38: 52                                ld      d,d
+BD39: 49                                ld      c,c
+BD3A: 54                                ld      d,h
+BD3B: 45                                ld      b,l
+BD3C: 20 52                             jr      nz,LBD90
+BD3E: 45                                ld      b,l
+BD3F: 54                                ld      d,h
+BD40: 52                                ld      d,d
+BD41: 59                                ld      e,c
+BD42: 0A                                ld      a,(bc)
+BD43: A0                                and     b
+
+                                        ; Referenced from BA51
+BD44: DD 21 E0 BF                LBD44: ld      ix,0BFE0h
 BD48: DD 66 01                          ld      h,(ix+01h)
 BD4B: DD 6E 00                          ld      l,(ix+00h)
 BD4E: 11 05 00                          ld      de,0005h
@@ -4774,8 +4841,8 @@ BD57: 6F                         LBD57: ld      l,a
 BD58: BD                                cp      l
 
                                         ; Referenced from BA09
-                                        ; --- START PROC CONIN ---
-BD59: 2A 57 BD                   CONIN: ld      hl,(LBD57)
+                                        ; --- START PROC LBD59 ---
+BD59: 2A 57 BD                   LBD59: ld      hl,(LBD57)
 BD5C: 7E                                ld      a,(hl)
 BD5D: B7                                or      a
 BD5E: FA 66 BD                          jp      m,LBD66
@@ -4795,7 +4862,7 @@ BD71: 69                                ld      l,c
 BD72: 7A                                ld      a,d
 BD73: 69                                ld      l,c
 BD74: 6F                                ld      l,a
-BD75: 20 4C                             jr      nz,0BDC3h
+BD75: 20 4C                             jr      nz,LBDC3
 BD77: 61                                ld      h,c
 BD78: 76                                halt
 BD79: 6F                                ld      l,a
@@ -4805,14 +4872,843 @@ BD7C: 8D                                adc     a,l
 BD7D: 00                                nop
 BD7E: 00                                nop
 BD7F: 00                                nop
+BD80: FF                                rst     0x38
 
+BD81: AC                         LBD81: xor     h
+BD82: A6                                and     (hl)
+BD83: AC                                xor     h
+BD84: B8                                cp      b
+BD85: BA                                cp      d
+BD86: B1                                or      c
+BD87: DF                                rst     0x18
 
-; **************************************************************************************
-; **************************************************************************************
-; **************************************************************************************
-; **************************************************************************************
-; **************************************************************************************
-; **************************************************************************************
+BD88: DF                         LBD88: rst     0x18
+
+BD89: BC                         LBD89: cp      h
+BD8A: B0                                or      b
+BD8B: B2                                or      d
+BD8C: FF                                rst     0x38
+
+BD8D: FF                         LBD8D: rst     0x38
+
+BD8E: FF                         LBD8E: rst     0x38
+
+                                        ; Referenced from BD36
+BD8F: F7                         LBD8F: rst     0x30
+
+                                        ; Referenced from BD3C
+BD90: FD FF                      LBD90: rst     0x38
+
+BD92: FF                         LBD92: rst     0x38
+
+BD93: FF                         LBD93: rst     0x38
+
+BD94: FF                         LBD94: rst     0x38
+
+BD95: FF                         LBD95: rst     0x38
+
+BD96: FF                         LBD96: rst     0x38
+
+BD97: FF                         LBD97: rst     0x38
+
+BD98: FF                         LBD98: rst     0x38
+
+BD99: FF                         LBD99: rst     0x38
+
+BD9A: FF                         LBD9A: rst     0x38
+
+BD9B: FF                         LBD9B: rst     0x38
+
+BD9C: FF                         LBD9C: rst     0x38
+
+BD9D: FF                         LBD9D: rst     0x38
+
+BD9E: FF                         LBD9E: rst     0x38
+
+BD9F: FF                         LBD9F: rst     0x38
+
+BDA0: FF                         LBDA0: rst     0x38
+
+BDA1: BB                         LBDA1: cp      e
+BDA2: AA                                xor     d
+BDA3: B2                                or      d
+BDA4: AF                                xor     a
+BDA5: DF                                rst     0x18
+
+BDA6: DF                         LBDA6: rst     0x18
+
+BDA7: DF                         LBDA7: rst     0x18
+
+BDA8: DF                         LBDA8: rst     0x18
+
+BDA9: BE                         LBDA9: cp      (hl)
+BDAA: AC                                xor     h
+BDAB: B2                                or      d
+BDAC: FF                                rst     0x38
+
+BDAD: FF                         LBDAD: rst     0x38
+
+BDAE: FF                         LBDAE: rst     0x38
+
+BDAF: DE FC                      LBDAF: sbc     a,0FCh
+BDB1: FB                                ei
+BDB2: FA F9 F8                          jp      m,0F8F9h
+BDB5: FF                                rst     0x38
+
+BDB6: FF                         LBDB6: rst     0x38
+
+BDB7: FF                         LBDB7: rst     0x38
+
+BDB8: FF                         LBDB8: rst     0x38
+
+BDB9: FF                         LBDB9: rst     0x38
+
+BDBA: FF                         LBDBA: rst     0x38
+
+BDBB: FF                         LBDBB: rst     0x38
+
+BDBC: FF                         LBDBC: rst     0x38
+
+BDBD: FF                         LBDBD: rst     0x38
+
+BDBE: FF                         LBDBE: rst     0x38
+
+BDBF: FF                         LBDBF: rst     0x38
+
+BDC0: FF                         LBDC0: rst     0x38
+
+BDC1: AF                         LBDC1: xor     a
+BDC2: B6                                or      (hl)
+
+                                        ; Referenced from BD75
+BDC3: AF                         LBDC3: xor     a
+BDC4: DF                                rst     0x18
+
+BDC5: DF                         LBDC5: rst     0x18
+
+BDC6: DF                         LBDC6: rst     0x18
+
+BDC7: DF                         LBDC7: rst     0x18
+
+BDC8: DF                         LBDC8: rst     0x18
+
+BDC9: BC                         LBDC9: cp      h
+BDCA: B0                                or      b
+BDCB: B2                                or      d
+BDCC: FF                                rst     0x38
+
+BDCD: FF                         LBDCD: rst     0x38
+
+BDCE: FF                         LBDCE: rst     0x38
+
+BDCF: C5                         LBDCF: push    bc
+BDD0: F7                                rst     0x30
+
+BDD1: F6 F5                      LBDD1: or      0F5h
+BDD3: F4 F3 F2                          call    p,0F2F3h
+BDD6: F1                                pop     af
+BDD7: F0                                ret     p
+BDD8: FF                                rst     0x38
+
+BDD9: FF                         LBDD9: rst     0x38
+
+BDDA: FF                         LBDDA: rst     0x38
+
+BDDB: FF                         LBDDB: rst     0x38
+
+BDDC: FF                         LBDDC: rst     0x38
+
+BDDD: FF                         LBDDD: rst     0x38
+
+BDDE: FF                         LBDDE: rst     0x38
+
+BDDF: FF                         LBDDF: rst     0x38
+
+BDE0: FF                         LBDE0: rst     0x38
+
+BDE1: AC                         LBDE1: xor     h
+BDE2: AA                                xor     d
+BDE3: BD                                cp      l
+BDE4: B2                                or      d
+BDE5: B6                                or      (hl)
+BDE6: AB                                xor     e
+BDE7: DF                                rst     0x18
+
+BDE8: DF                         LBDE8: rst     0x18
+
+BDE9: BC                         LBDE9: cp      h
+BDEA: B0                                or      b
+BDEB: B2                                or      d
+BDEC: FF                                rst     0x38
+
+BDED: FF                         LBDED: rst     0x38
+
+BDEE: FF                         LBDEE: rst     0x38
+
+BDEF: F5                         LBDEF: push    af
+BDF0: EF                                rst     0x28
+
+BDF1: EE FF                      LBDF1: xor     0FFh
+BDF3: FF                                rst     0x38
+
+BDF4: FF                         LBDF4: rst     0x38
+
+BDF5: FF                         LBDF5: rst     0x38
+
+BDF6: FF                         LBDF6: rst     0x38
+
+BDF7: FF                         LBDF7: rst     0x38
+
+BDF8: FF                         LBDF8: rst     0x38
+
+BDF9: FF                         LBDF9: rst     0x38
+
+BDFA: FF                         LBDFA: rst     0x38
+
+BDFB: FF                         LBDFB: rst     0x38
+
+BDFC: FF                         LBDFC: rst     0x38
+
+BDFD: FF                         LBDFD: rst     0x38
+
+BDFE: FF                         LBDFE: rst     0x38
+
+BDFF: FF                         LBDFF: rst     0x38
+
+BE00: 1A                         LBE00: ld      a,(de)
+BE01: 1A                                ld      a,(de)
+BE02: 1A                                ld      a,(de)
+BE03: 1A                                ld      a,(de)
+BE04: 1A                                ld      a,(de)
+BE05: 1A                                ld      a,(de)
+BE06: 1A                                ld      a,(de)
+BE07: 1A                                ld      a,(de)
+BE08: 1A                                ld      a,(de)
+BE09: 1A                                ld      a,(de)
+BE0A: 1A                                ld      a,(de)
+BE0B: 1A                                ld      a,(de)
+BE0C: 1A                                ld      a,(de)
+BE0D: 1A                                ld      a,(de)
+BE0E: 1A                                ld      a,(de)
+BE0F: 1A                                ld      a,(de)
+BE10: 1A                                ld      a,(de)
+BE11: 1A                                ld      a,(de)
+BE12: 1A                                ld      a,(de)
+BE13: 1A                                ld      a,(de)
+BE14: 1A                                ld      a,(de)
+BE15: 1A                                ld      a,(de)
+BE16: 1A                                ld      a,(de)
+BE17: 1A                                ld      a,(de)
+BE18: 1A                                ld      a,(de)
+BE19: 1A                                ld      a,(de)
+BE1A: 1A                                ld      a,(de)
+BE1B: 1A                                ld      a,(de)
+BE1C: 1A                                ld      a,(de)
+BE1D: 1A                                ld      a,(de)
+BE1E: 1A                                ld      a,(de)
+BE1F: 1A                                ld      a,(de)
+BE20: 1A                                ld      a,(de)
+BE21: 1A                                ld      a,(de)
+BE22: 1A                                ld      a,(de)
+BE23: 1A                                ld      a,(de)
+BE24: 1A                                ld      a,(de)
+BE25: 1A                                ld      a,(de)
+BE26: 1A                                ld      a,(de)
+BE27: 1A                                ld      a,(de)
+BE28: 1A                                ld      a,(de)
+BE29: 1A                                ld      a,(de)
+BE2A: 1A                                ld      a,(de)
+BE2B: 1A                                ld      a,(de)
+BE2C: 1A                                ld      a,(de)
+BE2D: 1A                                ld      a,(de)
+BE2E: 1A                                ld      a,(de)
+BE2F: 1A                                ld      a,(de)
+BE30: 1A                                ld      a,(de)
+BE31: 1A                                ld      a,(de)
+BE32: 1A                                ld      a,(de)
+BE33: 1A                                ld      a,(de)
+BE34: 1A                                ld      a,(de)
+BE35: 1A                                ld      a,(de)
+BE36: 1A                                ld      a,(de)
+BE37: 1A                                ld      a,(de)
+BE38: 1A                                ld      a,(de)
+BE39: 1A                                ld      a,(de)
+BE3A: 1A                                ld      a,(de)
+BE3B: 1A                                ld      a,(de)
+BE3C: 1A                                ld      a,(de)
+BE3D: 1A                                ld      a,(de)
+BE3E: 1A                                ld      a,(de)
+BE3F: 1A                                ld      a,(de)
+BE40: 1A                                ld      a,(de)
+BE41: 1A                                ld      a,(de)
+BE42: 1A                                ld      a,(de)
+BE43: 1A                                ld      a,(de)
+BE44: 1A                                ld      a,(de)
+BE45: 1A                                ld      a,(de)
+BE46: 1A                                ld      a,(de)
+BE47: 1A                                ld      a,(de)
+BE48: 1A                                ld      a,(de)
+BE49: 1A                                ld      a,(de)
+BE4A: 1A                                ld      a,(de)
+BE4B: 1A                                ld      a,(de)
+BE4C: 1A                                ld      a,(de)
+BE4D: 1A                                ld      a,(de)
+BE4E: 1A                                ld      a,(de)
+BE4F: 1A                                ld      a,(de)
+BE50: 1A                                ld      a,(de)
+BE51: 1A                                ld      a,(de)
+BE52: 1A                                ld      a,(de)
+BE53: 1A                                ld      a,(de)
+BE54: 1A                                ld      a,(de)
+BE55: 1A                                ld      a,(de)
+BE56: 1A                                ld      a,(de)
+BE57: 1A                                ld      a,(de)
+BE58: 1A                                ld      a,(de)
+BE59: 1A                                ld      a,(de)
+BE5A: 1A                                ld      a,(de)
+BE5B: 1A                                ld      a,(de)
+BE5C: 1A                                ld      a,(de)
+BE5D: 1A                                ld      a,(de)
+BE5E: 1A                                ld      a,(de)
+BE5F: 1A                                ld      a,(de)
+BE60: 1A                                ld      a,(de)
+BE61: 1A                                ld      a,(de)
+BE62: 1A                                ld      a,(de)
+BE63: 1A                                ld      a,(de)
+BE64: 1A                                ld      a,(de)
+BE65: 1A                                ld      a,(de)
+BE66: 1A                                ld      a,(de)
+BE67: 1A                                ld      a,(de)
+BE68: 1A                                ld      a,(de)
+BE69: 1A                                ld      a,(de)
+BE6A: 1A                                ld      a,(de)
+BE6B: 1A                                ld      a,(de)
+BE6C: 1A                                ld      a,(de)
+BE6D: 1A                                ld      a,(de)
+BE6E: 1A                                ld      a,(de)
+BE6F: 1A                                ld      a,(de)
+BE70: 1A                                ld      a,(de)
+BE71: 1A                                ld      a,(de)
+BE72: 1A                                ld      a,(de)
+BE73: 1A                                ld      a,(de)
+BE74: 1A                                ld      a,(de)
+BE75: 1A                                ld      a,(de)
+BE76: 1A                                ld      a,(de)
+BE77: 1A                                ld      a,(de)
+BE78: 1A                                ld      a,(de)
+BE79: 1A                                ld      a,(de)
+BE7A: 1A                                ld      a,(de)
+BE7B: 1A                                ld      a,(de)
+BE7C: 1A                                ld      a,(de)
+BE7D: 1A                                ld      a,(de)
+BE7E: 1A                                ld      a,(de)
+BE7F: 1A                                ld      a,(de)
+BE80: 1A                                ld      a,(de)
+BE81: 1A                                ld      a,(de)
+BE82: 1A                                ld      a,(de)
+BE83: 1A                                ld      a,(de)
+BE84: 1A                                ld      a,(de)
+BE85: 1A                                ld      a,(de)
+BE86: 1A                                ld      a,(de)
+BE87: 1A                                ld      a,(de)
+BE88: 1A                                ld      a,(de)
+BE89: 1A                                ld      a,(de)
+BE8A: 1A                                ld      a,(de)
+BE8B: 1A                                ld      a,(de)
+BE8C: 1A                                ld      a,(de)
+BE8D: 1A                                ld      a,(de)
+BE8E: 1A                                ld      a,(de)
+BE8F: 1A                                ld      a,(de)
+BE90: 1A                                ld      a,(de)
+BE91: 1A                                ld      a,(de)
+BE92: 1A                                ld      a,(de)
+BE93: 1A                                ld      a,(de)
+BE94: 1A                                ld      a,(de)
+BE95: 1A                                ld      a,(de)
+BE96: 1A                                ld      a,(de)
+BE97: 1A                                ld      a,(de)
+BE98: 1A                                ld      a,(de)
+BE99: 1A                                ld      a,(de)
+BE9A: 1A                                ld      a,(de)
+BE9B: 1A                                ld      a,(de)
+BE9C: 1A                                ld      a,(de)
+BE9D: 1A                                ld      a,(de)
+BE9E: 1A                                ld      a,(de)
+BE9F: 1A                                ld      a,(de)
+BEA0: 1A                                ld      a,(de)
+BEA1: 1A                                ld      a,(de)
+BEA2: 1A                                ld      a,(de)
+BEA3: 1A                                ld      a,(de)
+BEA4: 1A                                ld      a,(de)
+BEA5: 1A                                ld      a,(de)
+BEA6: 1A                                ld      a,(de)
+BEA7: 1A                                ld      a,(de)
+BEA8: 1A                                ld      a,(de)
+BEA9: 1A                                ld      a,(de)
+BEAA: 1A                                ld      a,(de)
+BEAB: 1A                                ld      a,(de)
+BEAC: 1A                                ld      a,(de)
+BEAD: 1A                                ld      a,(de)
+BEAE: 1A                                ld      a,(de)
+BEAF: 1A                                ld      a,(de)
+BEB0: 1A                                ld      a,(de)
+BEB1: 1A                                ld      a,(de)
+BEB2: 1A                                ld      a,(de)
+BEB3: 1A                                ld      a,(de)
+BEB4: 1A                                ld      a,(de)
+BEB5: 1A                                ld      a,(de)
+BEB6: 1A                                ld      a,(de)
+BEB7: 1A                                ld      a,(de)
+BEB8: 1A                                ld      a,(de)
+BEB9: 1A                                ld      a,(de)
+BEBA: 1A                                ld      a,(de)
+BEBB: 1A                                ld      a,(de)
+BEBC: 1A                                ld      a,(de)
+BEBD: 1A                                ld      a,(de)
+BEBE: 1A                                ld      a,(de)
+BEBF: 1A                                ld      a,(de)
+BEC0: 1A                                ld      a,(de)
+BEC1: 1A                                ld      a,(de)
+BEC2: 1A                                ld      a,(de)
+BEC3: 1A                                ld      a,(de)
+BEC4: 1A                                ld      a,(de)
+BEC5: 1A                                ld      a,(de)
+BEC6: 1A                                ld      a,(de)
+BEC7: 1A                                ld      a,(de)
+BEC8: 1A                                ld      a,(de)
+BEC9: 1A                                ld      a,(de)
+BECA: 1A                                ld      a,(de)
+BECB: 1A                                ld      a,(de)
+BECC: 1A                                ld      a,(de)
+BECD: 1A                                ld      a,(de)
+BECE: 1A                                ld      a,(de)
+BECF: 1A                                ld      a,(de)
+BED0: 1A                                ld      a,(de)
+BED1: 1A                                ld      a,(de)
+BED2: 1A                                ld      a,(de)
+BED3: 1A                                ld      a,(de)
+BED4: 1A                                ld      a,(de)
+BED5: 1A                                ld      a,(de)
+BED6: 1A                                ld      a,(de)
+BED7: 1A                                ld      a,(de)
+BED8: 1A                                ld      a,(de)
+BED9: 1A                                ld      a,(de)
+BEDA: 1A                                ld      a,(de)
+BEDB: 1A                                ld      a,(de)
+BEDC: 1A                                ld      a,(de)
+BEDD: 1A                                ld      a,(de)
+BEDE: 1A                                ld      a,(de)
+BEDF: 1A                                ld      a,(de)
+BEE0: 1A                                ld      a,(de)
+BEE1: 1A                                ld      a,(de)
+BEE2: 1A                                ld      a,(de)
+BEE3: 1A                                ld      a,(de)
+BEE4: 1A                                ld      a,(de)
+BEE5: 1A                                ld      a,(de)
+BEE6: 1A                                ld      a,(de)
+BEE7: 1A                                ld      a,(de)
+BEE8: 1A                                ld      a,(de)
+BEE9: 1A                                ld      a,(de)
+BEEA: 1A                                ld      a,(de)
+BEEB: 1A                                ld      a,(de)
+BEEC: 1A                                ld      a,(de)
+BEED: 1A                                ld      a,(de)
+BEEE: 1A                                ld      a,(de)
+BEEF: 1A                                ld      a,(de)
+BEF0: 1A                                ld      a,(de)
+BEF1: 1A                                ld      a,(de)
+BEF2: 1A                                ld      a,(de)
+BEF3: 1A                                ld      a,(de)
+BEF4: 1A                                ld      a,(de)
+BEF5: 1A                                ld      a,(de)
+BEF6: 1A                                ld      a,(de)
+BEF7: 1A                                ld      a,(de)
+BEF8: 1A                                ld      a,(de)
+BEF9: 1A                                ld      a,(de)
+BEFA: 1A                                ld      a,(de)
+BEFB: 1A                                ld      a,(de)
+BEFC: 1A                                ld      a,(de)
+BEFD: 1A                                ld      a,(de)
+BEFE: 1A                                ld      a,(de)
+BEFF: 1A                                ld      a,(de)
+BF00: DF                                rst     0x18
+
+BF01: B0                         LBF01: or      b
+BF02: B1                                or      c
+BF03: DF                                rst     0x18
+
+BF04: 32 D3 DF                   LBF04: ld      (0DFD3h),a
+BF07: AB                                xor     e
+BF08: B7                                or      a
+BF09: BA                                cp      d
+BF0A: B1                                or      c
+BF0B: DF                                rst     0x18
+
+BF0C: AB                         LBF0C: xor     e
+BF0D: A6                                and     (hl)
+BF0E: AF                                xor     a
+BF0F: BA                                cp      d
+BF10: DF                                rst     0x18
+
+BF11: AD                         LBF11: xor     l
+BF12: BA                                cp      d
+BF13: AB                                xor     e
+BF14: AA                                xor     d
+BF15: AD                                xor     l
+BF16: B1                                or      c
+BF17: FF                                rst     0x38
+
+BF18: AF                         LBF18: xor     a
+BF19: BA                                cp      d
+BF1A: AD                                xor     l
+BF1B: B2                                or      d
+BF1C: BE                                cp      (hl)
+BF1D: B1                                or      c
+BF1E: BA                                cp      d
+BF1F: B1                                or      c
+BF20: AB                                xor     e
+BF21: DF                                rst     0x18
+
+BF22: BA                         LBF22: cp      d
+BF23: AD                                xor     l
+BF24: AD                                xor     l
+BF25: B0                                or      b
+BF26: AD                                xor     l
+BF27: D3 DF                             out     (0DFh),a
+BF29: AB                                xor     e
+BF2A: A6                                and     (hl)
+BF2B: AF                                xor     a
+BF2C: BA                                cp      d
+BF2D: DF                                rst     0x18
+
+BF2E: AD                         LBF2E: xor     l
+BF2F: BA                                cp      d
+BF30: AB                                xor     e
+BF31: AA                                xor     d
+BF32: AD                                xor     l
+BF33: B1                                or      c
+BF34: DF                                rst     0x18
+
+BF35: AB                         LBF35: xor     e
+BF36: B0                                or      b
+BF37: DF                                rst     0x18
+
+BF38: B6                         LBF38: or      (hl)
+BF39: B8                                cp      b
+BF3A: B1                                or      c
+BF3B: B0                                or      b
+BF3C: AD                                xor     l
+BF3D: BA                                cp      d
+BF3E: FF                                rst     0x38
+
+BF3F: B9                         LBF3F: cp      c
+BF40: AA                                xor     d
+BF41: B1                                or      c
+BF42: BC                                cp      h
+BF43: AB                                xor     e
+BF44: B6                                or      (hl)
+BF45: B0                                or      b
+BF46: B1                                or      c
+BF47: DF                                rst     0x18
+
+BF48: BC                         LBF48: cp      h
+BF49: B0                                or      b
+BF4A: B2                                or      d
+BF4B: AF                                xor     a
+BF4C: B3                                or      e
+BF4D: BA                                cp      d
+BF4E: AB                                xor     e
+BF4F: BA                                cp      d
+BF50: FF                                rst     0x38
+
+BF51: B6                         LBF51: or      (hl)
+BF52: B1                                or      c
+BF53: A9                                xor     c
+BF54: BE                                cp      (hl)
+BF55: B3                                or      e
+BF56: B6                                or      (hl)
+BF57: BB                                cp      e
+BF58: DF                                rst     0x18
+
+BF59: BB                         LBF59: cp      e
+BF5A: AD                                xor     l
+BF5B: B6                                or      (hl)
+BF5C: A9                                xor     c
+BF5D: BA                                cp      d
+BF5E: DF                                rst     0x18
+
+BF5F: B1                         LBF5F: or      c
+BF60: BE                                cp      (hl)
+BF61: B2                                or      d
+BF62: BA                                cp      d
+BF63: DF                                rst     0x18
+
+BF64: D7                         LBF64: rst     0x10
+
+BF65: AA                         LBF65: xor     d
+BF66: AC                                xor     h
+BF67: BA                                cp      d
+BF68: DF                                rst     0x18
+
+BF69: BE                         LBF69: cp      (hl)
+BF6A: D3 DF                             out     (0DFh),a
+BF6C: BD                                cp      l
+BF6D: D3 DF                             out     (0DFh),a
+BF6F: BC                                cp      h
+BF70: D3 DF                             out     (0DFh),a
+BF72: B0                                or      b
+BF73: AD                                xor     l
+BF74: DF                                rst     0x18
+
+BF75: BB                         LBF75: cp      e
+BF76: D6 FF                             sub     0FFh
+BF78: B1                                or      c
+BF79: B0                                or      b
+BF7A: DF                                rst     0x18
+
+BF7B: AC                         LBF7B: xor     h
+BF7C: B0                                or      b
+BF7D: AA                                xor     d
+BF7E: AD                                xor     l
+BF7F: BC                                cp      h
+BF80: 1A                                ld      a,(de)
+BF81: AB                                xor     e
+BF82: BA                                cp      d
+BF83: AC                                xor     h
+BF84: AB                                xor     e
+BF85: DF                                rst     0x18
+
+BF86: DF                         LBF86: rst     0x18
+
+BF87: DF                         LBF87: rst     0x18
+
+BF88: DF                         LBF88: rst     0x18
+
+BF89: DF                         LBF89: rst     0x18
+
+BF8A: DF                         LBF8A: rst     0x18
+
+BF8B: DF                         LBF8B: rst     0x18
+
+BF8C: FF                         LBF8C: rst     0x38
+
+BF8D: FF                         LBF8D: rst     0x38
+
+BF8E: FF                         LBF8E: rst     0x38
+
+BF8F: FE 9A                      LBF8F: cp      9Ah
+BF91: FF                                rst     0x38
+
+BF92: FF                         LBF92: rst     0x38
+
+BF93: FF                         LBF93: rst     0x38
+
+BF94: FF                         LBF94: rst     0x38
+
+BF95: FF                         LBF95: rst     0x38
+
+BF96: FF                         LBF96: rst     0x38
+
+BF97: FF                         LBF97: rst     0x38
+
+BF98: FF                         LBF98: rst     0x38
+
+BF99: FF                         LBF99: rst     0x38
+
+BF9A: FF                         LBF9A: rst     0x38
+
+BF9B: FF                         LBF9B: rst     0x38
+
+BF9C: FF                         LBF9C: rst     0x38
+
+BF9D: FF                         LBF9D: rst     0x38
+
+BF9E: FF                         LBF9E: rst     0x38
+
+BF9F: FF                         LBF9F: rst     0x38
+
+BFA0: 1A                         LBFA0: ld      a,(de)
+BFA1: AB                                xor     e
+BFA2: BA                                cp      d
+BFA3: AC                                xor     h
+BFA4: AB                                xor     e
+BFA5: DF                                rst     0x18
+
+BFA6: DF                         LBFA6: rst     0x18
+
+BFA7: DF                         LBFA7: rst     0x18
+
+BFA8: DF                         LBFA8: rst     0x18
+
+BFA9: AF                         LBFA9: xor     a
+BFAA: AD                                xor     l
+BFAB: B1                                or      c
+BFAC: FF                                rst     0x38
+
+BFAD: FF                         LBFAD: rst     0x38
+
+BFAE: FF                         LBFAE: rst     0x38
+
+BFAF: FF                         LBFAF: rst     0x38
+
+BFB0: FF                         LBFB0: rst     0x38
+
+BFB1: FF                         LBFB1: rst     0x38
+
+BFB2: FF                         LBFB2: rst     0x38
+
+BFB3: FF                         LBFB3: rst     0x38
+
+BFB4: FF                         LBFB4: rst     0x38
+
+BFB5: FF                         LBFB5: rst     0x38
+
+BFB6: FF                         LBFB6: rst     0x38
+
+BFB7: FF                         LBFB7: rst     0x38
+
+BFB8: FF                         LBFB8: rst     0x38
+
+BFB9: FF                         LBFB9: rst     0x38
+
+BFBA: FF                         LBFBA: rst     0x38
+
+BFBB: FF                         LBFBB: rst     0x38
+
+BFBC: FF                         LBFBC: rst     0x38
+
+BFBD: FF                         LBFBD: rst     0x38
+
+BFBE: FF                         LBFBE: rst     0x38
+
+BFBF: FF                         LBFBF: rst     0x38
+
+BFC0: 1A                         LBFC0: ld      a,(de)
+BFC1: AB                                xor     e
+BFC2: BA                                cp      d
+BFC3: AC                                xor     h
+BFC4: AB                                xor     e
+BFC5: DF                                rst     0x18
+
+BFC6: DF                         LBFC6: rst     0x18
+
+BFC7: DF                         LBFC7: rst     0x18
+
+BFC8: DF                         LBFC8: rst     0x18
+
+BFC9: B7                         LBFC9: or      a
+BFCA: BA                                cp      d
+BFCB: A7                                and     a
+BFCC: FF                                rst     0x38
+
+BFCD: FF                         LBFCD: rst     0x38
+
+BFCE: FF                         LBFCE: rst     0x38
+
+BFCF: FF                         LBFCF: rst     0x38
+
+                                        ; Referenced from BC91, BCAA
+BFD0: FF                         LBFD0: rst     0x38
+
+BFD1: FF                         LBFD1: rst     0x38
+
+                                        ; Referenced from BC95, BCB7
+BFD2: FF                         LBFD2: rst     0x38
+
+BFD3: FF                         LBFD3: rst     0x38
+
+                                        ; Referenced from BC98, BCB3
+BFD4: FF                         LBFD4: rst     0x38
+
+BFD5: FF                         LBFD5: rst     0x38
+
+                                        ; Referenced from BC9C, BCAF
+BFD6: FF                         LBFD6: rst     0x38
+
+BFD7: FF                         LBFD7: rst     0x38
+
+                                        ; Referenced from BCA0
+BFD8: FF                         LBFD8: rst     0x38
+
+BFD9: FF                         LBFD9: rst     0x38
+
+                                        ; Referenced from BC40, BCEA
+BFDA: FF                         LBFDA: rst     0x38
+
+                                        ; Referenced from BC45, BCE3
+BFDB: FF                         LBFDB: rst     0x38
+
+                                        ; Referenced from BC2A, BC30, BCD4
+BFDC: FF                         LBFDC: rst     0x38
+
+                                        ; Referenced from BCD8, BCDD
+BFDD: FF                         LBFDD: rst     0x38
+
+                                        ; Referenced from BC4F, BCBE, BCC6
+BFDE: FF                         LBFDE: rst     0x38
+
+BFDF: FF                         LBFDF: rst     0x38
+
+BFE0: FF                         LBFE0: rst     0x38
+
+BFE1: AF                         LBFE1: xor     a
+BFE2: B3                                or      e
+BFE3: BD                                cp      l
+BFE4: DF                                rst     0x18
+
+BFE5: DF                         LBFE5: rst     0x18
+
+BFE6: DF                         LBFE6: rst     0x18
+
+BFE7: DF                         LBFE7: rst     0x18
+
+BFE8: DF                         LBFE8: rst     0x18
+
+BFE9: AF                         LBFE9: xor     a
+BFEA: AD                                xor     l
+BFEB: B1                                or      c
+
+                                        ; Referenced from BCEE
+BFEC: FF                         LBFEC: rst     0x38
+
+BFED: FF                         LBFED: rst     0x38
+
+BFEE: FF                         LBFEE: rst     0x38
+
+BFEF: FF                         LBFEF: rst     0x38
+
+BFF0: FF                         LBFF0: rst     0x38
+
+BFF1: FF                         LBFF1: rst     0x38
+
+BFF2: FF                         LBFF2: rst     0x38
+
+BFF3: FF                         LBFF3: rst     0x38
+
+BFF4: FF                         LBFF4: rst     0x38
+
+BFF5: FF                         LBFF5: rst     0x38
+
+BFF6: FF                         LBFF6: rst     0x38
+
+BFF7: FF                         LBFF7: rst     0x38
+
+BFF8: FF                         LBFF8: rst     0x38
+
+BFF9: FF                         LBFF9: rst     0x38
+
+BFFA: FF                         LBFFA: rst     0x38
+
+BFFB: FF                         LBFFB: rst     0x38
+
+BFFC: FF                         LBFFC: rst     0x38
+
+BFFD: FF                         LBFFD: rst     0x38
+
+BFFE: FF                         LBFFE: rst     0x38
+
+BFFF: FF                         LBFFF: rst     0x38
+
 
 references to external address 0000h:
         AC1A ld hl,0000h
@@ -4841,21 +5737,21 @@ references to external address 0001h:
         BB36 ld (0001h),hl
 
 references to external address 0003h:
-        AEED ld a,(IOBYTE)
+        AEED ld a,(0003h)
         AEF3 ld hl,0003h
         B50F ld bc,0003h
-        BB13 ld (IOBYTE),a
-        BB7B ld a,(IOBYTE)
-        BBA2 ld a,(IOBYTE)
-        BBC8 ld a,(IOBYTE)
-        BBE1 ld a,(IOBYTE)
-        BC06 ld a,(IOBYTE)
+        BB13 ld (0003h),a
+        BB7B ld a,(0003h)
+        BBA2 ld a,(0003h)
+        BBC8 ld a,(0003h)
+        BBE1 ld a,(0003h)
+        BC06 ld a,(0003h)
 
 references to external address 0004h:
-        A525 ld (DEFDRIVE),a
-        A52C ld (DEFDRIVE),a
-        BB16 ld (DEFDRIVE),a
-        BB49 ld a,(DEFDRIVE)
+        A525 ld (0004h),a
+        A52C ld (0004h),a
+        BB16 ld (0004h),a
+        BB49 ld a,(0004h)
 
 references to external address 0005h:
         A48F jp 0005h
@@ -4904,59 +5800,14 @@ references to external address 2420h:
 references to external address 31BAh:
         BA82 jp nz,31BAh
 
-references to external address 3F00h:
-        BAC7 jp p,3F00h
-
 references to external address 41BAh:
         BA92 jp nz,41BAh
 
 references to external address 51BAh:
         BAA2 jp nz,51BAh
 
-references to external address 0BFD0h:
-        BC91 ld (0BFD0h),sp
-        BCA4 ld sp,0BFD0h
-        BCAA ld sp,(0BFD0h)
-
-references to external address 0BFD2h:
-        BC95 ld (0BFD2h),hl
-        BCB7 ld hl,(0BFD2h)
-
-references to external address 0BFD4h:
-        BC98 ld (0BFD4h),de
-        BCB3 ld de,(0BFD4h)
-
-references to external address 0BFD6h:
-        BC9C ld (0BFD6h),bc
-        BCAF ld bc,(0BFD6h)
-
-references to external address 0BFD8h:
-        BCA0 ld (0BFD8h),a
-
-references to external address CURRTRACK:
-        BC40 ld (CURRTRACK),a
-        BCEA ld a,(CURRTRACK)
-
-references to external address CURRSEC:
-        BC45 ld (CURRSEC),a
-        BCE3 ld a,(CURRSEC)
-
-references to external address CURRDRIVE:
-        BC2A ld (CURRDRIVE),a
-        BC30 ld a,(CURRDRIVE)
-        BCD4 ld a,(CURRDRIVE)
-
-references to external address LAST_DRIVE:
-        BCD8 ld a,(LAST_DRIVE)
-        BCDD ld (LAST_DRIVE),a
-
-references to external address BUFADDR:
-        BC4F ld (BUFADDR),bc
-        BCBE ld hl,(BUFADDR)
-        BCC6 ld hl,(BUFADDR)
-
-references to external address LAST_TRACK:
-        BCEE ld a,(LAST_TRACK)
+references to external address 0DFD3h:
+        BF04 ld (0DFD3h),a
 
 references to external address 0E003h:
         BBB8 ld iy,(0E003h)
@@ -4965,9 +5816,9 @@ references to external address 0E3DCh:
         BB6D jp 0E3DCh
         BD66 ld hl,0E3DCh
 
-references to external address WRSTG:
-        BB1C call WRSTG
-        BC83 call WRSTG
+references to external address 0E3FAh:
+        BB1C call 0E3FAh
+        BC83 call 0E3FAh
 
 references to external address 0E403h:
         BB72 call 0E403h
@@ -4980,28 +5831,28 @@ references to external address 0E650h:
 references to external address 0E800h:
         BAD9 call 0E800h
 
-references to external address EPROM_SETTRACK:
-        BB0A call EPROM_SETTRACK
-        BCF2 call nz,EPROM_SETTRACK
+references to external address 0E803h:
+        BB0A call 0E803h
+        BCF2 call nz,0E803h
 
-references to external address EPROM_SETSECTOR:
-        BAE9 call EPROM_SETSECTOR
-        BCE7 call EPROM_SETSECTOR
+references to external address 0E806h:
+        BAE9 call 0E806h
+        BCE7 call 0E806h
 
-references to external address EPROM_SETDRIVE:
-        BAD6 call EPROM_SETDRIVE
-        BCE0 call nz,EPROM_SETDRIVE
+references to external address 0E809h:
+        BAD6 call 0E809h
+        BCE0 call nz,0E809h
 
 references to external address 0E80Ch:
         BAEE call 0E80Ch
         BB45 call 0E80Ch
 
-references to external address EPROM_WRITESECTOR:
-        BC70 call EPROM_WRITESECTOR
+references to external address 0E80Fh:
+        BC70 call 0E80Fh
 
-references to external address EPROM_READSECTOR:
-        BAF1 call EPROM_READSECTOR
-        BC5A call EPROM_READSECTOR
+references to external address 0E812h:
+        BAF1 call 0E812h
+        BC5A call 0E812h
 
 references to external address 0E82Ah:
         BCF6 call 0E82Ah
@@ -5009,14 +5860,20 @@ references to external address 0E82Ah:
 references to external address 0EDAEh:
         AC53 call nc,0EDAEh
 
+references to external address 0F2F3h:
+        BDD3 call p,0F2F3h
+
 references to external address 0F5B8h:
         AC73 call pe,0F5B8h
 
+references to external address 0F8F9h:
+        BDB2 jp m,0F8F9h
+
 possible references to internal address A400:
-        A7D5 ld hl,STARTCCP
-        AAF4 ld de,STARTCCP
-        B6D4 ld hl,STARTCCP
-        BAE2 ld hl,STARTCCP
+        A7D5 ld hl,0A400h
+        AAF4 ld de,0A400h
+        B6D4 ld hl,0A400h
+        BAE2 ld hl,0A400h
         ----------
         A7D2 ld (LA400),hl
         BB4D jp LA400
@@ -5370,13 +6227,27 @@ possible references to internal address BA56:
         BB22 ld hl,0BA56h
 
 possible references to internal address BA68:
-        BC3A ld de,DPH_TABLE
+        BC3A ld de,0BA68h
 
 possible references to internal address BB50:
         BB19 ld hl,0BB50h
 
 possible references to internal address BD30:
         BC80 ld hl,0BD30h
+
+possible references to internal address BDA5:
+        BB42 ld hl,0BDA5h
+        BCBB ld de,0BDA5h
+        BCC3 ld de,0BDA5h
+
+possible references to internal address BFD0:
+        BCA4 ld sp,0BFD0h
+        ----------
+        BC91 ld (LBFD0),sp
+        BCAA ld sp,(LBFD0)
+
+possible references to internal address BFE0:
+        BD44 ld ix,0BFE0h
 
 possible references to external address 0000h:
         AC1A ld hl,0000h
@@ -5413,13 +6284,13 @@ possible references to external address 0003h:
         AEF3 ld hl,0003h
         B50F ld bc,0003h
         ----------
-        AEED ld a,(IOBYTE)
-        BB13 ld (IOBYTE),a
-        BB7B ld a,(IOBYTE)
-        BBA2 ld a,(IOBYTE)
-        BBC8 ld a,(IOBYTE)
-        BBE1 ld a,(IOBYTE)
-        BC06 ld a,(IOBYTE)
+        AEED ld a,(0003h)
+        BB13 ld (0003h),a
+        BB7B ld a,(0003h)
+        BBA2 ld a,(0003h)
+        BBC8 ld a,(0003h)
+        BBE1 ld a,(0003h)
+        BC06 ld a,(0003h)
 
 possible references to external address 0005h:
         BD4E ld de,0005h
@@ -5531,20 +6402,6 @@ possible references to external address 2CB9h:
 possible references to external address 76F3h:
         A7CF ld hl,76F3h
 
-possible references to external address BUFEPROM:
-        BB42 ld hl,BUFEPROM
-        BCBB ld de,BUFEPROM
-        BCC3 ld de,BUFEPROM
-
-possible references to external address 0BFD0h:
-        BCA4 ld sp,0BFD0h
-        ----------
-        BC91 ld (0BFD0h),sp
-        BCAA ld sp,(0BFD0h)
-
-possible references to external address VDDTABLE:
-        BD44 ld ix,VDDTABLE
-
 possible references to external address 0E3DCh:
         BD66 ld hl,0E3DCh
         ----------
@@ -5584,6 +6441,12 @@ references to port 7Ah
 references to port 0BCh
         BD26 in a,(0BCh)
         BD03 out (0BCh),a
+
+references to port 0DFh
+        BF27 out (0DFh),a
+        BF6A out (0DFh),a
+        BF6D out (0DFh),a
+        BF70 out (0DFh),a
 
 references to port 0FFh
         BB84 in a,(0FFh)
@@ -5756,31 +6619,31 @@ Procedures (192):
   LBA30  0003            1          1
   LBA4E  0003            1          1
   LBB6D  0003            1          1
-  CONST  001E            1          0
-  READER  0016            2          1
-  CONOUT  0025            1          4
+  LBB7B  001E            1          0
+  LBBC8  0016            2          1
+  LBBDE  0025            1          4
   LBBEE  0006            1          2
   LBBF4  000F            3          1
-  LIST  0014            2          4
+  LBC03  0014            2          4
   LBC17  0006            3          2
   LBC1B  0002            2          1
-  HOME  0009            1          2
-  SELDSK  0019            1          0
-  SETTRK  0005            2          0
-  SETSEC  0005            2          0
-  SECTRAN  0006            1          0
-  SETDMA  0005            1          0
-  READ  000F            1          5
-  WRITE  002D            1          8
-  WRITE_RETRY_EXIT  0004            2          1
-  LOAD_REGS2  0004            2          1
-  SAVE_REGS  0018            4          0
-  LOAD_REGS  0012            1          0
-  CPMBUF_TO_DISKBUF  0008            1          1
-  DISKBUF_TO_CPMBUF  0011            1          0
-  START_COPYBUF  000A            1          0
-  CHECK_CHANGED_TRKSEC  0022            2          3
-  VERIFY_SECTOR  003A            1          1
-  CONIN  0016            1          0
+  LBC1D  0009            1          2
+  LBC26  0019            1          0
+  LBC3F  0005            2          0
+  LBC44  0005            2          0
+  LBC49  0003            1          0
+  LBC4F  0005            1          0
+  LBC54  000F            1          5
+  LBC63  002D            1          8
+  LBC8C  0004            2          1
+  LBC8D  0004            2          1
+  LBC91  0018            4          0
+  LBCA9  0012            1          0
+  LBCBB  0008            1          1
+  LBCC3  0011            1          0
+  LBCCA  000A            1          0
+  LBCD4  0022            2          3
+  LBCF6  003A            1          1
+  LBD59  0016            1          0
 
 Call Graph:

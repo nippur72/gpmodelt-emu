@@ -16,6 +16,7 @@ NUM_RETRY   EQU $BA54  ; number of write retry attempts
 DPH         EQU $BA68  ; DPH ? disk parameter header
 DPB         EQU $BAC2  ; DPB disk parameter block
 BUFEPROM    EQU $BDA5  ; (128 bytes) sector buffer for disk eprom routines
+SKEWTABLE   EQU $BAA8  ; sector skew table
 CRSROW      EQU $BF01  ; cursor row (used by the eprom routines)
 LASTCROW    EQU $BF02  ; last cursor row (used by the eprom routines)
 CRSCOL      EQU $BF03  ; cursor column (used by the eprom routines)
@@ -37,9 +38,10 @@ VIDEORAM    EQU $C000  ; start of video RAM
 
 ; **** VDD TABLE **** IX+00h .. IX+10h where IX usually is $BFE0
 
+ERROR_NUMER     EQU $00  ; DISK ERROR number
 EPROM_CURRDRIVE EQU $09  ; current drive for eprom routines
 EPROM_DSKBUFPTR EQU $0A  ; (word) pointer disk sector buffer
-EPROM_TRKNUMNEG EQU $0C  ; stores track number NEGATED
+EPROM_TRKNUMNEG EQU $0C  ; stores track number (NEGATED??)
 EPROM_U1        EQU $0D  ;
 EPROM_SECNUMNEG EQU $0E  ; stores sector number NEGATED
 EPROM_TRKNUM    EQU $10  ; stores track number
@@ -55,7 +57,7 @@ TMONLOAD          EQU $E3DF    ; T-MON "L"
 INIZV             EQU $E3E2    ; inizializza il video
 INIZO             EQU $E3E5    ; inizializza le porte I/O
 RDNUM             EQU $E3E8    ; read HEX number from keyboard ant put in HL, D=0 exit with "." or "/"
-PTBTE             EQU $E3EB    ; stampa il numero puntato da BC con spazio
+PTBTE             EQU $E3EB    ; stampa il numero puntato da (BC) con spazio
 PRTAD0            EQU $E3EE    ; stampa BC in esadecimale con ":"
 PRTHEX            EQU $E104    ; stamp cifra esadecimale in A
 RDCHR             EQU $E3F1    ; read char con echo
@@ -79,7 +81,11 @@ EPROM_SETSECTOR   EQU $E806    ; sector in C
 EPROM_SETDMA      EQU $E80C    ; set DMA buffer at HL, writes also in EPROM_U1, EPROM_U2
 EPROM_WRITESECTOR EQU $E80F
 EPROM_READSECTOR  EQU $E812
-BOOT_FROM_DISK    EQU $EB1C
+DISK_ERROR        EQU $E830    ; display "DISK ERROR"
+BOOT_FROM_TAPE    EQU $E0B0
+BOOT_FROM_DISK    EQU $E818
+
+
 
 ; **** IO PORTS ****
 

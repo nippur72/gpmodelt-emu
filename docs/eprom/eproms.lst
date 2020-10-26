@@ -1801,7 +1801,7 @@ E88A: DD 36 0C 00                       ld      (ix+0Ch),00h
 
                                         ; Referenced from 0E836h, 0E896h
                                         ; --- START PROC 0E88Eh ---
-E88E: 3E FB                      0E88Eh:        ld      a,0FBh
+E88E: 3E FB                      0E88Eh:        ld      a,0FBh           ; RESTORE COMMAND, F3h on 5.25
 
                                         ; Referenced from 0E849h
 E890: D3 BC                      0E890h:        out     (0BCh),a
@@ -1819,7 +1819,7 @@ E89C: C9                                ret
                                         ; --- START PROC 0E89Dh ---
 E89D: CD 27 E8                   0E89Dh:        call    0E827h
 E8A0: DD 71 0C                          ld      (ix+0Ch),c
-E8A3: 3E 4C                             ld      a,4Ch   ; 'L'
+E8A3: 3E 4C                             ld      a,4Ch                ; max track, 27h on 5.25"
 E8A5: B9                                cp      c
 E8A6: DA 30 E8                          jp      c,0E830h
 
@@ -1828,7 +1828,7 @@ E8A6: DA 30 E8                          jp      c,0E830h
 E8A9: DD 7E 0C                   0E8A9h:        ld      a,(ix+0Ch)
 E8AC: 2F                                cpl
 E8AD: D3 BF                             out     (0BFh),a
-E8AF: 3E EB                             ld      a,0EBh
+E8AF: 3E EB                             ld      a,0EBh              ; SEEK COMMAND,  E3h on 5.25"
 E8B1: D3 BC                             out     (0BCh),a
 E8B3: CD 33 E8                          call    0E833h
 E8B6: C8                                ret     z
@@ -1936,7 +1936,7 @@ E945: 00                                nop
 E946: DD F9                             ld      sp,ix
 E948: 0E 00                             ld      c,00h
 E94A: CD 03 E8                          call    0E803h
-E94D: 0E 01                             ld      c,01h
+E94D: 0E 01                             ld      c,01h                 ; 00h on 5.25"
 E94F: CD 06 E8                          call    EPROM_SETSECTOR
 E952: E5                                push    hl
 E953: CD 12 E8                          call    0E812h
@@ -1948,9 +1948,9 @@ E958: E9                                jp      (hl)
 E959: 1E 00                      0E959h:        ld      e,00h
 E95B: C3 39 E8                          jp      0E839h
 
-                                        ; Referenced from 0E815h
-E95E: 1E 03                      0E95Eh:        ld      e,03h
-E960: C3 39 E8                          jp      0E839h
+                                        ; Referenced from 0E815h           ; dead code use to
+E95E: 1E 03                      0E95Eh:        ld      e,03h              ; boot from disk and
+E960: C3 39 E8                          jp      0E839h                     ; jump at address 0103h
 
                                         ; Referenced from 0E81Bh
                                         ; --- START PROC 0E963h ---
