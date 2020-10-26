@@ -9,11 +9,14 @@ function initMem() {
          memory[address+i] = rom[i];
       }
    }
-   
+
+
    rom_load(rom_E000,        0xE000);
    rom_load(rom_E400,        0xE400);
-   rom_load(rom_E800_FDC8,   0xE800);
-   //rom_load(rom_E800_FDC525, 0xE800);
+
+   if(FLOPPY_8_INCHES) rom_load(rom_E800_FDC8,   0xE800);
+   else                rom_load(rom_E800_FDC525, 0xE800);
+
    rom_load(rom_EC00_ACI,    0xEC00);
 
    /*
@@ -318,3 +321,30 @@ if(autoload !== undefined) {
 }
 
 cpm();
+
+/*
+let ff = 0;
+// logs when PC = BA00h (CPM entry)
+debugBefore = (function() {
+   let lastpc = 0;
+   return function() {
+      if(lastpc === 0xBA00) {
+         // there was a call to RST 30
+         console.log(`************ CP/M entry point reached`);
+      }
+
+      if(lastpc === 0xE818) {
+         ff = 100;
+         console.log(`************ qui ${cpu_status()}`);
+         dumpStack();
+      }
+
+      if(ff>0) {
+         console.log(`${cpu_status()}`);
+         ff--;
+      }
+
+      lastpc = cpu.getState().pc;
+   };
+})();
+*/

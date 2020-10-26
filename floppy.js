@@ -60,28 +60,21 @@ let FDC_COMMAND_WRITE_SECTOR    = 4;
 let FDC_COMMAND_WRITE_TRACK     = 5;
 let FDC_COMMAND_FORCE_INTERRUPT = 6;
 
-// 8"
-let FDC_NSIDES     = 2;
-let FDC_NTRACKS    = 77;
-let FDC_NSECTORS   = 26;
-let FDC_SECTORSIZE = 128;
-let FDC_MEDIA_SIZE = FDC_SECTORSIZE * FDC_NSECTORS * FDC_NSIDES * FDC_NTRACKS;
+let FLOPPY_8_INCHES = true;
 
-/*
-// 5.25 "
-let FDC_NSIDES     = 2;
-let FDC_NTRACKS    = 40;
-let FDC_NSECTORS   = 18;
-let FDC_SECTORSIZE = 128;
+let FDC_NSIDES     = FLOPPY_8_INCHES ? 2   : 1;
+let FDC_NTRACKS    = FLOPPY_8_INCHES ? 77  : 40;
+let FDC_NSECTORS   = FLOPPY_8_INCHES ? 26  : 18;
+let FDC_SECTORSIZE = FLOPPY_8_INCHES ? 128 : 128;
 let FDC_MEDIA_SIZE = FDC_SECTORSIZE * FDC_NSECTORS * FDC_NSIDES * FDC_NTRACKS;
-*/
 
 // data is assumed to be stored on the media:
 // track 0 side 0 [ sectors 0-26 ], track 0 side 1 [ sectors 0-26 ], ...
 
 function FDC_getpos(side, track, sector) {
 
-   let sec = sector -1;
+   let sec = FLOPPY_8_INCHES ? sector-1 : sector;
+
    if(sec<0) {
       console.warn(`sector ${sec}`)
       sec=0;
@@ -238,7 +231,7 @@ function FDC_write(port, value) {
       case 0x02:
          // sector port
          FDC_sector = value;
-         //console.warn(`set FDC sector = ${hex(value)}h`);
+         //console.log(`set FDC sector = ${hex(value)}h`);
          return;
 
       case 0x03:
@@ -426,6 +419,12 @@ function FDC_parse_command(cmd) {
       //console.log(`FDC SEEK from track ${FDC_track} to ${FDC_data}`);
 
       FDC_track = FDC_data;      // does the seek from current track to desidered track
+
+      if(FDC_track >= FDC_NTRACKS) {
+         FDC_STATUS_SEEK_ERROR = 1;   // track out of range
+         console.warn(`track ${FDC_track} out of range `);
+      }
+
       FDC_INTREQ = 1;            // command terminated
       FDC_STATUS_BUSY = 0;       // no longer busy
 
@@ -439,6 +438,12 @@ function FDC_parse_command(cmd) {
       //console.log(`FDC STEP IN at track ${FDC_track}`);
 
       if(u === 1) FDC_track++    // increment track register if u bit is 1
+
+      if(FDC_track >= FDC_NTRACKS) {
+         FDC_STATUS_SEEK_ERROR = 1;   // track out of range
+         console.warn(`track ${FDC_track} out of range `);
+      }
+
       FDC_INTREQ = 1;            // command terminated
       FDC_STATUS_BUSY = 0;       // no longer busy
 
@@ -452,11 +457,20 @@ function FDC_parse_command(cmd) {
       //console.log(`FDC READ SECTOR track ${FDC_track} sec ${FDC_sector} with m=${m} S=${S} C=${C} E=${E} @@@ ${cpu_status()}`);
       if(debug_write_sector) console.log(`FDC WRITE SECTOR track ${FDC_track} sec ${FDC_sector} with m=${m}`);
 
+      // sector out of range
+      if( ((FDC_sector<1 || FDC_sector>FDC_NSECTORS) && FLOPPY_8_INCHES) || (FDC_sector>=FDC_NSECTORS && !FLOPPY_8_INCHES)) {
+         FDC_STATUS_RNF = 1;
+         FDC_INTREQ = 1;
+         FDC_STATUS_BUSY = 0;
+         FDC_update_status(FDC_COMMAND_WRITE_SECTOR);
+         console.warn(`sector ${FDC_sector} out of range `);
+         return;
+      }
+
       FDC_STATUS_BUSY = 1;            // marks as busy
       FDC_sector_ptr = 0;             // starts writing from byte 0
       FDC_dma = FDC_DMA_WRITE_SECTOR; // enable writing
       FDC_STATUS_DATA_REQUEST = 1;    // asks for a byte to be sent
-
       FDC_update_status(FDC_COMMAND_WRITE_SECTOR);
 
       return;
@@ -484,6 +498,16 @@ function FDC_parse_command(cmd) {
       //console.log(`FDC READ SECTOR track ${FDC_track} sec ${FDC_sector} with m=${m} S=${S} C=${C} E=${E} @@@ ${cpu_status()}`);
       if(debug_read_sector) console.log(`FDC READ SECTOR track ${FDC_track} sec ${FDC_sector} with m=${m}`);
 
+      // sector out of range
+      if( ((FDC_sector<1 || FDC_sector>FDC_NSECTORS) && FLOPPY_8_INCHES) || (FDC_sector>=FDC_NSECTORS && !FLOPPY_8_INCHES)) {
+         FDC_STATUS_RNF = 1;
+         FDC_INTREQ = 1;
+         FDC_STATUS_BUSY = 0;
+         FDC_update_status(FDC_COMMAND_READ_SECTOR);
+         console.warn(`sector ${FDC_sector} out of range `);
+         return;
+      }
+
       FDC_STATUS_BUSY = 1;           // marks as busy
       FDC_sector_ptr = 0;            // starts reading from byte 0
       FDC_dma = FDC_DMA_READ_SECTOR; // enable reading
@@ -491,10 +515,14 @@ function FDC_parse_command(cmd) {
 
       /*
       // simula un settore non trovato
-      FDC_STATUS_BUSY = 0;
-      FDC_STATUS_DATA_REQUEST = 0;   // byte is ready
-      FDC_STATUS_RNF = 1;
-      FDC_INTREQ = 1;
+      if(FDC_track == 3 && FDC_sector == 6) {
+         FDC_STATUS_BUSY = 0;
+         FDC_STATUS_DATA_REQUEST = 0;
+         FDC_STATUS_RNF = 1;
+         FDC_INTREQ = 1;
+         FDC_update_status(FDC_COMMAND_READ_SECTOR);
+         return;
+      }
       */
 
       FDC_update_status(FDC_COMMAND_READ_SECTOR);
@@ -507,6 +535,16 @@ function FDC_parse_command(cmd) {
       // TODO E bit ignored
       //console.warn(`FDC READ ADDRESS track ${FDC_track} sec ${FDC_sector} with E=${E} @@@ ${cpu_status()}`);
       if(debug_read_address) console.log(`FDC READ ADDRESS track ${FDC_track} sec ${FDC_sector}`);
+
+      // sector out of range
+      if( ((FDC_sector<1 || FDC_sector>FDC_NSECTORS) && FLOPPY_8_INCHES) || (FDC_sector>=FDC_NSECTORS && !FLOPPY_8_INCHES)) {
+         FDC_STATUS_RNF = 1;
+         FDC_INTREQ = 1;
+         FDC_STATUS_BUSY = 0;
+         FDC_update_status(FDC_COMMAND_READ_ADDRESS);
+         console.warn(`sector ${FDC_sector} out of range `);
+         return;
+      }
 
       FDC_STATUS_BUSY = 1;            // marks as busy
       FDC_sector_ptr = 0;             // starts sending first of 6 bytes
