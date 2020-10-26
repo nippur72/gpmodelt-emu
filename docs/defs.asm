@@ -13,7 +13,7 @@ STARTBIOS   EQU $BA00   ; start of bios in memory
 
 ; CPM bios RAM workspace
 NUM_RETRY   EQU $BA54  ; number of write retry attempts
-DPH         EQU $BA68  ; DPH ? disk parameter header
+DPH         EQU $BA68  ; DPH disk parameter header
 DPB         EQU $BAC2  ; DPB disk parameter block
 BUFEPROM    EQU $BDA5  ; (128 bytes) sector buffer for disk eprom routines
 SKEWTABLE   EQU $BAA8  ; sector skew table

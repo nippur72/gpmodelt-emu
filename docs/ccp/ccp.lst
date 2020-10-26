@@ -4214,6 +4214,9 @@ BA5D: 44
 BA5E: 05
 BA5F: 68
 
+
+EMPTY_OR_UNKNOWN:
+
 BA60: 00
 BA61: 00
 BA62: 00
@@ -4222,6 +4225,10 @@ BA64: 00
 BA65: 00
 BA66: 00
 BA67: 00
+
+DPH_TABLE:
+
+DPH_DISK0:
 
 BA68: A8
 BA69: BA
@@ -4237,6 +4244,9 @@ BA72: C2 BA 21
 BA75: BF
 BA76: A5
 BA77: BE
+
+DPH_DISK1:
+
 BA78: A8
 BA79: BA
 BA7A: 00
@@ -4249,7 +4259,11 @@ BA80: 25
 BA81: BE
 BA82: C2 BA 31
 BA85: BF
-BA86: C4 BE A8
+BA86: C4 BE
+
+DPH_DISK2:
+
+BA88: A8
 BA89: BA
 BA8A: 00
 BA8B: 00
@@ -4263,6 +4277,9 @@ BA92: C2 BA 41
 BA95: BF
 BA96: E3
 BA97: BE
+
+DPH_DISK3:
+
 BA98: A8
 BA99: BA
 BA9A: 00
@@ -4277,6 +4294,9 @@ BAA2: C2 BA 51
 BAA5: BF
 BAA6: 02
 BAA7: BF
+
+SKEWTABLE:
+; 26 entries (sectors for 8")
 BAA8: 01 07 0D
 BAAB: 13
 BAAC: 19
@@ -4328,7 +4348,7 @@ BAE8: 4A                                ld      c,d
 BAE9: CD 06 E8                          call    EPROM_SETSECTOR
 BAEC: E1                                pop     hl
 BAED: E5                                push    hl
-BAEE: CD 0C E8                          call    0E80Ch
+BAEE: CD 0C E8                          call    EPROM_SETDMA
 BAF1: CD 12 E8                          call    EPROM_READSECTOR
 BAF4: E1                                pop     hl
 BAF5: 11 80 00                          ld      de,0080h
@@ -4379,7 +4399,7 @@ BB39: 32 05 00                          ld      (0005h),a
 BB3C: 21 06 AC                          ld      hl,0AC06h
 BB3F: 22 06 00                          ld      (0006h),hl
 BB42: 21 A5 BD                          ld      hl,BUFEPROM
-BB45: CD 0C E8                          call    0E80Ch
+BB45: CD 0C E8                          call    EPROM_SETDMA
 BB48: FB                                ei
 BB49: 3A 04 00                          ld      a,(DEFDRIVE)
 BB4C: 4F                                ld      c,a
@@ -4992,9 +5012,9 @@ references to external address EPROM_SETDRIVE:
         BAD6 call EPROM_SETDRIVE
         BCE0 call nz,EPROM_SETDRIVE
 
-references to external address 0E80Ch:
-        BAEE call 0E80Ch
-        BB45 call 0E80Ch
+references to external address EPROM_SETDMA:
+        BAEE call EPROM_SETDMA
+        BB45 call EPROM_SETDMA
 
 references to external address EPROM_WRITESECTOR:
         BC70 call EPROM_WRITESECTOR
