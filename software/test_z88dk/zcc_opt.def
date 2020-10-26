@@ -1,0 +1,24 @@
+
+IF !DEFINED_noprotectmsdos  
+	defc	DEFINED_noprotectmsdos   = 1
+	defc noprotectmsdos   = 0
+	IFNDEF noprotectmsdos  
+	ENDIF
+ENDIF
+
+
+IF !DEFINED_noredir  
+	defc	DEFINED_noredir   = 1
+	defc noredir   = 0
+	IFNDEF noredir  
+	ENDIF
+ENDIF
+
+
+IF !DEFINED_nogfxglobals  
+	defc	DEFINED_nogfxglobals   = 1
+	defc nogfxglobals   = 0
+	IFNDEF nogfxglobals  
+	ENDIF
+ENDIF
+
