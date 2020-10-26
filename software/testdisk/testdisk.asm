@@ -1,6 +1,7 @@
 
 
-WRSTG EQU $E3FA    ; prints string in HL until char with 7 bit on
+; standard definitions
+include "../../docs/defs.asm"
 
 ORG $0100
 
@@ -10,8 +11,12 @@ START:
     HALT
 
 MESSAGE:
-    defb "QUESTO DISCO FUNZIONA"
-    defb 255
+    defb 12, "QUESTO DISCO FUNZIONA !", $A0
+
+    db $00
+    db $00
+
+
 
 
 
