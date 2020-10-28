@@ -27,8 +27,8 @@ function extract_ccp(disk_name, side) {
     let ccp = [];
 
     let t=0; s=2;
-    let howmany = 55; // 55 => 7168 files that fits from A400 to BFFF
-    for(let ns=0; ns<=howmany; ns++) {
+    let howmany = 26*2-1; // from A400 to near BFFF
+    for(let ns=0; ns<howmany; ns++) {
         let start = getpos(side, t, s);
         let sector = disk.slice(start,start+128).map(e=>(~e & 0xFF));
         sector.forEach(b=>ccp.push(b));
@@ -40,7 +40,7 @@ function extract_ccp(disk_name, side) {
         }
     }
 
-    let ccp_name = `${disk_name}.side${side}.ccp.bin`;
+    let ccp_name = `../docs/ccp/${disk_name}.side${side}.ccp.bin`;
 
     fs.writeFileSync(ccp_name, new Uint8Array(ccp));
 
