@@ -17,7 +17,7 @@ BOOT:   ld      sp,TMPSTACK     ; imposta stack temporaneo da usare per il boot
         call    0E809h          ; ?
         call    0E800h          ; ?
 
-        ld      b,34h           ; B conta 56 settori (2 tracce da 26 settori)
+        ld      b,34h           ; B conta 52 settori (2 tracce da 26 settori) BUG: ne conta uno in più perchè parte da 2
         ld      c,00h           ; C = traccia 0
         ld      d,02h           ; D = settore ? come mai non è zero?
         ld      hl,CPMADDR      ; destination address to load CP/M
