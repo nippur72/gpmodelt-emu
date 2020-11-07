@@ -10,7 +10,6 @@ function initMem() {
       }
    }
 
-
    rom_load(rom_E000,        0xE000);
    rom_load(rom_E400,        0xE400);
 
@@ -18,6 +17,8 @@ function initMem() {
    else                rom_load(rom_E800_FDC525, 0xE800);
 
    rom_load(rom_EC00_ACI,    0xEC00);
+
+   //rom_load(rom_GPMON007,    0xE000);
 
    /*
    rom_load(rom_MON24_2,   0xE000);
