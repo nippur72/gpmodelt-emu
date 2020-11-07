@@ -7,12 +7,14 @@
 ;DOUBLE_SIDE     EQU 0
 
 ;internal options
-CUSTOM_DOS_MSG  EQU 0
-NO_AUTOEXEC     EQU 0
-SAVE_SPACE      EQU 0
-PATCH_READER    EQU 0              ; 1=patches a bug in READER
-PATCH_BOOT      EQU 0              ; 1=patche a bug in WBOOT
+CUSTOM_DOS_MSG  EQU 1              ; customized prompt message
+NO_AUTOEXEC     EQU 1              ; 1=disables "Inizio Lavoro"
+SAVE_SPACE      EQU 1
+PATCH_READER    EQU 1              ; 1=patches a bug in READER
 
+;
+; DSM = (TRACKS x SIDE – RESERVED) x NSECT x SECTSIZE : BLOCKSIZE
+;
 IF FLOPPY_525
     NTRACKS         EQU 40
     NSECTORS        EQU 18
@@ -21,11 +23,13 @@ IF FLOPPY_525
     STARTSECT       EQU 0
     USE_SKEWING     EQU 0
     IF DOUBLE_SIDE
-        NBLOCKS         EQU 170       ; 80 for a single sided disk
+        NBLOCKS         EQU 170
         MAX_DRIVES      EQU 2
+        BLOCKSIZE       EQU 1024
     ELSE
         NBLOCKS         EQU 80
         MAX_DRIVES      EQU 4
+        BLOCKSIZE       EQU 1024
     ENDIF
 ELSE
     NTRACKS         EQU 77
@@ -35,11 +39,13 @@ ELSE
     STARTSECT       EQU 1
     USE_SKEWING     EQU 1
     IF DOUBLE_SIDE
-        NBLOCKS         EQU 242*2
+        NBLOCKS         EQU 246
         MAX_DRIVES      EQU 2
+        BLOCKSIZE       EQU 2048
     ELSE
         NBLOCKS         EQU 242
         MAX_DRIVES      EQU 4
+        BLOCKSIZE       EQU 1024
     ENDIF
 ENDIF
 
@@ -200,18 +206,28 @@ IF MAX_DRIVES==4
     DW ALVAREA + 3*31
 ENDIF
 
-IF FLOPPY_525
-    SKEWTABLE EQU $0
-ELSE
+IF USE_SKEWING
     SKEWTABLE:
-    DB $01,$07,$0D,$13,$19,$05,$0B,$11,$17,$03,$09,$0F,$15,$02,$08,$0E,$14,$1A,$06,$0C,$12,$18,$04,$0A,$10,$16
+    IF FLOPPY_525
+        DB 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17
+    ELSE
+        DB $01,$07,$0D,$13,$19,$05,$0B,$11,$17,$03,$09,$0F,$15,$02,$08,$0E,$14,$1A,$06,$0C,$12,$18,$04,$0A,$10,$16
+    ENDIF
+ELSE
+    SKEWTABLE EQU $0
 ENDIF
 
 DPB:
     DW NSECTORS          ;SECTORS PER TRACK
-    DB $03               ;BSH - BLOCK SHIFT FACTOR
-    DB $07               ;BLM - BLOCK MASK
-    DB $00               ;EXM - EXTENT MASK
+    IF BLOCKSIZE == 1024
+        DB $03               ;BSH - BLOCK SHIFT FACTOR
+        DB $07               ;BLM - BLOCK MASK
+        DB $00               ;EXM - EXTENT MASK
+    ELSE
+        DB $04               ;BSH - BLOCK SHIFT FACTOR
+        DB 15                ;BLM - BLOCK MASK
+        DB $00               ;EXM - EXTENT MASK
+    ENDIF
     DW NBLOCKS           ;NUMBER OF BLOCKS
     DB $3F,$00           ;DIRENTRY SIZE
     DB $C0,$00           ;AL0, AL1
@@ -244,11 +260,7 @@ WBOOTLOOP:
     pop     de
     pop     bc
     dec     b
-    IF PATCH_BOOT
-        jr  z,BOOT
-    ELSE
-        jr  z,WBOOTENDLOOP
-    ENDIF
+    jr      z,WBOOTENDLOOP
     inc     d
     ld      a,d
     cp      NSECTORS+STARTSECT
@@ -312,7 +324,11 @@ MESSAGE_DOS_22:
                 DB "CPM 2.2 48k 5.25",34," SS"
             ENDIF
         ELSE
-            DB "CPM 2.2 48k 8",34," SS"
+            IF MAX_DRIVES == 2
+                DB "CPM 2.2 48k 8",34," DS"
+            ELSE
+                DB "CPM 2.2 48k 8",34," SS"
+            ENDIF
         ENDIF
         DB $0D,$0A,$A0
     ELSE
@@ -527,14 +543,14 @@ SETSEC:                                   ; Referenced from BA21, BC24
 ; and return either BC or BC+1.
 ; Referenced from BA30
 SECTRAN:
-    IF FLOPPY_525
-        push    bc       ;
-        pop     hl       ; hl = bc  (no skew table)
-    ELSE
+    IF USE_SKEWING
         ex      de,hl    ;
         add     hl,bc    ;
         ld      l,(hl)   ;
         ld      h,00h    ; hl = DE[BC]
+    ELSE
+        push    bc       ;
+        pop     hl       ; hl = bc  (no skew table)
     ENDIF
     ret
 
@@ -601,16 +617,16 @@ SAVE_REGS:                           ; Referenced from BBDE, BC03, BC54, BC63
     ld      (TMPREGDE),de
     ld      (TMPREGBC),bc
     ld      (TMPREGA),a
-    pop     de                      ;
-    ld      sp,TMPREGSP             ;
-    push    de                      ;
+    pop     de                      ; de = return address
+    ld      sp,STACK_BOTTOM         ; sets a new stack for read write routines
+    push    de                      ; puts return address there
     ret
 
 ; Referenced from BC8D
 LOAD_REGS:
-    pop     hl
-    ld      sp,(TMPREGSP)
-    ex      (sp),hl
+    pop     hl                      ; hl = return address
+    ld      sp,(TMPREGSP)           ; restores CP/M stack
+    ex      (sp),hl                 ; puts return address there
     ld      bc,(TMPREGBC)
     ld      de,(TMPREGDE)
     ld      hl,(TMPREGHL)
@@ -638,7 +654,7 @@ COPY_LOOP:
     ret
 
 CHECK_CHANGED_TRKSEC:
-    IF MAX_DRIVES==4
+    IF DOUBLE_SIDE==0
         ; single sided disks
         ld      a,(CURRDRIVE)
         ld      c,a
@@ -657,23 +673,6 @@ CHECK_CHANGED_TRKSEC:
         call    nz,EPROM_SETTRACK
         ret
     ELSE
-        ld      a,(CURRDRIVE)
-        ld      c,a
-        ld      a,(LAST_DRIVE)
-        cp      c
-        ld      a,c
-        ld      (LAST_DRIVE),a
-        call    nz,EPROM_SETDRIVE
-        ld      a,(CURRSEC)
-        ld      c,a
-        call    EPROM_SETSECTOR
-        ld      a,(CURRTRACK)
-        ld      c,a
-        ld      a,(LAST_TRACK)
-        cp      c
-        call    nz,EPROM_SETTRACK
-        ret
-
         ; double sided disks
         call    CALC_PHYSICAL_DRIVE_TRACK
         ld      a,(PHDRIVE)
@@ -709,16 +708,16 @@ CHECK_CHANGED_TRKSEC:
         ld    (PHDRIVE),a        ; PHDRIVE = CURRDRIVE * 2
         ld    a,(CURRTRACK)      ;
         ld    (PHTRACK),a        ; PHTRACK = CURRTRACK
-        cp    40                 ; IF CURRTRACK <= 39 THEN RET
+        cp    NTRACKS            ; IF CURRTRACK <= NTRACKS THEN RET
         ret   c                  ;
         ld    a,(PHDRIVE)
         inc   a                  ;
         ld    (PHDRIVE),a        ; PHDRIVE = PHDRIVE + 1
         ld    a,(PHTRACK)        ;
         ld    c,a                ;
-        ld    a,79               ;
+        ld    a,NTRACKS*2-1      ;
         sub   c                  ;
-        ld    (PHTRACK),a        ; PHTRACK = 79-CURDRIVE
+        ld    (PHTRACK),a        ; PHTRACK = (NTRACKS*2-1)-CURRTRACK
         ret
     ENDIF
 
@@ -818,6 +817,8 @@ MESSAGE_INIZIO_LAVORO:
         DB "Inizio Lavoro",$8D,$00,$00,$00
     ENDIF
 
+END_BIOS_BD7F:
+
 IF !SAVE_SPACE
     EMPTY_ZONE_37B:
     DS 37
@@ -849,15 +850,9 @@ CSVAREA:
         DS 16
     ENDIF
 
-IF MAX_DRIVES==4
-    EMPTY_111:
+STACK_TOP:
     DS 111
-ELSE
-    PHDRIVE:       DB 0
-    PHTRACK:       DB 0
-    LAST_PHDRIVE:  DB 0
-    LAST_PHTRACK:  DB 0
-ENDIF
+STACK_BOTTOM:
 
 TMPREGSP:    DW 0    ; saves sp register
 TMPREGHL:    DW 0    ; saves hl register
@@ -870,4 +865,10 @@ CURRSEC:     DB 0    ; current sector
 CURRDRIVE:   DB 0    ; current drive number (0..3)
 LAST_DRIVE:  DB 0    ; last used drive
 DMA_ADDR:    DW 0    ; saves CPM DMA buffer
+IF DOUBLE_SIDE
+    PHDRIVE:       DB 0
+    PHTRACK:       DB 0
+    LAST_PHDRIVE:  DB 0
+    LAST_PHTRACK:  DB 0
+ENDIF
 

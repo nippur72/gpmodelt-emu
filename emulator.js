@@ -329,13 +329,23 @@ debugBefore = (function() {
    return function() {
       let pc = cpu.getState().pc;
 
-      //if(pc === 0xBF34) {
-      //   // there was a call to RST 30
-      //   console.log(`PHDRIVE=${mem_read(0xbcd8)}, PHTRACK=${mem_read(0xbcd9)} CURDRIVE=${mem_read(0xbfdc)} CURRTRACK=${mem_read(0xbfda)}`);
-      //}
+      if(pc === 0xBC99) {
+         console.log(`enter ${cpu_status()}`);
+      }
+      if(pc >= 0xBC9C && pc <= 0xBCC9) {
+         console.log("returned and below");
+      }
+      if(pc >= 0xBCCA && pc <= 0xBCEC) {
+         console.log("in");
+      }
+      if(pc === 0xBCDA) {
+         console.log("executing ret");
+      }
+      if(pc === 0xBC18) {
+         console.log(`DMA=${hex(mem_read_word(0xbee7),4)}`);
+      }
       if(pc === 0xBA00) console.log(`*** CPM STARTED ***`);
       if(pc === 0x0100) console.log(`*** CPM BOOT LOADER STARTED ***`);
-      if(pc === 0xBBCB) console.log(`*** CPM READER *** ${cpu_status()}`);
    };
 })();
 */
