@@ -103,6 +103,20 @@ function paste(text) {
    }
 }
 
+function pasteLong(str) {
+   function pasteQueue(lines) {
+      if(lines.length == 0) return;
+      let firstline = lines[0];
+      lines = lines.slice(1);
+      paste(firstline+"\r\n");
+      setTimeout(()=>pasteQueue(lines), 100);
+   }
+
+   let lines = str.split("\n");
+   //lines.forEach(line=>paste(line+"\r\n"));
+   pasteQueue(lines);
+}
+
 function zap() {      
    for(let t=0;t<memory.length;t++) memory[t] = (Math.random()*4096) & 0xFF;
    //for(let t=0;t<memory.length;t++) memory[t] = 0x76;
