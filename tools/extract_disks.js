@@ -3,7 +3,7 @@ const { FDC_getpos: getpos, FDC_getpos_geometry, emptydisk } = require("./fdc-po
 
 // read all disks
 let disk_path = "../software";
-let disk_names = fs.readdirSync(disk_path).filter(fn=>fn.match(/GP.*dsk$/g));
+let disk_names = fs.readdirSync(disk_path).filter(fn=>fn.match(/GP.*img$/g));
 
 //disk_names.forEach(dn=>extract_boot(dn));
 //disk_names.forEach(dn=>extract_ccp(dn, 0));
@@ -24,7 +24,7 @@ function extract_side_1(disk_name) {
     };
 
     let source_name = `${disk_path}/${disk_name}`;
-    let dest_name = `${disk_path}/${disk_name}.side1.SS.dsk`;
+    let dest_name = `${disk_path}/${disk_name}.side1.SS.img`;
     let source_disk = fs.readFileSync(source_name);
     let dest_disk = emptydisk(geometry);
 

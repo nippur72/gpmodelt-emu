@@ -321,31 +321,21 @@ if(autoload !== undefined) {
    setTimeout(()=>loadBytes(autoload), 1000);
 }
 
-cpm();
+setTimeout(()=>load_default_disks(), 500);
 
 /*
-let ff = 0;
 // logs when PC = BA00h (CPM entry)
 debugBefore = (function() {
-   let lastpc = 0;
    return function() {
-      if(lastpc === 0xBA00) {
-         // there was a call to RST 30
-         console.log(`************ CP/M entry point reached`);
-      }
+      let pc = cpu.getState().pc;
 
-      if(lastpc === 0xE818) {
-         ff = 100;
-         console.log(`************ qui ${cpu_status()}`);
-         dumpStack();
-      }
-
-      if(ff>0) {
-         console.log(`${cpu_status()}`);
-         ff--;
-      }
-
-      lastpc = cpu.getState().pc;
+      //if(pc === 0xBF34) {
+      //   // there was a call to RST 30
+      //   console.log(`PHDRIVE=${mem_read(0xbcd8)}, PHTRACK=${mem_read(0xbcd9)} CURDRIVE=${mem_read(0xbfdc)} CURRTRACK=${mem_read(0xbfda)}`);
+      //}
+      if(pc === 0xBA00) console.log(`*** CPM STARTED ***`);
+      if(pc === 0x0100) console.log(`*** CPM BOOT LOADER STARTED ***`);
+      if(pc === 0xBBCB) console.log(`*** CPM READER *** ${cpu_status()}`);
    };
 })();
 */

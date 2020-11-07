@@ -382,3 +382,18 @@ function bitmapChars(chars) {
    }
    console.log(w.join("\n"));
 }
+
+
+/*
+istruzioni per copiare da i8080 emulator:
+let z = new Emulator()
+// paste saveAs() routine
+let ccc = z.memio.ram.slice(0x880+256,0x880+256+34*256);
+let blob = new Blob([new Uint8Array(ccc)], {type: "application/octet-stream"});
+saveAs(blob, "cpm48.com");
+*/
+
+function pasteLong(str) {
+   let lines = str.split("\n");
+   str.forEach(line=>paste(line));
+}

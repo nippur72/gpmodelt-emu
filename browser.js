@@ -99,12 +99,11 @@ function droppedFile(outName, bytes, address) {
       tapeLen = tapeBuffer.length;
       tapePtr = 0;
       tapeHighPtr = 0;
-            
       return;
    }   
 
-   const dsk = /\.dsk$/i;
-   if(dsk.test(outName)) {
+   const img = /\.img$/i;
+   if(img.test(outName)) {
       drag_drop_disk(outName, bytes);
       load(outName, dropdrive);
       return;
@@ -115,6 +114,8 @@ function droppedFile(outName, bytes, address) {
       writeFile(outName, bytes)
       crun(outName, address);         
    }
+
+   // TODO add CP/M .com
 }
 
 // **** welcome message ****
@@ -149,7 +150,7 @@ function parseQueryStringCommands() {
 
       if(address !== undefined) address = parseInt(address, 16);
 
-      setTimeout(()=>fetchProgramAll(name, address), 1000);            
+      setTimeout(()=>fetchProgram(name, address), 1000);
    }
 
    if(options.nodisk === true) {
@@ -192,25 +193,6 @@ function parseQueryStringCommands() {
       calculateGeometry();
       onResize();
    }
-}
-
-async function fetchProgramAll(name, address) {
-   const candidates = [
-      name,
-      `${name}.bin`,
-      `${name}/${name}`,
-      `${name}/${name}.bin`,      
-      `bin/${name}`,
-      `bin/${name}.bin`,
-      `bin/${name}/${name}`,
-      `bin/${name}/${name}.bin`      
-   ];
-
-   for(let t=0;t<candidates.length;t++) {
-      if(await fetchProgram(candidates[t], address)) return;   
-   }
-
-   console.log(`cannot load "${name}"`);
 }
 
 async function fetchProgram(name, address)

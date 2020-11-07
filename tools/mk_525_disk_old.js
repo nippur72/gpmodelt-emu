@@ -41,8 +41,8 @@ let geometry = {
 
 const disk = emptydisk(geometry);
 
-let boot_loader = fs.readFileSync("../docs/bootloaders/GP16_IMD.dsk.boot.bin");
-let ccp = fs.readFileSync("../docs/ccp/GP16_IMD.dsk.side0.ccp.bin");
+let boot_loader = fs.readFileSync("../docs/bootloaders/GP16_IMD.img.boot.bin");
+let ccp = fs.readFileSync("../docs/ccp/GP16_IMD.img.side0.ccp.bin");
 let calkins = fs.readFileSync("../docs/ccp/CPM22.calkins.bin");
 
 // patcha bootloader
@@ -150,7 +150,6 @@ write_seq("ccp",  ccp,         disk, 0, 2, 0, geometry);
 let fname = `disk_${geometry.NSIDES}x${geometry.NTRACKS}x${geometry.NSECTORS}x${geometry.SECTORSIZE}x${geometry.DOUBLESIDE?"DS":"SS"}`;
 
 fs.writeFileSync(`${fname}.img`, disk);
-fs.writeFileSync(`${fname}.dsk`, disk);
 
 console.log("done");
 

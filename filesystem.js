@@ -13,6 +13,12 @@ async function dir() {
    });
 }
 
+async function files(pattern) {
+   let keys = await idb.keys(store);
+   keys = keys.filter(fn=>fn.match(pattern));
+   return keys;
+}
+
 async function fileExists(filename) {
    return await idb.get(filename, store) !== undefined;
 }
@@ -55,22 +61,25 @@ function setStore(store) {
 async function load(filename, p) {   
    if(!await fileExists(filename)) {
       console.log(`file "${filename}" not found`);
-      return;
+      return false;
    }
    
    const ext = filename.substr(-4).toLowerCase();
 
-        if(ext === ".bin") await load_file(filename, p);
-   else if(ext === ".dsk") await load_disk(filename, p);
-   else console.log("give filename .bin or .dsk extension");
+        if(ext === ".bin") return await load_file(filename, p);
+   else if(ext === ".img") return await load_disk(filename, p);
+   else {
+      console.log("give filename .bin or .img extension");
+      return false;
+   }
 }
 
 async function save(filename, p1, p2) {
    const ext = filename.substr(-4).toLowerCase();
 
         if(ext == ".bin") await save_file(filename, p1, p2);
-   else if(ext == ".dsk") await save_disk(filename, p1);
-   else console.log("give filename .bin or .dsk extension");
+   else if(ext == ".img") await save_disk(filename, p1);
+   else console.log("give filename .bin or .img extension");
 }
 
 function loadBytes(bytes, address, fileName) {
@@ -87,7 +96,8 @@ function loadBytes(bytes, address, fileName) {
 
 async function load_file(fileName, address) {   
    const bytes = await readFile(fileName);
-   loadBytes(bytes, address, fileName);  
+   loadBytes(bytes, address, fileName);
+   return true;
 }
 
 async function save_file(filename, start, end) {
@@ -121,11 +131,12 @@ async function load_disk(diskname, drive) {
    if(drive === undefined) drive = 1;
    if(drive < 1 || drive >2) {
       console.log("wrong drive number");
-      return;
+      return false;
    }
    const bytes = await readFile(diskname);
    drives[drive-1].floppy = bytes;   
    console.log(`disk in drive ${drive} has been loaded with "${diskname}" (${bytes.length} bytes)`);
+   return true;
 }
 
 async function remove(filename) {   

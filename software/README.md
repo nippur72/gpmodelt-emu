@@ -1,6 +1,6 @@
 # Content of the software directory
 
-- "GP01_IMD.dsk" thru "GP23_IMD.dsk" are as set of disk images that
+- "GP01_IMD.img" thru "GP23_IMD.img" are as set of disk images that
   were rescued with some original machines. They are standard 8" disks,
   (77 tracks, 26 sectors, 128 bytes/sector), more details in the
   file "GPModT - Lista Software.xls"

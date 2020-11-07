@@ -1,6 +1,6 @@
 ;
 ; General Processor Model T
-; CP/M bootloader contained in disk GP02_IMD.dsk
+; CP/M bootloader contained in disk GP02_IMD.img
 ;
 
         ORG     0100h

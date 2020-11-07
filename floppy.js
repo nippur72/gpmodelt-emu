@@ -9,7 +9,7 @@ let debug_read_address_dma = false;
 let debug_read_status      = false;
 let debug_read_3f          = false;
 
-let FLOPPY_8_INCHES = false;
+let FLOPPY_8_INCHES = true;
 
 // 3f interface outside registers
 let FDC_drive_number = 3;
@@ -605,41 +605,43 @@ class Drive {
 // the actual floppy disks inserted in the drives
 const drives = [ new Drive(0), new Drive(1) ];
 
-async function cpm() {
-   //if(!await fileExists("GP01_IMD.dsk")) await fetchProgramAll("GP01_IMD.dsk");
-   //if(!await fileExists("GP02_IMD.dsk")) await fetchProgramAll("GP02_IMD.dsk");
-   //if(!await fileExists("GP03_IMD.dsk")) await fetchProgramAll("GP03_IMD.dsk");
-   //if(!await fileExists("GP04_IMD.dsk")) await fetchProgramAll("GP04_IMD.dsk");
-   //if(!await fileExists("GP05_IMD.dsk")) await fetchProgramAll("GP05_IMD.dsk");
-   //if(!await fileExists("GP06_IMD.dsk")) await fetchProgramAll("GP06_IMD.dsk");
-   //if(!await fileExists("GP07_IMD.dsk")) await fetchProgramAll("GP07_IMD.dsk");
-   //if(!await fileExists("GP08_IMD.dsk")) await fetchProgramAll("GP08_IMD.dsk");
-   //if(!await fileExists("GP09_IMD.dsk")) await fetchProgramAll("GP09_IMD.dsk");
-   //if(!await fileExists("GP10_IMD.dsk")) await fetchProgramAll("GP10_IMD.dsk");
-   //if(!await fileExists("GP11_IMD.dsk")) await fetchProgramAll("GP11_IMD.dsk");
-   //if(!await fileExists("GP12_IMD.dsk")) await fetchProgramAll("GP12_IMD.dsk");
-   //if(!await fileExists("GP13_IMD.dsk")) await fetchProgramAll("GP13_IMD.dsk");
-   //if(!await fileExists("GP14_IMD.dsk")) await fetchProgramAll("GP14_IMD.dsk");
-   //if(!await fileExists("GP15_IMD.dsk")) await fetchProgramAll("GP15_IMD.dsk");
-   //if(!await fileExists("GP16_IMD.dsk")) await fetchProgramAll("GP16_IMD.dsk");
-   //if(!await fileExists("GP17_IMD.dsk")) await fetchProgramAll("GP17_IMD.dsk");
-   //if(!await fileExists("GP18_IMD.dsk")) await fetchProgramAll("GP18_IMD.dsk");
-   //if(!await fileExists("GP19_IMD.dsk")) await fetchProgramAll("GP19_IMD.dsk");
-   //if(!await fileExists("GP20_IMD.dsk")) await fetchProgramAll("GP20_IMD.dsk");
-   //if(!await fileExists("GP21_IMD.dsk")) await fetchProgramAll("GP21_IMD.dsk");
-   //if(!await fileExists("GP22_IMD.dsk")) await fetchProgramAll("GP22_IMD.dsk");
-   //if(!await fileExists("GP23_IMD.dsk")) await fetchProgramAll("GP23_IMD.dsk");
+async function load_default_disks() {
+   //if(!await fileExists("GP01_IMD.img")) await fetchProgramAll("GP01_IMD.img");
+   //if(!await fileExists("GP02_IMD.img")) await fetchProgramAll("GP02_IMD.img");
+   //if(!await fileExists("GP03_IMD.img")) await fetchProgramAll("GP03_IMD.img");
+   //if(!await fileExists("GP04_IMD.img")) await fetchProgramAll("GP04_IMD.img");
+   //if(!await fileExists("GP05_IMD.img")) await fetchProgramAll("GP05_IMD.img");
+   //if(!await fileExists("GP06_IMD.img")) await fetchProgramAll("GP06_IMD.img");
+   //if(!await fileExists("GP07_IMD.img")) await fetchProgramAll("GP07_IMD.img");
+   //if(!await fileExists("GP08_IMD.img")) await fetchProgramAll("GP08_IMD.img");
+   //if(!await fileExists("GP09_IMD.img")) await fetchProgramAll("GP09_IMD.img");
+   //if(!await fileExists("GP10_IMD.img")) await fetchProgramAll("GP10_IMD.img");
+   //if(!await fileExists("GP11_IMD.img")) await fetchProgramAll("GP11_IMD.img");
+   //if(!await fileExists("GP12_IMD.img")) await fetchProgramAll("GP12_IMD.img");
+   //if(!await fileExists("GP13_IMD.img")) await fetchProgramAll("GP13_IMD.img");
+   //if(!await fileExists("GP14_IMD.img")) await fetchProgramAll("GP14_IMD.img");
+   //if(!await fileExists("GP15_IMD.img")) await fetchProgramAll("GP15_IMD.img");
+   //if(!await fileExists("GP16_IMD.img")) await fetchProgramAll("GP16_IMD.img");
+   //if(!await fileExists("GP17_IMD.img")) await fetchProgramAll("GP17_IMD.img");
+   //if(!await fileExists("GP18_IMD.img")) await fetchProgramAll("GP18_IMD.img");
+   //if(!await fileExists("GP19_IMD.img")) await fetchProgramAll("GP19_IMD.img");
+   //if(!await fileExists("GP20_IMD.img")) await fetchProgramAll("GP20_IMD.img");
+   //if(!await fileExists("GP21_IMD.img")) await fetchProgramAll("GP21_IMD.img");
+   //if(!await fileExists("GP22_IMD.img")) await fetchProgramAll("GP22_IMD.img");
+   //if(!await fileExists("GP23_IMD.img")) await fetchProgramAll("GP23_IMD.img");
 
    if(FLOPPY_8_INCHES) {
-      await load("GP16_IMD.dsk",1);
-      await load("GP02_IMD.dsk",2);
-      paste("\nBD");
-   } else {
-      let diskname = `disk_${FDC_NSIDES}x${FDC_NTRACKS}x${FDC_NSECTORS}x${FDC_SECTORSIZE}.dsk`;
-      await load(diskname,1);
-      await load(diskname,2);
-      paste("\nBD");
+      let disk1 = "GP16_IMD.img";
+      let disk2 = "GP02_IMD.img";
+      if(!(await load(disk1,1) && await load(disk2,2))) {
+         dropdrive = 1; await fetchProgram(`disks/${disk1}`);
+         dropdrive = 2; await fetchProgram(`disks/${disk2}`);
+      }
    }
+}
+
+async function start_cpm() {
+   paste("\nBD");
 }
 
 function dump_disk(side, track, sector) {

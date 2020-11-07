@@ -35,7 +35,7 @@ const disk = emptydisk(geometry);
 let boot_loader_name = geometry.TYPE8 ? "boot_loader.floppy.8.SS.bin" : "boot_loader.floppy.525.SS.bin";
 let boot_loader = fs.readFileSync(`../docs/bootloaders/${boot_loader_name}`);
 
-let ccp = fs.readFileSync("../docs/ccp/disks/GP16_IMD.dsk.side0.ccp.bin");
+let ccp = fs.readFileSync("../docs/ccp/disks/GP16_IMD.img.side0.ccp.bin");
 let calkins = fs.readFileSync("../docs/ccp/CPM22.calkins.bin");
 
 let biosname = geometry.TYPE8 ? "bios.floppy.8.SS.bin" : "bios.floppy.525.SS.bin";
@@ -62,7 +62,6 @@ write_seq("ccp",  ccp,         disk, 0, 2, 0, geometry);
 let fname = `disk_${geometry.NSIDES}x${geometry.NTRACKS}x${geometry.NSECTORS}x${geometry.SECTORSIZE}x${geometry.DOUBLESIDE?"DS":"SS"}`;
 
 fs.writeFileSync(`${fname}.img`, disk);
-fs.writeFileSync(`${fname}.dsk`, disk);
 
 console.log("done");
 
