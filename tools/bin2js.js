@@ -5,6 +5,7 @@ const options = parseOptions([
    { name: 'input',      alias: 'i', type: String },
    { name: 'output',     alias: 'o', type: String },
    { name: 'varname',    alias: 'n', type: String },
+   { name: 'export',     alias: 'e', type: Boolean, defaultOption: false },
 ]);
 
 if(options.input === undefined || options.output === undefined || options.varname === undefined) 
@@ -16,10 +17,11 @@ if(options.input === undefined || options.output === undefined || options.varnam
 const fileName = options.input;
 const outName = options.output;
 const varName = options.varname;
+const makeExport = options.export;
 
 const bytes = fs.readFileSync(fileName);
 
-const javascript = bitmap2javascript(bytes, varName, undefined);
+const javascript = bitmap2javascript(bytes, varName, makeExport);
 fs.writeFileSync(outName, javascript);
 console.log(`'${outName}' generated from '${fileName}'`);
 
@@ -32,7 +34,7 @@ function parseOptions(optionDefinitions) {
    }
 }
 
-function bitmap2javascript(bytes, varname, exportVarname) 
+function bitmap2javascript(bytes, varname, makeExport)
 {   
    let s = "// file generated automatically by 'bin2js'. Do not edit\r\n\r\n";
 
@@ -46,7 +48,7 @@ function bitmap2javascript(bytes, varname, exportVarname)
 
    s+="\r\n]);\r\n";
 
-   if(exportVarname !== undefined) {
+   if(makeExport) {
       s += `\r\nmodule.exports = ${varname};\r\n`;
    }
 
