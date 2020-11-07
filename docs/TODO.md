@@ -13,6 +13,17 @@
 - versione doppia faccia
 - fare uno speed test per capire il migliore interleave
 - drag & drop dei .COM
+- programma per copiare files
+- programma di prova disco
+- impementazione emulatore disco con numero di settore
+- z88dk ret invece di jp
+- documentare pin ready pin 6 gotek
+
+# problema del drive B
+
+- provare con altro sistema
+- ricostruire disco 8"
+- confrontare con altra CCP/BDOS
 
 # varie
 
@@ -23,6 +34,7 @@
 - vedere lista software.xls (enrico)
 - vedere situazione eprom.xls (enrico)
 - vedere immagine hard disk sa1004_extracted.zip
+- vedere dischi GP1 e GP2 e GP01-GP23 contenuto
 
 # emulatore
 
