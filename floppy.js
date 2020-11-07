@@ -60,9 +60,7 @@ let FDC_COMMAND_WRITE_SECTOR    = 4;
 let FDC_COMMAND_WRITE_TRACK     = 5;
 let FDC_COMMAND_FORCE_INTERRUPT = 6;
 
-let FLOPPY_8_INCHES = true;
-
-let FDC_NSIDES     = FLOPPY_8_INCHES ? 2   : 1;
+let FDC_NSIDES     = FLOPPY_8_INCHES ? 2   : 2;
 let FDC_NTRACKS    = FLOPPY_8_INCHES ? 77  : 40;
 let FDC_NSECTORS   = FLOPPY_8_INCHES ? 26  : 18;
 let FDC_SECTORSIZE = FLOPPY_8_INCHES ? 128 : 128;
@@ -92,7 +90,7 @@ function FDC_getpos(side, track, sector) {
 let warnings = 0;
 function warn(msg) {
    warnings++;
-   if(warnings < 1000) {
+   if(warnings < 10000) {
       console.log(msg);
    }
 }
@@ -163,6 +161,9 @@ function FDC_read(port) {
 
             //if(FDC_sector_ptr == 0) console.log(`sector start read drvn=${drvn} pos=${pos}`);
 
+            if(pos>drives[drvn].floppy.length-1) {
+               console.warn(`read beyond disk`);
+            }
             FDC_data = drives[drvn].floppy[pos];
             FDC_sector_ptr++;
 
@@ -249,6 +250,9 @@ function FDC_write(port, value) {
             if(debug_write_sector_dma && FDC_sector_ptr == 0)                  console.log(`sector start write`);
             if(debug_write_sector_dma && FDC_sector_ptr == FDC_SECTORSIZE - 1) console.log(`sector end write`);
 
+            if(pos>drives[drvn].floppy.length-1) {
+               console.warn(`write beyond disk`);
+            }
             drives[drvn].floppy[pos] = FDC_data;
             FDC_sector_ptr++;
 
@@ -270,6 +274,9 @@ function FDC_write(port, value) {
             if(debug_write_sector_dma && FDC_sector_ptr == 0)                                 console.log(`track start write`);
             if(debug_write_sector_dma && FDC_sector_ptr == FDC_NSECTORS * FDC_SECTORSIZE - 1) console.log(`track end write`);
 
+            if(pos>drives[drvn].floppy.length-1) {
+               console.warn(`write beyond disk`);
+            }
             drives[drvn].floppy[pos] = FDC_data;
             FDC_sector_ptr++;
 
@@ -455,7 +462,9 @@ function FDC_parse_command(cmd) {
    if((cmd & 0b11100000) === 0b10100000) {
       // TODO m,F1,F2,E,a0 bits ignored
       //console.log(`FDC READ SECTOR track ${FDC_track} sec ${FDC_sector} with m=${m} S=${S} C=${C} E=${E} @@@ ${cpu_status()}`);
-      if(debug_write_sector) console.log(`FDC WRITE SECTOR track ${FDC_track} sec ${FDC_sector} with m=${m}`);
+      //if(debug_write_sector) console.log(`FDC WRITE SECTOR track ${FDC_track} sec ${FDC_sector} drive=${FDC_drive_number_descs[FDC_drive_number]} side=${FDC_side_descs[FDC_side]}`);
+
+      if(debug_write_sector) console.log(`FDC WRITE SECTOR track ${FDC_track} sec ${FDC_sector} drive=${FDC_drive_number_descs[FDC_drive_number]} side=${FDC_side_descs[FDC_side]} t=${mem_read(0xbfda)} s=${mem_read(0xBFDB)}`);
 
       // sector out of range
       if( ((FDC_sector<1 || FDC_sector>FDC_NSECTORS) && FLOPPY_8_INCHES) || (FDC_sector>=FDC_NSECTORS && !FLOPPY_8_INCHES)) {
@@ -482,6 +491,8 @@ function FDC_parse_command(cmd) {
       //console.log(`FDC READ SECTOR track ${FDC_track} sec ${FDC_sector} with m=${m} S=${S} C=${C} E=${E} @@@ ${cpu_status()}`);
       if(debug_write_track) console.log(`FDC WRITE TRACK track ${FDC_track}`);
 
+      // TODO gestire errore
+
       FDC_STATUS_BUSY = 1;            // marks as busy
       FDC_sector_ptr = 0;             // starts writing from byte 0
       FDC_dma = FDC_DMA_WRITE_TRACK;  // enable writing
@@ -496,7 +507,7 @@ function FDC_parse_command(cmd) {
    if((cmd & 0b11100001) === 0b10000000) {
       // TODO m,F1,F2,E bits ignored
       //console.log(`FDC READ SECTOR track ${FDC_track} sec ${FDC_sector} with m=${m} S=${S} C=${C} E=${E} @@@ ${cpu_status()}`);
-      if(debug_read_sector) console.log(`FDC READ SECTOR track ${FDC_track} sec ${FDC_sector} with m=${m}`);
+      if(debug_read_sector) console.log(`FDC READ SECTOR track ${FDC_track} sec ${FDC_sector} drive=${FDC_drive_number_descs[FDC_drive_number]} side=${FDC_side_descs[FDC_side]}`);
 
       // sector out of range
       if( ((FDC_sector<1 || FDC_sector>FDC_NSECTORS) && FLOPPY_8_INCHES) || (FDC_sector>=FDC_NSECTORS && !FLOPPY_8_INCHES)) {
@@ -594,7 +605,7 @@ const drives = [ new Drive(0), new Drive(1) ];
 
 async function cpm() {
    //if(!await fileExists("GP01_IMD.dsk")) await fetchProgramAll("GP01_IMD.dsk");
-   if(!await fileExists("GP02_IMD.dsk")) await fetchProgramAll("GP02_IMD.dsk");
+   //if(!await fileExists("GP02_IMD.dsk")) await fetchProgramAll("GP02_IMD.dsk");
    //if(!await fileExists("GP03_IMD.dsk")) await fetchProgramAll("GP03_IMD.dsk");
    //if(!await fileExists("GP04_IMD.dsk")) await fetchProgramAll("GP04_IMD.dsk");
    //if(!await fileExists("GP05_IMD.dsk")) await fetchProgramAll("GP05_IMD.dsk");
@@ -608,7 +619,7 @@ async function cpm() {
    //if(!await fileExists("GP13_IMD.dsk")) await fetchProgramAll("GP13_IMD.dsk");
    //if(!await fileExists("GP14_IMD.dsk")) await fetchProgramAll("GP14_IMD.dsk");
    //if(!await fileExists("GP15_IMD.dsk")) await fetchProgramAll("GP15_IMD.dsk");
-   if(!await fileExists("GP16_IMD.dsk")) await fetchProgramAll("GP16_IMD.dsk");
+   //if(!await fileExists("GP16_IMD.dsk")) await fetchProgramAll("GP16_IMD.dsk");
    //if(!await fileExists("GP17_IMD.dsk")) await fetchProgramAll("GP17_IMD.dsk");
    //if(!await fileExists("GP18_IMD.dsk")) await fetchProgramAll("GP18_IMD.dsk");
    //if(!await fileExists("GP19_IMD.dsk")) await fetchProgramAll("GP19_IMD.dsk");
@@ -617,13 +628,22 @@ async function cpm() {
    //if(!await fileExists("GP22_IMD.dsk")) await fetchProgramAll("GP22_IMD.dsk");
    //if(!await fileExists("GP23_IMD.dsk")) await fetchProgramAll("GP23_IMD.dsk");
 
-   load("GP16_IMD.dsk",1);
-   load("GP02_IMD.dsk",2);
+   if(FLOPPY_8_INCHES) {
+      await load("GP16_IMD.dsk",1);
+      await load("GP02_IMD.dsk",2);
+      paste("\nBD");
+   } else {
+      let diskname = `disk_${FDC_NSIDES}x${FDC_NTRACKS}x${FDC_NSECTORS}x${FDC_SECTORSIZE}.dsk`;
+      await load(diskname,1);
+      await load(diskname,2);
+      paste("\nBD");
+   }
 }
 
-function dump_disk(track, sector) {
-   let pos = FDC_getpos(0, track, sector);
+function dump_disk(side, track, sector) {
+   let pos = FDC_getpos(side, track, sector);
    let bytes = drives[0].floppy.slice(pos,pos+128);
+   //bytes = bytes.map(b=>~b & 0xFF);
    dumpBytes(bytes, 0, 127);
 }
 
