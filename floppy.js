@@ -633,7 +633,11 @@ async function load_default_disks() {
    if(FLOPPY_8_INCHES) {
       let disk1 = "GP16_IMD.img";
       let disk2 = "GP02_IMD.img";
-      if(!(await load(disk1,1) && await load(disk2,2))) {
+      if(await fileExists(disk1) && await fileExists(disk2)) {
+         await load(disk1,1);
+         await load(disk2,2);
+      }
+      else {
          dropdrive = 1; await fetchProgram(`disks/${disk1}`);
          dropdrive = 2; await fetchProgram(`disks/${disk2}`);
       }
