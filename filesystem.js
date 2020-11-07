@@ -116,6 +116,7 @@ async function save_disk(diskname, drive) {
    console.log(`disk in drive ${drive} saved as "${diskname}" (${bytes.length} bytes)`);
 }
 
+let dropdrive = 1;
 async function load_disk(diskname, drive) {   
    if(drive === undefined) drive = 1;
    if(drive < 1 || drive >2) {

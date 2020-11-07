@@ -106,7 +106,7 @@ function droppedFile(outName, bytes, address) {
    const dsk = /\.dsk$/i;
    if(dsk.test(outName)) {
       drag_drop_disk(outName, bytes);
-      load(outName, 1);
+      load(outName, dropdrive);
       return;
    }
 
