@@ -1258,7 +1258,7 @@ E63B: EA 88 32                          jp      pe,3288h
 E63E: C3 31 32                          jp      3231h
 
 E641: 3E 0D                      0E641h:        ld      a,0Dh
-E643: CD 50 E6                          call    0E650h
+E643: CD 50 E6                          call    EPROM_LPRINT
 E646: 3E 0A                             ld      a,0Ah
 E648: 00                                nop
 E649: 00                                nop
@@ -1267,8 +1267,8 @@ E64B: 3E 01                             ld      a,01h
 E64D: C3 C5 0D                          jp      0DC5h
 
                                         ; Referenced from 0E643h
-                                        ; --- START PROC 0E650h ---
-E650: F5                         0E650h:        push    af
+                                        ; --- START PROC EPROM_LPRINT ---
+E650: F5                         EPROM_LPRINT:        push    af
 
                                         ; Referenced from 0E654h
 E651: DB 5D                      0E651h:        in      a,(5Dh) ; ']'
@@ -4058,7 +4058,7 @@ Procedures (139):
   0E4C8h  0006            1          2
   0E4CEh  0016            2          3
   0E5C8h  0002            3          0
-  0E650h  0020            1          0
+  EPROM_LPRINT  0020            1          0
   0E680h  0011            2          0
   0E696h  000B            3          0
   0E6E0h  0068            4          1

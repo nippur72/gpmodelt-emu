@@ -58,12 +58,12 @@ F000 .. FFFF (non usato) espansione EPROM
 ## I/O MAP
 
 FF      Tastiera
-3c-3f   PIO floppy
-bc-bf   PIO floppy
-5c-5f   PIO stampante
-78-7b   PIO user 1 libera
-6c-6f   PIO user 2 libera
-74-77   PIO user 3 libera (ex ACI)
+3f      floppy porta drivesel
+bc-bf   floppy
+5c-5f   stampante parallela
+78-7b   us1 seriale
+6c-6f   us2 (possible HD)
+74-77   us3 (ex ACI)
 77      ACI
 
 ordine delle porte PIO:
@@ -86,7 +86,7 @@ BF 1791 - Dati
     - Bit 6: (solo 5.25 revisione ???) pilota DDEN
     (in ingresso)
     - Bit 0, 1, 3: rilettura dati da uscita
-    - Bit 5: Lettura linea HLD 1791
+    - Bit 5: Lettura linea HLT 1791
     - Bit 6: Lettura linea INTREQ 1791
     - Bit 7: Lettura linea DATA REQ 1791
 
@@ -131,4 +131,36 @@ In lettura:
 - STATUS REGISTER
 
 - IBM 3470: 26 sectors per track, 128 bytes per sectors, 77 tracce
+
+## porta seriale
+
+porta 7Ah
+    read: bit 0 => data is ready to be read
+          bit 3 => data can be written to output
+
+porta 78h: read/write data
+
+
+## notes on CP/M
+
+Mappatura dei dispositivi
+
+- CON:
+    read supports only keyboard
+    write TTY: (default) e UC1: a video
+    write CRT: is mapped to serial
+    write BATCH is mapped to eprom printer
+
+- LST:
+    write TTY: eprom printer
+    write CRT: is mapped to serial
+    write LPT: eprom printer
+    write UL1: video
+
+- PUN: chiama LST:
+
+- RDR: causa bug legge sempre da keyboard, richiede il seguente patch
+       mem_write(0xBBCC, 0b00001100);
+       mem_write(0xBBCE, 0b00000100);
+
 
