@@ -197,7 +197,6 @@ function parseQueryStringCommands() {
 
 async function fetchProgram(name, address)
 {
-   console.log(`wanting to load ${name}`);
    try
    {
       const response = await fetch(`software/${name}`);
