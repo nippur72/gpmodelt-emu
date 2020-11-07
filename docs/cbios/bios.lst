@@ -1,0 +1,573 @@
+BA00: C3 12 BB                          jp      BOOT            ;ARRIVE HERE FROM COLD START LOAD  ;
+BA03: C3 D1 BA                   LBA03: jp      WBOOT           ;ARRIVE HERE FOR WARM START        ;
+BA06: C3 7B BB                   LBA06: jp      CONST           ;CHECK FOR CONSOLE CHAR READY      ; Referenced from AD2A, AEDA, AEE0
+BA09: C3 59 BD                   LBA09: jp      CONIN           ;READ CONSOLE CHARACTER IN         ; Referenced from AD03, AD30, AD38, AEE7, BD69
+BA0C: C3 DE BB                   LBA0C: jp      CONOUT          ;WRITE CONSOLE CHARACTER OUT       ; Referenced from AD55, ADA9, ADAE, AEDD
+BA0F: C3 03 BC                   LBA0F: jp      LIST            ;WRITE LISTING CHARACTER OUT       ; Referenced from AD5E
+BA12: C3 03 BC                   LBA12: jp      LIST            ;WRITE CHARACTER TO PUNCH DEVICE   ;
+BA15: C3 C8 BB                   LBA15: jp      READER          ;READ READER DEVICE                ; Referenced from AECE
+BA18: C3 1D BC                   LBA18: jp      HOME            ;MOVE TO TRACK 00 ON SELECTED DISK ; Referenced from AFA1
+BA1B: C3 26 BC                   LBA1B: jp      SELDSK          ;SELECT DISK DRIVE                 ; Referenced from AF5D
+BA1E: C3 3F BC                   LBA1E: jp      SETTRK          ;SET TRACK NUMBER                  ; Referenced from B01A
+BA21: C3 44 BC                   LBA21: jp      SETSEC          ;SET SECTOR NUMBER                 ; Referenced from B03B
+BA24: C3 4F BC                   LBA24: jp      SETDMA          ;SET DMA ADDRESS                   ; Referenced from B1E6
+BA27: C3 54 BC                   LBA27: jp      READ            ;READ SELECTED SECTOR              ; Referenced from AFB2
+BA2A: C3 63 BC                   LBA2A: jp      WRITE           ;WRITE SELECTED SECTOR             ; Referenced from AFB8
+BA2D: C3 A2 BB                   LBA2D: jp      LISTST          ;RETURN LIST STATUS                ;
+BA30: C3 49 BC                   LBA30: jp      SECTRAN         ;SECTOR TRANSLATE SUBROUTINE       ; Referenced from B036
+BA33: C3 00 00                   LBA33: jp      0000h
+BA36: C3 00 00                   LBA36: jp      0000h
+BA39: C3 00 00                   LBA39: jp      0000h
+BA3C: C3 00 00                   LBA3C: jp      0000h
+BA3F: C3 00 00                   LBA3F: jp      0000h
+BA42: C3 00 00                   LBA42: jp      0000h
+BA45: C3 00 00                   LBA45: jp      0000h
+BA48: C3 00 00                   LBA48: jp      0000h
+BA4B: C3 00 00                   LBA4B: jp      0000h
+BA4E: C3 50 E6                   LBA4E: jp      0E650h               ; Referenced from BC18
+BA51: C3 44 BD                   LBA51: jp      GETCURSORADDR
+
+                                        ; Referenced from BC69, BC73
+                                 NUM_RETRY:
+BA54: 05
+BA55: 31
+                                 INIT_PORT_7A:
+BA56: 01
+BA57: 00
+BA58: 02
+BA59: 00
+BA5A: 03
+BA5B: C1
+BA5C: 04
+BA5D: 44
+BA5E: 05
+BA5F: 68
+
+
+EMPTY_OR_UNKNOWN:
+
+BA60: 00
+BA61: 00
+BA62: 00
+BA63: 00
+BA64: 00
+BA65: 00
+BA66: 00
+BA67: 00
+
+DPH_TABLE:
+
+DPH_DISK0:
+;
+BA68: A8 BA 00 00 00 00 00 00 25 BE C2 BA 21 BF A5 BE
+BA78: A8 BA 00 00 00 00 00 00 25 BE C2 BA 31 BF C4 BE
+BA88: A8 BA 00 00 00 00 00 00 25 BE C2 BA 41 BF E3 BE
+BA98: A8 BA 00 00 00 00 00 00 25 BE C2 BA 51 BF 02 BF
+
+                                 SKEWTABLE:
+; 26 entries (sectors for 8")
+BAA8: 01 07 0D 13 19 05 0B 11 17 03 09 0F 15 02 08 0E 14 1A 06 0C 12 18 04 0A 10 16
+
+                                 DISK_PARAMETER_BLOCK:
+
+BAC2: 1A 00 03 07 00 F2 00 3F 00 C0 00 10 00 02 00
+
+BAD1: 31 80 00                   WBOOT: ld      sp,0080h                   ; Referenced from BA03
+BAD4: 0E 00                             ld      c,00h
+BAD6: CD 09 E8                          call    EPROM_SETDRIVE
+BAD9: CD 00 E8                          call    0E800h
+BADC: 06 2C                             ld      b,2Ch   ; ','              ; reads 44 sectors (only CCP)
+BADE: 0E 00                             ld      c,00h
+BAE0: 16 02                             ld      d,02h                      ; starting from sector 2
+BAE2: 21 00 A4                          ld      hl,STARTCCP
+
+
+                                 WBOOTLOOP:                                ; Referenced from BB02, BB10
+BAE5: C5                                push    bc
+BAE6: D5                                push    de
+BAE7: E5                                push    hl
+BAE8: 4A                                ld      c,d
+BAE9: CD 06 E8                          call    EPROM_SETSECTOR
+BAEC: E1                                pop     hl
+BAED: E5                                push    hl
+BAEE: CD 0C E8                          call    EPROM_SETDMA
+BAF1: CD 12 E8                          call    EPROM_READSECTOR
+BAF4: E1                                pop     hl
+BAF5: 11 80 00                          ld      de,0080h
+BAF8: 19                                add     hl,de
+BAF9: D1                                pop     de
+BAFA: C1                                pop     bc
+BAFB: 05                                dec     b
+BAFC: 28 1B                             jr      z,WBOOTENDLOOP
+BAFE: 14                                inc     d
+BAFF: 7A                                ld      a,d
+BB00: FE 1B                             cp      1Bh
+BB02: 38 E1                             jr      c,WBOOTLOOP
+BB04: 16 01                             ld      d,01h
+BB06: 0C                                inc     c
+BB07: C5                                push    bc
+BB08: D5                                push    de
+BB09: E5                                push    hl
+BB0A: CD 03 E8                          call    EPROM_SETTRACK
+BB0D: E1                                pop     hl
+BB0E: D1                                pop     de
+BB0F: C1                                pop     bc
+BB10: 18 D3                             jr      WBOOTLOOP
+
+BB12: AF                         BOOT:  xor     a                      ; Referenced from BA00
+BB13: 32 03 00                          ld      (IOBYTE),a
+BB16: 32 04 00                          ld      (DEFDRIVE),a
+
+                                 WBOOTENDLOOP:                         ; Referenced from BAFC
+BB19: 21 50 BB                          ld      hl,MESSAGE_DOS_22
+BB1C: CD FA E3                          call    WRSTG
+BB1F: C5                                push    bc
+BB20: 06 0A                             ld      b,0Ah
+BB22: 21 56 BA                          ld      hl,INIT_PORT_7A
+
+                                 INIT_7A_LOOP:                         ; Referenced from BB2A
+BB25: 7E                                ld      a,(hl)
+BB26: D3 7A                             out     (7Ah),a ; 'z'
+BB28: 23                                inc     hl
+BB29: 05                                dec     b
+BB2A: C2 25 BB                          jp      nz,INIT_7A_LOOP
+
+BB2D: C1                                pop     bc
+BB2E: 3E C3                             ld      a,0C3h
+BB30: 32 00 00                          ld      (0000h),a
+BB33: 21 03 BA                          ld      hl,0BA03h
+BB36: 22 01 00                          ld      (0001h),hl
+BB39: 32 05 00                          ld      (0005h),a
+BB3C: 21 06 AC                          ld      hl,0AC06h
+BB3F: 22 06 00                          ld      (0006h),hl
+BB42: 21 A5 BD                          ld      hl,BUFEPROM
+BB45: CD 0C E8                          call    EPROM_SETDMA
+BB48: FB                                ei
+BB49: 3A 04 00                          ld      a,(DEFDRIVE)
+BB4C: 4F                                ld      c,a
+BB4D: C3 00 A4                          jp      STARTCCP
+
+
+                                 MESSAGE_DOS_22:
+BB50: 0D
+BB51: 0A
+BB52: 44
+BB53: 4F
+BB54: 53
+BB55: 20 32
+BB57: 2E 32
+BB59: 20 34
+BB5B: 38 6B
+BB5D: 0D
+BB5E: 0A
+BB5F: 72
+BB60: 65
+BB61: 76
+BB62: 2E 20
+BB64: 64
+BB65: 69
+BB66: 63
+BB67: 2F
+BB68: 38 31
+BB6A: 0D
+BB6B: 0A
+BB6C: A0
+
+                                        ; Referenced from BBCF
+                                        ; --- START PROC LBB6D ---
+BB6D: C3 DC E3                   LBB6D: jp      0E3DCh
+
+BB70: 3E 0D                      LBB70: ld      a,0Dh
+BB72: CD 03 E4                          call    0E403h
+BB75: 3E 0A                             ld      a,0Ah
+BB77: CD 03 E4                          call    0E403h
+BB7A: C9                                ret
+
+                                        ; Referenced from BA06
+                                        ; --- START PROC CONST ---
+BB7B: 3A 03 00                   CONST: ld      a,(IOBYTE)
+BB7E: E6 03                             and     03h
+BB80: FE 01                             cp      01h
+BB82: 28 08                             jr      z,LBB8C
+BB84: DB FF                             in      a,(0FFh)
+BB86: 07                                rlca
+BB87: 3E FF                      LBB87: ld      a,0FFh                     ; Referenced from BB94, BB97, BBC6
+BB89: D0                         LBB89: ret     nc                         ; Referenced from BB55
+BB8A: AF                                xor     a
+BB8B: C9                                ret
+
+BB8C: AF                         LBB8C: xor     a                          ; Referenced from BB82
+BB8D: D3 7A                             out     (7Ah),a ; 'z'
+BB8F: DB 7A                      LBB8F: in      a,(7Ah) ; 'z'              ; Referenced from BB59
+BB91: E6 01                             and     01h
+BB93: 37                         LBB93: scf                                ; Referenced from BBA0
+BB94: 28 F1                             jr      z,LBB87
+BB96: 3F                                ccf
+BB97: 18 EE                             jr      LBB87
+
+BB99: AF                         LBB99: xor     a                          ; Referenced from BBAB
+BB9A: D3 7A                      LBB9A: out     (7Ah),a ; 'z'              ; Referenced from BB68
+BB9C: DB 7A                             in      a,(7Ah) ; 'z'
+BB9E: E6 04                             and     04h
+BBA0: 18 F1                             jr      LBB93
+
+                                LISTST:                                    ; Referenced from BA2D
+BBA2: 3A 03 00                          ld      a,(IOBYTE)
+BBA5: E6 C0                             and     0C0h
+BBA7: 28 0B                             jr      z,LBBB4
+BBA9: FE 40                             cp      40h     ; '@'
+BBAB: 28 EC                             jr      z,LBB99
+BBAD: FE 80                             cp      80h
+BBAF: 28 03                             jr      z,LBBB4
+BBB1: AF                                xor     a
+BBB2: 18 11                             jr      LBBC5
+
+                                        ; Referenced from BBA7, BBAF
+BBB4: DB 5D                      LBBB4: in      a,(5Dh) ; ']'
+BBB6: 07                                rlca
+BBB7: 07                                rlca
+BBB8: FD 2A 03 E0                       ld      iy,(0E003h)
+BBBC: 47                                ld      b,a
+BBBD: FD 7E 06                          ld      a,(iy+06h)
+BBC0: EE 04                             xor     04h
+BBC2: A0                                and     b
+BBC3: E6 C0                             and     0C0h
+
+                                        ; Referenced from BBB2
+BBC5: 2F                         LBBC5: cpl
+BBC6: 18 BF                             jr      LBB87
+
+                                        ; Referenced from BA15, BB5B
+                                        ; --- START PROC READER ---
+BBC8: 3A 03 00                   READER: ld      a,(IOBYTE)
+BBCB: E6 03                             and     03h
+BBCD: FE 01                             cp      01h
+BBCF: 20 9C                             jr      nz,LBB6D
+
+                                        ; Referenced from BBD8
+BBD1: AF                         LBBD1: xor     a
+BBD2: D3 7A                             out     (7Ah),a ; 'z'
+BBD4: DB 7A                             in      a,(7Ah) ; 'z'
+BBD6: E6 01                             and     01h
+BBD8: CA D1 BB                          jp      z,LBBD1
+BBDB: DB 78                             in      a,(78h) ; 'x'
+BBDD: C9                                ret
+
+                                        ; Referenced from BA0C
+                                        ; --- START PROC CONOUT ---
+BBDE: CD 91 BC                   CONOUT: call    SAVE_REGS
+BBE1: 3A 03 00                          ld      a,(IOBYTE)
+BBE4: E6 03                             and     03h
+BBE6: FE 01                             cp      01h
+BBE8: 28 0A                             jr      z,LBBF4
+BBEA: FE 02                             cp      02h
+BBEC: 28 29                             jr      z,LBC17
+
+                                        ; Referenced from BC15
+                                        ; --- START PROC LBBEE ---
+BBEE: 79                         LBBEE: ld      a,c
+BBEF: CD 03 E4                          call    0E403h
+BBF2: 18 27                             jr      LBC1B
+
+                                        ; Referenced from BBE8, BBFB, BC0F
+                                        ; --- START PROC LBBF4 ---
+BBF4: AF                         LBBF4: xor     a
+BBF5: D3 7A                             out     (7Ah),a ; 'z'
+BBF7: DB 7A                             in      a,(7Ah) ; 'z'
+BBF9: E6 04                             and     04h
+BBFB: CA F4 BB                          jp      z,LBBF4
+BBFE: 79                                ld      a,c
+BBFF: D3 78                             out     (78h),a ; 'x'
+BC01: 18 18                             jr      LBC1B
+
+                                        ; Referenced from BA0F, BA12
+                                        ; --- START PROC LIST ---
+BC03: CD 91 BC                   LIST:  call    SAVE_REGS
+BC06: 3A 03 00                          ld      a,(IOBYTE)
+BC09: E6 C0                             and     0C0h
+BC0B: 28 0A                             jr      z,LBC17
+BC0D: FE 40                             cp      40h     ; '@'
+BC0F: 28 E3                             jr      z,LBBF4
+BC11: FE 80                             cp      80h
+BC13: 28 02                             jr      z,LBC17
+BC15: 18 D7                             jr      LBBEE
+
+                                        ; Referenced from BBEC, BC0B, BC13
+                                        ; --- START PROC LBC17 ---
+BC17: 79                         LBC17: ld      a,c
+BC18: CD 4E BA                          call    LBA4E
+
+                                        ; Referenced from BBF2, BC01
+                                        ; --- START PROC LBC1B ---
+BC1B: 18 70                      LBC1B: jr      LOAD_REGS2
+
+
+BC1D: 0E 00                      HOME:  ld      c,00h                    ; Referenced from BA18
+BC1F: CD 3F BC                          call    SETTRK
+BC22: 0E 00                             ld      c,00h
+BC24: 18 1E                             jr      SETSEC
+
+
+                                        ; returns the address of a Disc Parameter Header in HL.
+                                        ; The exact format of a DPH varies between CP/M versions;
+                                        ; If the disc could not be selected it returns HL=0.
+                                 SELDSK:                                 ; Referenced from BA1B
+BC26: 21 00 00                          ld      hl,0000h
+BC29: 79                                ld      a,c
+BC2A: 32 DC BF                          ld      (CURRDRIVE),a
+BC2D: FE 04                             cp      04h
+BC2F: D0                                ret     nc
+BC30: 3A DC BF                          ld      a,(CURRDRIVE)
+BC33: 6F                                ld      l,a
+BC34: 26 00                             ld      h,00h
+BC36: 29                                add     hl,hl
+BC37: 29                                add     hl,hl
+BC38: 29                                add     hl,hl
+BC39: 29                                add     hl,hl
+BC3A: 11 68 BA                          ld      de,DPH_TABLE
+BC3D: 19                                add     hl,de                      ; hl = DPH_TABLE[CURRDRIVE*16]
+BC3E: C9                                ret
+
+                                 SETTRK:                                   ; Referenced from BA1E, BC1F
+BC3F: 79                                ld      a,c
+BC40: 32 DA BF                          ld      (CURRTRACK),a
+BC43: C9                                ret
+
+
+                                 SETSEC:                                   ; Referenced from BA21, BC24
+BC44: 79                                ld      a,c
+BC45: 32 DB BF                          ld      (CURRSEC),a
+BC48: C9                                ret
+
+                                        ; Translate sector numbers to take account of skewing.
+                                        ; On entry, BC=logical sector number (zero based) and DE=address
+                                        ; of translation table. On exit, HL contains physical sector number.
+                                        ; On a system with hardware skewing, this would normally ignore DE
+                                        ; and return either BC or BC+1.
+                                 SECTRAN:                                 ; Referenced from BA30
+BC49: EB                                ex      de,hl
+BC4A: 09                                add     hl,bc
+BC4B: 6E                                ld      l,(hl)
+BC4C: 26 00                             ld      h,00h                     ; hl = DE[BC]
+BC4E: C9                                ret
+
+                                 SETDMA:                                  ; Referenced from BA24
+BC4F: ED 43 DE BF                       ld      (BUFADDR),bc
+BC53: C9                                ret
+
+                                        ;
+                                        ; Read the currently set track and sector at the current DMA address.
+                                        ; Returns A=0 for OK, 1 for unrecoverable error, 0FFh if media changed.
+                                        ;
+BC54: CD 91 BC                   READ:  call    SAVE_REGS                 ; Referenced from BA27
+BC57: CD D4 BC                          call    CHECK_CHANGED_TRKSEC
+BC5A: CD 12 E8                          call    EPROM_READSECTOR
+BC5D: CD C3 BC                          call    DISKBUF_TO_CPMBUF
+BC60: AF                                xor     a
+BC61: 18 2A                             jr      LOAD_REGS2
+
+
+BC63: CD 91 BC                   WRITE: call    SAVE_REGS                 ; Referenced from BA2A
+BC66: CD D4 BC                          call    CHECK_CHANGED_TRKSEC
+BC69: 3A 54 BA                          ld      a,(NUM_RETRY)
+BC6C: F5                                push    af
+
+
+                                 WRITE_RETRY:                             ; Referenced from BC89
+BC6D: CD BB BC                          call    CPMBUF_TO_DISKBUF
+BC70: CD 0F E8                          call    EPROM_WRITESECTOR
+BC73: 3A 54 BA                          ld      a,(NUM_RETRY)
+BC76: FE 00                             cp      00h                   ; do not verify if 0
+BC78: 28 12                             jr      z,WRITE_RETRY_EXIT    ;
+BC7A: CD F6 BC                          call    VERIFY_SECTOR         ; possible verify
+BC7D: B7                                or      a
+BC7E: 28 0C                             jr      z,WRITE_RETRY_EXIT    ; verify ok => exit
+BC80: 21 30 BD                          ld      hl,MSGRETRY           ; prints error message
+BC83: CD FA E3                          call    WRSTG                 ;
+BC86: F1                                pop     af
+BC87: 3D                                dec     a                     ; decrease number of attempts
+BC88: F5                                push    af
+BC89: 20 E2                             jr      nz,WRITE_RETRY        ; retry
+BC8B: 3C                                inc     a
+
+                                 WRITE_RETRY_EXIT:                    ; Referenced from BC78, BC7E
+BC8C: C1                                pop     bc
+
+                                 LOAD_REGS2:                          ; Referenced from BC1B, BC61
+BC8D: CD A9 BC                          call    LOAD_REGS
+BC90: C9                                ret
+
+                                 SAVE_REGS:                           ; Referenced from BBDE, BC03, BC54, BC63
+BC91: ED 73 D0 BF                       ld      (0BFD0h),sp
+BC95: 22 D2 BF                          ld      (0BFD2h),hl
+BC98: ED 53 D4 BF                       ld      (0BFD4h),de
+BC9C: ED 43 D6 BF                       ld      (0BFD6h),bc
+BCA0: 32 D8 BF                          ld      (0BFD8h),a
+BCA3: D1                                pop     de
+BCA4: 31 D0 BF                          ld      sp,0BFD0h
+BCA7: D5                                push    de
+BCA8: C9                                ret
+
+                                 LOAD_REGS:                          ; Referenced from BC8D
+BCA9: E1                                pop     hl
+BCAA: ED 7B D0 BF                       ld      sp,(0BFD0h)
+BCAE: E3                                ex      (sp),hl
+BCAF: ED 4B D6 BF                       ld      bc,(0BFD6h)
+BCB3: ED 5B D4 BF                       ld      de,(0BFD4h)
+BCB7: 2A D2 BF                          ld      hl,(0BFD2h)
+BCBA: C9                                ret
+
+                                CPMBUF_TO_DISKBUF:                  ; Referenced from BC6D
+BCBB: 11 A5 BD                          ld      de,BUFEPROM
+BCBE: 2A DE BF                          ld      hl,(BUFADDR)
+BCC1: 18 07                             jr      START_COPYBUF
+
+                                DISKBUF_TO_CPMBUF:                  ; Referenced from BC5D
+BCC3: 11 A5 BD                          ld      de,BUFEPROM
+BCC6: 2A DE BF                          ld      hl,(BUFADDR)
+BCC9: EB                                ex      de,hl
+
+BCCA: 06 80                      START_COPYBUF:
+                                        ld      b,80h
+                                 COPY_LOOP:
+BCCC: 7E                                ld      a,(hl)
+BCCD: 2F                                cpl                   ; invert data from WDC 1791 /D0-/D7
+BCCE: 12                                ld      (de),a
+BCCF: 23                                inc     hl
+BCD0: 13                                inc     de
+BCD1: 10 F9                             djnz    COPY_LOOP
+BCD3: C9                                ret
+
+
+                                 CHECK_CHANGED_TRKSEC:                     ; Referenced from BC57, BC66
+BCD4: 3A DC BF                          ld      a,(CURRDRIVE)
+BCD7: 4F                                ld      c,a
+BCD8: 3A DD BF                          ld      a,(LAST_DRIVE)
+BCDB: B9                                cp      c
+BCDC: 79                                ld      a,c
+BCDD: 32 DD BF                          ld      (LAST_DRIVE),a
+BCE0: C4 09 E8                          call    nz,EPROM_SETDRIVE
+BCE3: 3A DB BF                          ld      a,(CURRSEC)
+BCE6: 4F                                ld      c,a
+BCE7: CD 06 E8                          call    EPROM_SETSECTOR
+BCEA: 3A DA BF                          ld      a,(CURRTRACK)
+BCED: 4F                                ld      c,a
+BCEE: 3A EC BF                          ld      a,(LAST_TRACK)
+BCF1: B9                                cp      c
+BCF2: C4 03 E8                          call    nz,EPROM_SETTRACK
+BCF5: C9                                ret
+
+                                        ; Referenced from BC7A
+                                 VERIFY_SECTOR:
+BCF6: CD 2A E8                   VERIFY_SECTOR: call    0E82Ah
+BCF9: 0E BF                             ld      c,0BFh
+BCFB: DD 66 0B                          ld      h,(ix+0Bh)
+BCFE: DD 6E 0A                          ld      l,(ix+0Ah)
+BD01: 3E 7F                             ld      a,7Fh   ; ''
+BD03: D3 BC                             out     (0BCh),a
+BD05: 18 02                             jr      LBD09
+
+                                        ; Referenced from BD0C, BD11, BD16, BD1B
+BD07: ED A2                      LBD07: ini
+
+BD09: DB 3F                      LBD09: in      a,(3Fh) ; '?'               ; Referenced from BD05, BD1E
+BD0B: 07                                rlca
+BD0C: 38 F9                             jr      c,LBD07
+BD0E: DB 3F                             in      a,(3Fh) ; '?'
+BD10: 07                                rlca
+BD11: 38 F4                             jr      c,LBD07
+BD13: DB 3F                             in      a,(3Fh) ; '?'
+BD15: 07                                rlca
+BD16: 38 EF                             jr      c,LBD07
+BD18: DB 3F                             in      a,(3Fh) ; '?'
+BD1A: 07                                rlca
+BD1B: 38 EA                             jr      c,LBD07
+BD1D: 07                                rlca
+BD1E: 30 E9                             jr      nc,LBD09
+
+BD20: DB 3F                      LBD20: in      a,(3Fh) ; '?'              ; Referenced from BD24
+BD22: CB 77                             bit     6,a
+BD24: 28 FA                             jr      z,LBD20
+BD26: DB BC                             in      a,(0BCh)
+BD28: 2F                                cpl
+BD29: DD 77 0F                          ld      (ix+0Fh),a
+BD2C: DD A6 0D                          and     (ix+0Dh)
+BD2F: C9                                ret
+
+                                        MSGRETRY:
+                                        ; Message "\r\nDISK WRITE RETRY\r", $A0
+BD30: 0D
+BD31: 0A
+BD32: 44
+BD33: 49
+BD34: 53
+BD35: 4B
+BD36: 20 57
+BD38: 52
+BD39: 49
+BD3A: 54
+BD3B: 45
+BD3C: 20 52
+BD3E: 45
+BD3F: 54
+BD40: 52
+BD41: 59
+BD42: 0A
+BD43: A0
+                                        ;
+                                        ; gets cursor address in HL
+                                        ; by reading it from the pointer
+                                        ; stored in the VDD table
+                                        ;
+                                 GETCURSORADDR:                       ; Referenced from BA51
+BD44: DD 21 E0 BF                       ld      ix,VDDTABLE
+BD48: DD 66 01                          ld      h,(ix+01h)
+BD4B: DD 6E 00                          ld      l,(ix+00h)
+BD4E: 11 05 00                          ld      de,0005h
+BD51: 19                                add     hl,de
+BD52: 56                                ld      d,(hl)
+BD53: 23                                inc     hl
+BD54: 66                                ld      h,(hl)
+BD55: 6A                                ld      l,d
+BD56: C9                                ret
+
+                                        ; Referenced from BD59, BD62
+BD57: 6F                         LBD57: ld      l,a
+BD58: BD                                cp      l
+
+                                        ; Referenced from BA09
+                                        ; --- START PROC CONIN ---
+BD59: 2A 57 BD                   CONIN: ld      hl,(LBD57)
+BD5C: 7E                                ld      a,(hl)
+BD5D: B7                                or      a
+BD5E: FA 66 BD                          jp      m,LBD66
+BD61: 23                                inc     hl
+BD62: 22 57 BD                          ld      (LBD57),hl
+BD65: C9                                ret
+
+                                        ; Referenced from BD5E
+BD66: 21 DC E3                   LBD66: ld      hl,0E3DCh
+BD69: 22 0A BA                          ld      (LBA09+1),hl    ; reference not aligned to instruction
+BD6C: E6 7F                             and     7Fh     ; ''
+BD6E: C9                                ret
+
+; STRING "Inizio Lavoro"
+
+BD6F: 49                         LBD6F: ld      c,c
+BD70: 6E                                ld      l,(hl)
+BD71: 69                                ld      l,c
+BD72: 7A                                ld      a,d
+BD73: 69                                ld      l,c
+BD74: 6F                                ld      l,a
+BD75: 20 4C                             jr      nz,0BDC3h
+BD77: 61                                ld      h,c
+BD78: 76                                halt
+BD79: 6F                                ld      l,a
+BD7A: 72                                ld      (hl),d
+BD7B: 6F                                ld      l,a
+BD7C: 8D                                adc     a,l
+BD7D: 00                                nop
+BD7E: 00                                nop
+BD7F: 00                                nop
+
+
