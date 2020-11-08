@@ -11,6 +11,8 @@ CUSTOM_DOS_MSG  EQU 1              ; customized prompt message
 NO_AUTOEXEC     EQU 1              ; 1=disables "Inizio Lavoro"
 SAVE_SPACE      EQU 1
 PATCH_READER    EQU 1              ; 1=patches a bug in READER
+PATCH_WBOOT     EQU 1              ; 1=checks for validity of the drive in WBOOT
+PATCH_VERIFY    EQU 1              ; 1=avoid repeated code in VERIFY_LOOP routine
 
 ;
 ; DSM = (TRACKS x SIDE – RESERVED) x NSECT x SECTSIZE : BLOCKSIZE
@@ -310,6 +312,15 @@ INIT_SERIAL:                      ;
 
     ei
     ld      a,(DEFDRIVE)     ;
+
+    IF PATCH_WBOOT
+        IF MAX_DRIVES==4
+            and $03
+        ELSE
+            and $01
+        ENDIF
+    ENDIF
+
     ld      c,a              ; sets cpm default drive
 
     jp      STARTCCP         ; starts
@@ -737,17 +748,19 @@ VERIFY_LOOPENTER:
        rlca                           ; carry = bit 7 DATAREQ
        jr      c,VERIFY_LOOP          ; if data is ready repeat
 
-       in      a,(DRIVESEL)           ; read drive status
-       rlca                           ; carry = bit 7 DATAREQ
-       jr      c,VERIFY_LOOP          ; if data is ready repeat
+       IF !PATCH_VERIFY
+            in      a,(DRIVESEL)           ; read drive status
+            rlca                           ; carry = bit 7 DATAREQ
+            jr      c,VERIFY_LOOP          ; if data is ready repeat
 
-       in      a,(DRIVESEL)           ; read drive status
-       rlca                           ; carry = bit 7 DATAREQ
-       jr      c,VERIFY_LOOP          ; if data is ready repeat
+            in      a,(DRIVESEL)           ; read drive status
+            rlca                           ; carry = bit 7 DATAREQ
+            jr      c,VERIFY_LOOP          ; if data is ready repeat
 
-       in      a,(DRIVESEL)           ; read drive status
-       rlca                           ; carry = bit 7 DATAREQ
-       jr      c,VERIFY_LOOP          ; if data is ready repeat
+            in      a,(DRIVESEL)           ; read drive status
+            rlca                           ; carry = bit 7 DATAREQ
+            jr      c,VERIFY_LOOP          ; if data is ready repeat
+       ENDIF
 
        rlca                           ; carry = bit 6 INTREQ (end of command)
        jr      nc,VERIFY_LOOPENTER    ; if command is not completed then repeat
