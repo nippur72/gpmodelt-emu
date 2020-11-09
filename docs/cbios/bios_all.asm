@@ -312,7 +312,6 @@ INIT_SERIAL:                      ;
 
     ei
     ld      a,(DEFDRIVE)     ;
-
     IF PATCH_WBOOT
         IF MAX_DRIVES==4
             and $03
@@ -320,7 +319,6 @@ INIT_SERIAL:                      ;
             and $01
         ENDIF
     ENDIF
-
     ld      c,a              ; sets cpm default drive
 
     jp      STARTCCP         ; starts
@@ -580,7 +578,7 @@ READ:
     call    CHECK_CHANGED_TRKSEC
     call    EPROM_READSECTOR
     call    DISKBUF_TO_CPMBUF
-    xor     a
+    xor     a                         ; A=0 read ok
     jr      LOAD_REGS2
 
 ;
@@ -596,13 +594,13 @@ WRITE:
     call    SAVE_REGS
     call    CHECK_CHANGED_TRKSEC
     ld      a,(NUM_RETRY)
-    push    af
+    push    af                    ; save num retry in stack
 
 WRITE_RETRY:
     call    CPMBUF_TO_DISKBUF
     call    EPROM_WRITESECTOR
     ld      a,(NUM_RETRY)
-    cp      00h                   ; do not verify if 0
+    cp      00h                   ; do not verify if NUM_VERIFY=0
     jr      z,WRITE_RETRY_EXIT    ;
     call    VERIFY_SECTOR         ; verify sector written
     or      a
@@ -613,12 +611,12 @@ WRITE_RETRY:
     dec     a                     ; decrease number of attempts
     push    af
     jr      nz,WRITE_RETRY        ; retry
-    inc     a
+    inc     a                     ; sets A=1 error
 
-WRITE_RETRY_EXIT:                    ; Referenced from BC78, BC7E
-    pop     bc
+WRITE_RETRY_EXIT:
+    pop     bc                    ; destroy temp retry value from stack
 
-LOAD_REGS2:                          ; Referenced from BC1B, BC61
+LOAD_REGS2:
     call    LOAD_REGS
     ret
 
