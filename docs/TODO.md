@@ -1,29 +1,28 @@
 # TODO
 
-# CPM/DISK related
+# DISK related
 
-- confrontare CCP con una standard
-- capire perchè CCP BBB e EEE non bootano
-- CPM 2.2 al boot scrive su porta 7ah, come mai?
-- emulazione seriale parallela in cpm LST: e/o PIP US1
 - implementare comandi 1791 mancanti (step out ecc)
-- TODO perchè fa il READ ADDRESS
 - questione dei byte aggiuntivi in write track
-- /DDEN su macchina a 5.25
-- versione doppia faccia
+- scrivere un FORMCOPY per 5.25
+- testare /DDEN su macchina a 5.25 ?
 - fare uno speed test per capire il migliore interleave
+- impementazione emulatore disco con numero di settore e formato XML
+
+# CPM related
+
+- TODO perchè fa il READ ADDRESS
+- capire perchè CCP BBB e EEE non bootano
 - drag & drop dei .COM
 - programma per copiare files
 - programma di prova disco
-- impementazione emulatore disco con numero di settore
 - z88dk ret invece di jp
 - documentare pin ready pin 6 gotek
-
-# problema del drive B
-
-- provare con altro sistema
-- ricostruire disco 8"
-- confrontare con altra CCP/BDOS
+- test doppia faccia su macchina reale
+* confrontare CCP con una standard
+* emulazione seriale parallela in cpm LST: e/o PIP US1
+* versione doppia faccia
+* cbios migliorare verify
 
 # varie
 
@@ -34,11 +33,11 @@
 - vedere lista software.xls (enrico)
 - vedere situazione eprom.xls (enrico)
 - vedere immagine hard disk sa1004_extracted.zip
-- vedere dischi GP1 e GP2 e GP01-GP23 contenuto
+* vedere dischi GP1 e GP2 e GP01-GP23 contenuto
 
 # emulatore
 
 - reset della memoria iniziale/random ecc
-
-
+- spegnere audio se non usato
+- visual display disk track ecc
 
