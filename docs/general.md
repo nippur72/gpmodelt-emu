@@ -79,16 +79,31 @@ BD 1791 - Traccia
 BE 1791 - Settore
 BF 1791 - Dati  
 
-# PORTA DRIVSEL
+# PORTA DRIVESEL
 3fh: (in uscita)
     - Bit 0,1,2: selezione drive 001,010,100
     - Bit 3: selezione side (0=2.nda faccia)
     - Bit 6: (solo 5.25 revisione ???) pilota DDEN
     (in ingresso)
     - Bit 0, 1, 3: rilettura dati da uscita
+    - Bit 4: (undocumented) drive /READY
     - Bit 5: Lettura linea HLT 1791
     - Bit 6: Lettura linea INTREQ 1791
     - Bit 7: Lettura linea DATA REQ 1791
+
+RICOSTRUZIONE DA SCHEDA FDC DELLA PORTA 3FH
+
+bit         write                  read
+=====================================================================
+                LS374                  LS245
+0           D0=>D5=>Q5=>DR SEL 0   D0<=Q6<=D6<=Q6 (latched DR SEL 0)
+1           D1=>D4=>Q4=>DR SEL 1   D1<=Q7<=D7<=Q7 (latched DR SEL 1)
+2           D2=>D6=>Q6=>DR SEL 2   D2<=Q7<=D7<=Q7 (latched DR SEL 2)
+3           D3=>D8=>Q8=>SIDE SEL   D3<=Q4<=D4<=Q1 (latched SIDE SEL)
+4           n.c.                   D4<=Q0<=D0<=DRIVE /READY
+5           n.c.                   D5<=Q2<=D2<=n.c
+6           D6=>D2=>n.c.           D6<=Q3<=D3<=INT REQ
+7           n.c.                   D7<=Q5<=D5<=DATA REQ
 
 la porta 3f serve per single side e per selezionare la faccia
 la macchina vede A=1°drive side A, B=1°drive sideB, C=2°drivesideA e D_2°drive sideB
