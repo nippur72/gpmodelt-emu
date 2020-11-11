@@ -5,11 +5,12 @@ function mem_read(address) {
 function mem_write(address, value) {
    // TODO replicate video memory pages
    if(address <= 0xCFFF) memory[address] = value;
-   //if(address < 0xb000) console.log(`POKE &h${hex(address,4)}, &h${hex(value)} pc=${hex(cpu.getState().pc,4)}`);
+   else console.warn(`ROM write at address ${hex(address,4)}h value ${hex(value)}h pc=${hex(cpu.getState().pc,4)}h`);
 }
 
 function io_read(ioport) {  
    const port = ioport & 0xFF;
+   //if(port!=0xFF) warn(`read from unknown port ${hex(port)}h`);
    switch(port) {
 
       case 0x3f:
@@ -42,19 +43,16 @@ function io_read(ioport) {
       }
    }
 
-   warn(`read from unknown port ${hex(port)}h`);
-
+   //warn(`read from unknown port ${hex(port)}h`);
    return 0x00;
 }
-
-let ser_counter = 0;
-let ser_data = 0;
 
 function io_write(ioport, value) {    
    const port = ioport & 0xFF;
 
    //console.log(`io write ${hex(port)} ${hex(value)}`)
    switch(port) {
+
       case 0x3f:
          FDC_write_port_3f(value);
          return;
@@ -95,39 +93,6 @@ function io_write(ioport, value) {
         return;
       }
    } 
-   warn(`write on unknown port ${hex(port)}h value ${hex(value)}h`);
+   //warn(`write on unknown port ${hex(port)}h value ${hex(value)}h`);
 }
 
-class Serial
-{
-   constructor() {
-      this.output = [];
-      this.recbuf = [];
-   }
-
-   receive() {
-      if(this.recbuf.length > 0) {
-         let ch = this.recbuf[0];
-         this.recbuf = this.recbuf.slice(1);
-         return ch;
-      }
-      return 0x00; // receive buffer empty
-   }
-
-   receiveStatus() {
-      return 4+1;
-      //if(this.recbuf.length > 0) return 4+1;
-      //else return 0;
-   }
-
-   readyToSend(value) {
-
-   }
-
-   send(data) {
-      //this.output.push(data);
-      printerWrite(data);
-   }
-}
-
-serial = new Serial();
