@@ -138,7 +138,7 @@ E0B5: C3 00 00                          jp      0000h
 
                                         ; Referenced from 0E0AEh
 E0B8: FE 44                      0E0B8h:        cp      44h     ; 'D'
-E0BA: CA 18 E8                          jp      z,0E818h
+E0BA: CA 18 E8                          jp      z,BOOT_FROM_DISK
 E0BD: C9                                ret
 
                                         ; Referenced from 0E3E8h
@@ -1666,53 +1666,58 @@ E7FC: E6 7F                             and     7Fh     ; ''
 E7FE: C9                                ret
 
 E7FF: A1                         0E7FFh:        and     c
+
+;***************************************************************************************
+;
+; U3 DISK EPROM
+;
+;***************************************************************************************
+
+                                 EPROM_INITD:
 E800: C3 87 E8                          jp      0E887h
 
-                                        ; Referenced from 0E94Ah
-                                        ; --- START PROC EPROM_SETTRACK ---
-E803: C3 9D E8                   EPROM_SETTRACK:        jp      EPROM_SETTRACK1
+E803: C3 9D E8                   EPROM_SETTRACK:
+                                        jp      EPROM_SETTRACK1
 
-                                 EPROM_SETSECTOR:                       ; Referenced from 0E94Fh
+                                 EPROM_SETSECTOR:
 E806: C3 98 E8                          jp      EPROM_SETSECTOR1
 
-E809: C3 99 EA                   EPROM_SETDRIVE:        jp      EPROM_SETDRIVE1
+E809: C3 99 EA                   EPROM_SETDRIVE:
+                                        jp      EPROM_SETDRIVE1
 
-                                        ; Referenced from 0E93Fh
-                                        ; --- START PROC EPROM_SETDMA ---
-E80C: C3 EF E8                   EPROM_SETDMA:        jp      0E8EFh
+E80C: C3 EF E8                   EPROM_SETDMA:
+                                        jp      EPROM_SETDMA1
 
-E80F: C3 F9 E8                   0E80Fh:        jp      0E8F9h
+E80F: C3 F9 E8                   EPROM_WRITESECTOR:
+                                        jp      EPROM_WRITESECTOR1
 
-                                        ; Referenced from 0E953h
-                                        ; --- START PROC 0E812h ---
-E812: C3 BC E8                   0E812h:        jp      0E8BCh
+E812: C3 BC E8                   EPROM_READSECTOR:
+                                        jp      EPROM_READSECTOR1
 
-E815: C3 5E E9                   0E815h:        jp      0E95Eh
+E815: C3 5E E9                   0E815h:
+                                        jp      0E95Eh
 
-                                        ; Referenced from 0E0BAh
-E818: C3 59 E9                   0E818h:        jp      0E959h
+E818: C3 59 E9                   BOOT_FROM_DISK:
+                                        jp      BOOT_FROM_DISK1
 
-                                        ; Referenced from 0E9B5h, 0EAB6h
-                                        ; --- START PROC 0E81Bh ---
-E81B: C3 63 E9                   0E81Bh:        jp      0E963h
+E81B: C3 63 E9                   0E81Bh:
+                                        jp      0E963h
 
-                                        ; Referenced from 0EA8Eh
-                                        ; --- START PROC 0E81Eh ---
 E81E: C3 A9 E8                   0E81Eh:        jp      0E8A9h
 
 E821: C3 C2 E9                   0E821h:        jp      0E9C2h
 
 E824: C3 09 EA                   0E824h:        jp      0EA09h
 
-                                        ; Referenced from 0E887h, EPROM_SETTRACK1, 0E8EFh, 0EA53h, 0EAC4h
+                                        ; Referenced from 0E887h, EPROM_SETTRACK1, EPROM_SETDMA1, 0EA53h, 0EAC4h
                                         ; --- START PROC 0E827h ---
 E827: C3 54 E8                   0E827h:        jp      0E854h
 
-                                        ; Referenced from 0E8BCh, 0E966h, 0E998h, 0E9C8h, EPROM_SETDRIVE1
+                                        ; Referenced from EPROM_READSECTOR1, 0E966h, 0E998h, 0E9C8h, EPROM_SETDRIVE1
                                         ; --- START PROC 0E82Ah ---
 E82A: C3 50 E8                   0E82Ah:        jp      0E850h
 
-                                        ; Referenced from 0E8F9h, 0EA0Fh
+                                        ; Referenced from EPROM_WRITESECTOR1, 0EA0Fh
                                         ; --- START PROC 0E82Dh ---
 E82D: C3 58 E8                   0E82Dh:        jp      0E858h
 
@@ -1834,9 +1839,9 @@ E8B6: C8                                ret     z
 E8B7: CD 36 E8                          call    0E836h
 E8BA: 18 ED                             jr      0E8A9h
 
-                                        ; Referenced from 0E812h
-                                        ; --- START PROC 0E8BCh ---
-E8BC: CD 2A E8                   0E8BCh:        call    0E82Ah
+                                        ; Referenced from EPROM_READSECTOR
+                                        ; --- START PROC EPROM_READSECTOR1 ---
+E8BC: CD 2A E8                   EPROM_READSECTOR1:        call    0E82Ah
 
                                         ; Referenced from 0E8ECh
 E8BF: 0E BF                      0E8BFh:        ld      c,0BFh
@@ -1873,14 +1878,14 @@ E8EC: 20 D1                             jr      nz,0E8BFh
 E8EE: C9                                ret
 
                                         ; Referenced from EPROM_SETDMA
-                                        ; --- START PROC 0E8EFh ---
-E8EF: CD 27 E8                   0E8EFh:        call    0E827h
+                                        ; --- START PROC EPROM_SETDMA1 ---
+E8EF: CD 27 E8                   EPROM_SETDMA1:        call    0E827h
 E8F2: DD 75 0A                          ld      (ix+0Ah),l
 E8F5: DD 74 0B                          ld      (ix+0Bh),h
 E8F8: C9                                ret
 
-                                        ; Referenced from 0E80Fh
-E8F9: CD 2D E8                   0E8F9h:        call    0E82Dh
+                                        ; Referenced from EPROM_WRITESECTOR
+E8F9: CD 2D E8                   EPROM_WRITESECTOR1:        call    0E82Dh
 
                                         ; Referenced from 0E930h
 E8FC: 0E BF                      0E8FCh:        ld      c,0BFh
@@ -1938,13 +1943,13 @@ E94A: CD 03 E8                          call    EPROM_SETTRACK
 E94D: 0E 01                             ld      c,01h                 ; 00h on 5.25"
 E94F: CD 06 E8                          call    EPROM_SETSECTOR
 E952: E5                                push    hl
-E953: CD 12 E8                          call    0E812h
+E953: CD 12 E8                          call    EPROM_READSECTOR
 E956: E1                                pop     hl
 E957: 6B                                ld      l,e
 E958: E9                                jp      (hl)
 
-                                        ; Referenced from 0E818h
-E959: 1E 00                      0E959h:        ld      e,00h
+                                        ; Referenced from BOOT_FROM_DISK
+E959: 1E 00                      BOOT_FROM_DISK1:        ld      e,00h
 E95B: C3 39 E8                          jp      0E839h
 
                                         ; Referenced from 0E815h           ; dead code use to
@@ -2169,7 +2174,7 @@ EA98: C9                                ret
 
                                  EPROM_SETDRIVE1:                     ; Referenced from EPROM_SETDRIVE
 EA99: CD 2A E8                          call    0E82Ah
-EA9C: DD 71 09                          ld      (ix+EPROM_CURRDRIVE),c
+EA9C: DD 71 09                          ld      (ix+IX_CURRDRIVE),c
 EA9F: 3E 05                             ld      a,05h
 EAA1: B9                                cp      c
 EAA2: DA 30 E8                          jp      c,DISK_ERROR
@@ -4066,7 +4071,7 @@ Procedures (139):
   EPROM_SETTRACK  0003            1          1
   EPROM_SETSECTOR  0003            1          1
   EPROM_SETDMA  0003            1          1
-  0E812h  0003            1          1
+  EPROM_READSECTOR  0003            1          1
   0E81Bh  0003            2          1
   0E81Eh  0003            1          1
   0E827h  0003            5          1
@@ -4087,8 +4092,8 @@ Procedures (139):
   EPROM_SETSECTOR1  0005            1          0
   EPROM_SETTRACK1  000F            1          3
   0E8A9h  0013            2          2
-  0E8BCh  0033            1          2
-  0E8EFh  000A            1          1
+  EPROM_READSECTOR1  0033            1          2
+  EPROM_SETDMA1  000A            1          1
   0E963h  0035            1          2
   0EA4Fh  0017            1          2
   0EA66h  0008            1          2

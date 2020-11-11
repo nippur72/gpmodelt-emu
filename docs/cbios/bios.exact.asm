@@ -60,7 +60,7 @@ KBDIN             EQU $E3DC   ; keyboard input, puts read key in A
 EPROM_PRTCHAR     EQU $E403   ; used in some dead code in CBIOS
 EPROM_INITD       EQU $E800   ; initialize the disk routines
 EPROM_LPRINT      EQU $E650   ; stampa carattere
-EPROM_E82A        EQU $E82A   ; used by CBIOS
+SET_IX_READ       EQU $E82A   ; used by CBIOS
 EPROM_SETDRIVE    EQU $E809   ; drive in C
 EPROM_SETSECTOR   EQU $E806   ; sector in C
 EPROM_SETDMA      EQU $E80C   ; set DMA buffer at HL, writes also in EPROM_U1, EPROM_U2
@@ -70,8 +70,8 @@ EPROM_SETTRACK    EQU $E803   ; track in C
 WRSTG             EQU $E3FA    ; prints string in HL until char with 7 bit on
 
 ; VDD TABLE IX
-EPROM_DSKBUFPTR EQU $0A  ; (word) pointer disk sector buffer
-EPROM_DSKSTATUS EQU $0F  ; stores last disk status from port FDCCMD
+IX_DSKBUF EQU $0A  ; (word) pointer disk sector buffer
+IX_DSKSTATUS EQU $0F  ; stores last disk status from port FDCCMD
 
 ORG STARTBIOS
 
@@ -567,10 +567,10 @@ CHECK_CHANGED_TRKSEC:                     ; Referenced from BC57, BC66
     ret
 
 VERIFY_SECTOR:
-    call    EPROM_E82A                ; ? reset IX to VDDTABLE
+    call    SET_IX_READ               ; ? reset IX to VDDTABLE
     ld      c,FDCDATA                 ; port to be used in "ini"
-    ld      h,(ix+EPROM_DSKBUFPTR+1)
-    ld      l,(ix+EPROM_DSKBUFPTR)    ; hl points to EPROM_DISKBUFPTR
+    ld      h,(ix+IX_DSKBUF+1)
+    ld      l,(ix+IX_DSKBUF)    ; hl points to EPROM_DISKBUFPTR
     ld      a,7Fh
     out     (FDCCMD),a                ; send FDC READ SECTOR command
     jr      VERIFY_LOOPENTER
@@ -604,7 +604,7 @@ VERIFY_WAITEND:
 
        in      a,(FDCCMD)             ;
        cpl                            ; read FDC status
-       ld      (ix+EPROM_DSKSTATUS),a ; save into table
+       ld      (ix+IX_DSKSTATUS),a ; save into table
        and     (ix+0Dh)               ; mask it
        ret
 

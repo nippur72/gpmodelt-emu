@@ -47,17 +47,16 @@ VIDEORAM    EQU $C000  ; start of video RAM
 ;REVERSE     EQU $BF05  ; 80h=reverse, 00h=normal
 ;CSRADDR     EQU $BF06  ; (word) cursor address in memory (used by the eprom routines)
 
-ERROR_NUMER     EQU $00  ; DISK ERROR number
-EPROM_PRINTERST EQU $06  ; printer status (see LISTST)
-EPROM_CURRDRIVE EQU $09  ; current drive for eprom routines
-EPROM_DSKBUFPTR EQU $0A  ; (word) pointer disk sector buffer
-EPROM_TRKNUMNEG EQU $0C  ; stores track number (NEGATED??)
-EPROM_U1        EQU $0D  ; mask value for disk status byte
-EPROM_SECNUMNEG EQU $0E  ; stores sector number NEGATED
-EPROM_DSKSTATUS EQU $0F  ; stores last disk status from port FDCCMD
-EPROM_TRKNUM    EQU $10  ; stores track number
+IX_PRN_ST       EQU $06  ; printer status (see LISTST)
+IX_CURRDRIVE    EQU $09  ; current drive for eprom routines
+IX_DSKBUF       EQU $0A  ; (word) pointer disk sector buffer
+IX_TRKNUM       EQU $0C  ; stores track number
+IX_STMASK       EQU $0D  ; mask value for disk status byte
+IX_NRETRY       EQU $0E  ; number of retry for disk status/restore before fault
+IX_DSKSTATUS    EQU $0F  ; stores last disk status from port FDCCMD
+IX_RDADDRBUF    EQU $10  ; (6 bytes) READ ADDRESS command result TRK,SIDE,SECT,LEN,CRCL,CRCH
 
-; **** EPROM ****
+; **** EPROM ENTRIES ****
 
 MONITOR           EQU $E000    ; monitor entry point
 VDDPOINTER        EQU $E003    ; (word) address of the VDD table in memory (usually contains $BFE0)
@@ -76,20 +75,20 @@ PUTCHAR           EQU $E3F4    ; stampa carattere in A
 CRLF              EQU $E3F7    ; stampa CR+LF
 WRSTG             EQU $E3FA    ; prints string in HL until char with 7 bit on
 TMONTEST          EQU $E3FD    ; T-MON "T"
-;PRTDVR            EQU ??       ; printer driver, prints char in A (after CR or LF)
-;INIZP             EQU ??       ; E012? inizializza la stampante
-;TOGCUR            EQU ??       ; E018? toggle cursor
+;PRTDVR            EQU ??      ; printer driver, prints char in A (after CR or LF)
+;INIZP             EQU ??      ; E012? inizializza la stampante
+;TOGCUR            EQU ??      ; E018? toggle cursor
 PRTCHAR           EQU $E403    ; used in some dead code in CBIOS
 RDFLE             EQU $E406    ; read file from cassette (documented page 58)
 NOBLK             EQU $E40C    ; attende il sincronismo video per evitare il "brillio" durante l'accesso al video
 EPROM_LPRINT      EQU $E650    ; sends C to parallel printer port
-;??                EQU $E80C    ; used by CBIOS
-EPROM_E82A        EQU $E82A    ; used by CBIOS
+;??                EQU $E80C   ; used by CBIOS
+SET_IX_READ       EQU $E82A    ; used by CBIOS
 EPROM_INITD       EQU $E800    ; initialize the disk routines
 EPROM_SETDRIVE    EQU $E809    ; drive in C
 EPROM_SETTRACK    EQU $E803    ; track in C
 EPROM_SETSECTOR   EQU $E806    ; sector in C
-EPROM_SETDMA      EQU $E80C    ; set DMA buffer at HL, writes also in EPROM_U1, EPROM_U2
+EPROM_SETDMA      EQU $E80C    ; set DMA buffer at HL, writes also in IX_STMASK, EPROM_U2
 EPROM_WRITESECTOR EQU $E80F
 EPROM_READSECTOR  EQU $E812
 DISK_ERROR        EQU $E830    ; display "DISK ERROR"
