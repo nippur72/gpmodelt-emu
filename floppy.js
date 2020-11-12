@@ -12,11 +12,11 @@ let debug_read_3f          = false;
 let FLOPPY_8_INCHES = true;
 
 // 3f interface outside registers
-let FDC_drive_number = 3;
+let FDC_drive_number = 2;
 let FDC_side = 0;
 
 let FDC_side_descs = [ "S0", "S1" ];
-let FDC_drive_number_descs = [ "D0", "D1", "D2", "D3" ];
+let FDC_drive_number_descs = [ "0 (LEFT)", "1 (RIGHT)", "D2", "D3" ];
 
 // 1791 internal registers
 let FDC_track = 0;
@@ -110,8 +110,13 @@ function FDC_read_port_3f() {
 }
 
 function FDC_write_port_3f(value) {
+   let DR_SEL_0 = (value & 0b001) >> 0;
+   let DR_SEL_1 = (value & 0b010) >> 1;
+   let DR_SEL_2 = (value & 0b100) >> 2;
    let drive_number = value & 0b11;
    let side = (value & 0b1000) >> 3;
+
+   //console.log(`DR_SEL_0=${DR_SEL_0} DR_SEL_1=${DR_SEL_1} DR_SEL_2=${DR_SEL_2}`);
 
    // DDEN is supported only on the 5.25 machine
    // let DDEN = (value >> 6) & 1;
@@ -120,7 +125,7 @@ function FDC_write_port_3f(value) {
    //if(drive_number != FDC_drive_number) console.log(`**** drive number changed to "${FDC_drive_number_descs[drive_number]}"`);
    //if(side != FDC_side) console.log(`**** side changed to "${FDC_side_descs[side]}"`);
 
-   FDC_drive_number = drive_number;
+   FDC_drive_number = DR_SEL_0 ? 0 : DR_SEL_1 ? 1 : DR_SEL_2 ? 2 : 2;
    FDC_side = side;
 
    //console.log(`write to drive select: drive number=${FDC_drive_number} side=${FDC_side} ${cpu_status()}`);
@@ -152,7 +157,8 @@ function FDC_read(port) {
 
          let side = FDC_side == 0 ? 1 : 0;
 
-         let drvn = FDC_drive_number == 2 ? 0 : 1;
+         let drvn = FDC_drive_number;
+
          let pos = FDC_getpos(side, FDC_track, FDC_sector) + FDC_sector_ptr;
 
          // read sector transfer
@@ -243,7 +249,7 @@ function FDC_write(port, value) {
          // write data register
 
          let side = FDC_side == 0 ? 1 : 0;
-         let drvn = FDC_drive_number == 2 ? 0 : 1;
+         let drvn = FDC_drive_number;
 
          // write sector transfer
          if(FDC_dma === FDC_DMA_WRITE_SECTOR) {
@@ -635,7 +641,7 @@ async function load_default_disks() {
       let disk2 = "GP02_IMD.img";
       if(await fileExists(disk1) && await fileExists(disk2)) {
          await load(disk1,1);
-         await load(disk2,2);
+         await load(disk2,0);
       }
       else {
          dropdrive = 1; await fetchProgram(`disks/${disk1}`);

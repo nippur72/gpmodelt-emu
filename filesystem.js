@@ -116,26 +116,26 @@ async function save_file(filename, start, end) {
 }
 
 async function save_disk(diskname, drive) {      
-   if(drive === undefined) drive = 1;
-   if(drive < 1 || drive >2) {
+   if(drive === undefined) drive = 0;
+   if(drive < 0 || drive >1) {
       console.log("wrong drive number");
       return;
    }
-   const bytes = drives[drive-1].floppy;
+   const bytes = drives[drive].floppy;
    await writeFile(diskname, bytes);
-   console.log(`disk in drive ${drive} saved as "${diskname}" (${bytes.length} bytes)`);
+   console.log(`disk in drive ${FDC_drive_number_descs[drive]} saved as "${diskname}" (${bytes.length} bytes)`);
 }
 
-let dropdrive = 1;
+let dropdrive = 0;
 async function load_disk(diskname, drive) {   
-   if(drive === undefined) drive = 1;
-   if(drive < 1 || drive >2) {
+   if(drive === undefined) drive = 0;
+   if(drive < 0 || drive >1) {
       console.log("wrong drive number");
       return false;
    }
    const bytes = await readFile(diskname);
-   drives[drive-1].floppy = bytes;   
-   console.log(`disk in drive ${drive} has been loaded with "${diskname}" (${bytes.length} bytes)`);
+   drives[drive].floppy = bytes;
+   console.log(`disk in drive ${FDC_drive_number_descs[drive]} has been loaded with "${diskname}" (${bytes.length} bytes)`);
    return true;
 }
 
