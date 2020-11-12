@@ -397,3 +397,23 @@ function pasteLong(str) {
    let lines = str.split("\n");
    str.forEach(line=>paste(line));
 }
+
+
+// finds if certain memory location are visited in read or write
+
+let debug_addr = new Uint8Array(65536).fill(0);
+function mark_addr(from,to) {
+   for(let t=from;t<=to;t++) debug_addr[t] = 0xFF;
+}
+function mem_read(address) {
+   if(debug_addr[address]===0xFF) console.warn(`reading from ${hex(address,4)}h pc=${hex(cpu.getState().pc,4)}h`);
+   return memory[address];
+}
+function mem_write(address, value) {
+   // TODO replicate video memory pages
+   if(debug_addr[address]==0xFF) console.warn(`writing to ${hex(address,4)}h value ${hex(value)}h pc=${hex(cpu.getState().pc,4)}h`);
+   if(address <= 0xCFFF) memory[address] = value;
+   else console.warn(`ROM write at address ${hex(address,4)}h value ${hex(value)}h pc=${hex(cpu.getState().pc,4)}h`);
+}
+mark_addr(0xE005,0xE024);
+mark_addr(0xEAD1,0xEBFF);

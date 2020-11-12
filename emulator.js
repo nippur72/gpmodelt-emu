@@ -10,21 +10,21 @@ function initMem() {
       }
    }
 
-   rom_load(rom_E000,        0xE000);
-   rom_load(rom_E400,        0xE400);
+   if(true) {
+      rom_load(rom_E000,        0xE000);
+      rom_load(rom_E400,        0xE400);
+      if(FLOPPY_8_INCHES) rom_load(rom_E800_FDC8,   0xE800);
+      else                rom_load(rom_E800_FDC525, 0xE800);
+      rom_load(rom_EC00_ACI,    0xEC00);
+   }
+   else {
+      rom_load(rom_MON24_2,   0xE000);
+      rom_load(rom_SYS2K_482, 0xE400);
+      rom_load(rom_RIG02_U,   0xE800);
+   }
 
-   if(FLOPPY_8_INCHES) rom_load(rom_E800_FDC8,   0xE800);
-   else                rom_load(rom_E800_FDC525, 0xE800);
-
-   rom_load(rom_EC00_ACI,    0xEC00);
-
-   //rom_load(rom_GPMON007,    0xE000);
-
-   /*
-   rom_load(rom_MON24_2,   0xE000);
-   rom_load(rom_SYS2K_482, 0xE400);
-   rom_load(rom_RIG02_U,   0xE800);
-   */
+   // ROM di test di Gabriele Rossi
+   // rom_load(rom_GPMON007, 0xE000);
 
    rom_load([ 0xC3, 0x00, 0xE0 ], 0x0000); // JP E000
 }
@@ -326,26 +326,19 @@ setTimeout(()=>load_default_disks(), 500);
 /*
 // logs when PC = BA00h (CPM entry)
 debugBefore = (function() {
+   let first_time = true;
    return function() {
       let pc = cpu.getState().pc;
 
-      if(pc === 0xBC99) {
-         console.log(`enter ${cpu_status()}`);
-      }
-      if(pc >= 0xBC9C && pc <= 0xBCC9) {
-         console.log("returned and below");
-      }
-      if(pc >= 0xBCCA && pc <= 0xBCEC) {
-         console.log("in");
-      }
-      if(pc === 0xBCDA) {
-         console.log("executing ret");
-      }
-      if(pc === 0xBC18) {
-         console.log(`DMA=${hex(mem_read_word(0xbee7),4)}`);
-      }
-      if(pc === 0xBA00) console.log(`*** CPM STARTED ***`);
-      if(pc === 0x0100) console.log(`*** CPM BOOT LOADER STARTED ***`);
+      if(pc === 0x0000) console.warn(`*** 0000H STARTED***`);
+      if(pc === 0xBA00) console.warn(`*** CPM STARTED (BIOS $BA00) ***`);
+      if(pc === 0x0100) console.warn(`*** 0100H STARTED ***`);
+
+      //if(pc > 0xA000 && pc < 0xE000 && first_time) {
+      //   console.warn(`*** first time at ${cpu_status()} ***`);
+      //   first_time = false;
+      //}
+
    };
 })();
 */
