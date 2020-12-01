@@ -1,0 +1,4 @@
+Dump delle 4 x 2708 ROM del terminale DTSTAR unita' B.
+I dump non hanno dato errori ma non sono verificati in quanto le EPROM erano molto ossidate.
+
+La seconda lettura di U2 è quella buona (la prima aveva un pin troncato che probabilmente non faceva contatto) ed è equivalente alla ROM HT20.

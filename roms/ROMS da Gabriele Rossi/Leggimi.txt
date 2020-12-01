@@ -1,0 +1,16 @@
+ROM del Model-T S/N 321 da F.Pirri
+Scheda custom con 2 x 2716
+
+fdc5.bin
+Monv-10.bin
+
+ROM del Model-T fornite da Andrea Any
+4 x 2708, le prime due su scheda ROM, le altre su scheda MEM
+
+dt49-48.u1
+ht20.u2
+
+gcem1.u3
+gcem2.u4
+
+

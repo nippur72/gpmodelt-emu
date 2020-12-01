@@ -38,23 +38,36 @@ LAST_TRACK  EQU $BFEC  ; last used track (never written to?)
 LAST_DRIVE  EQU $BFDD  ; last used drive
 VIDEORAM    EQU $C000  ; start of video RAM
 
-; **** VDD TABLE **** IX+00h .. IX+10h where IX usually is $BFE0
+; **** VDD TABLE **** IX+00h .. IX+10h where IX usually is $BFE2. At BFE0 there is a pointer to BFE2
 
-;CRSROW      EQU $BF01  ; cursor row (used by the eprom routines)
-;LASTCROW    EQU $BF02  ; last cursor row (used by the eprom routines)
-;CRSCOL      EQU $BF03  ; cursor column (used by the eprom routines)
-;LASTCCOL    EQU $BF04  ; last cursor column (used by the eprom routines)
-;REVERSE     EQU $BF05  ; 80h=reverse, 00h=normal
-;CSRADDR     EQU $BF06  ; (word) cursor address in memory (used by the eprom routines)
+IX_CRSROW       EQU $00  ; cursor row
+IX_CRSROW_MAX   EQU $01  ; cursor row end, populated with 0Fh in 64x16
+IX_CRSCOL       EQU $02  ; cursor column
+IX_CRSCOL_MAX   EQU $03  ; cursor column end, populated with 3Fh in 64x16
+IX_REVERSE      EQU $04  ; 80h=reverse, 00h=normal only 7 bit is checked
+IX_CSRADDR      EQU $05  ; (word) cursor address in memory (used by the eprom routines)
 
 IX_PRN_ST       EQU $06  ; printer status (see LISTST)
-IX_CURRDRIVE    EQU $09  ; current drive for eprom routines
-IX_DSKBUF       EQU $0A  ; (word) pointer disk sector buffer
-IX_TRKNUM       EQU $0C  ; stores track number
+IX_CURRDRIVE    EQU $09  ; ** current drive for eprom routines
+IX_DSKBUF       EQU $0A  ; ** (word) pointer disk sector buffer
+IX_TRKNUM       EQU $0C  ; ** stores track number
 IX_STMASK       EQU $0D  ; mask value for disk status byte
 IX_NRETRY       EQU $0E  ; number of retry for disk status/restore before fault
 IX_DSKSTATUS    EQU $0F  ; stores last disk status from port FDCCMD
 IX_RDADDRBUF    EQU $10  ; (6 bytes) READ ADDRESS command result TRK,SIDE,SECT,LEN,CRCL,CRCH
+
+;
+; IX_SECNUM  EQU $0E  ; for RIG eprom
+; IX_11      EQU $11  ; number of retry when sending command to HDC
+; (at $BFF6)
+; IX_16      EQU $16  ; HDC COMMAND BYTE 0: delimiter F7h
+; IX_17      EQU $17  ; HDC COMMAND BYTE 1: SIDE
+; IX_18      EQU $18  ; HDC COMMAND BYTE 2: TRACK (negated)
+; IX_19      EQU $19  ; HDC COMMAND BYTE 3: SECTOR (negated)
+; IX_1A      EQU $18  ; HDC COMMAND BYTE 4: delimiter FEh
+; IX_1B      EQU $19  ; HDC COMMAND BYTE 5: delimiter FFh
+;
+
 
 ; **** EPROM ENTRIES ****
 
@@ -80,6 +93,7 @@ TMONTEST          EQU $E3FD    ; T-MON "T"
 ;TOGCUR            EQU ??      ; E018? toggle cursor
 PRTCHAR           EQU $E403    ; used in some dead code in CBIOS
 RDFLE             EQU $E406    ; read file from cassette (documented page 58)
+SAVEFILE          EQU $E409    ; save the memory in DE-HL to tape A=some marker
 NOBLK             EQU $E40C    ; attende il sincronismo video per evitare il "brillio" durante l'accesso al video
 EPROM_LPRINT      EQU $E650    ; sends C to parallel printer port
 ;??                EQU $E80C   ; used by CBIOS
@@ -108,6 +122,13 @@ FDCCMD    EQU $BC    ; 1791 - Comandi/status
 FDCTRK    EQU $BD    ; 1791 - Traccia
 FDCSEC    EQU $BE    ; 1791 - Settore
 FDCDATA   EQU $BF    ; 1791 - Dati
+HDCPORT   EQU $6D    ; porta HD controller
+
+; port 6d bits
+; bit 0: READY   1 when ready
+; bit 1: READOK  1
+; bit 2: BUSY    1 when busy
+; bit 3: DATAREQ 1
 
 ; **** IO PORT VALUES ****
 SERIAL_DATA_IN_READY   EQU  &b00000001

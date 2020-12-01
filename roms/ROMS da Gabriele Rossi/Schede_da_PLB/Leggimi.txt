@@ -1,0 +1,2 @@
+Dump delle EPROM presenti sulle schede ROM2 e ROM3 di Pierluigi Bartolini.
+Dump non verificati in quanto alcune delle EPROM erano ossidate.

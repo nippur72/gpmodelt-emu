@@ -8,8 +8,27 @@ let disk_names = fs.readdirSync(disk_path).filter(fn=>fn.match(/GP.*img$/g));
 //disk_names.forEach(dn=>extract_boot(dn));
 //disk_names.forEach(dn=>extract_ccp(dn, 0));
 //disk_names.forEach(dn=>extract_ccp(dn, 1));
+//disk_names.forEach(dn=>extract_side_1(dn));
+//extract_boot_rig("../docs/rig","sa1004_extracted_xor_FF.bin");
 
-disk_names.forEach(dn=>extract_side_1(dn));
+extract_ccp_rig("../docs/rig","sa1004_extracted_xor_FF.bin");
+
+function extract_ccp_rig(disk_path, disk_name) {
+    let disk = fs.readFileSync(`${disk_path}/${disk_name}`);
+
+    let ccp_and_bios = disk.slice(256,256+0x1a*256);
+    let ccp  = ccp_and_bios.slice(0,(0xBA00-0xA400));
+    let bios = ccp_and_bios.slice((0xBA00-0xA400));
+
+    let ccp_name = `${disk_path}/rig.ccp.bin`;
+    let bios_name = `${disk_path}/rig.bios.bin`;
+
+    fs.writeFileSync(ccp_name,  ccp);
+    fs.writeFileSync(bios_name, bios);
+
+    console.log(`extracted ${ccp_name} from ${disk_name}`);
+    console.log(`extracted ${bios_name} from ${disk_name}`);
+}
 
 function extract_side_1(disk_name) {
     let geometry = {
