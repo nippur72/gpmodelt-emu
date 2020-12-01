@@ -3,6 +3,8 @@
 // 64K RAM
 const memory = new Uint8Array(65536).fill(0x00); 
 
+let ROM_CONFIG = "scheda4";
+
 function initMem() {
    function rom_load(rom, address) {
       for(let i=0; i<rom.length; i++) {
@@ -10,17 +12,27 @@ function initMem() {
       }
    }
 
-   if(true) {
+   if(ROM_CONFIG == "standard") {
       rom_load(rom_E000,        0xE000);
       rom_load(rom_E400,        0xE400);
       if(FLOPPY_8_INCHES) rom_load(rom_E800_FDC8,   0xE800);
       else                rom_load(rom_E800_FDC525, 0xE800);
       rom_load(rom_EC00_ACI,    0xEC00);
    }
-   else {
+
+   if(ROM_CONFIG == "rig") {
       rom_load(rom_MON24_2,   0xE000);
       rom_load(rom_SYS2K_482, 0xE400);
       rom_load(rom_RIG02_U,   0xE800);
+   }
+
+   if(ROM_CONFIG == "scheda2") {
+      rom_load(rom_U1MON1512, 0xE000);
+      rom_load(rom_U3FDC,     0xE800);
+   }
+
+   if(ROM_CONFIG == "scheda4") {
+      rom_load(rom_T20V24, 0xE000);
    }
 
    // ROM di test di Gabriele Rossi
@@ -323,7 +335,6 @@ if(autoload !== undefined) {
 
 setTimeout(()=>load_default_disks(), 500);
 
-/*
 // logs when PC = BA00h (CPM entry)
 debugBefore = (function() {
    let first_time = true;
@@ -333,6 +344,12 @@ debugBefore = (function() {
       if(pc === 0x0000) console.warn(`*** 0000H STARTED***`);
       if(pc === 0xBA00) console.warn(`*** CPM STARTED (BIOS $BA00) ***`);
       if(pc === 0x0100) console.warn(`*** 0100H STARTED ***`);
+      if(pc === 0xEA87) console.warn(`*** EA87H RETURN WITH ERROR ***`);
+      if(pc === 0xE8FE) console.warn(`*** E8FEH READ BYTES ***`);
+      if(pc === 0xE8FC) console.warn(`*** E8FEH READ BYTES ***`);
+      if(pc === 0xEABF) console.warn(`*** HERE ***`);
+      if(pc === 0xEA7E) console.warn(`*** HERE ***`);
+      if(pc === 0xE8D6) console.warn(`*** HERE ***`);
 
       //if(pc > 0xA000 && pc < 0xE000 && first_time) {
       //   console.warn(`*** first time at ${cpu_status()} ***`);
@@ -341,4 +358,3 @@ debugBefore = (function() {
 
    };
 })();
-*/
