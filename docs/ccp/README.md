@@ -1,9 +1,9 @@
 # CCP versions
 AAA DOS 2.04
-BBB loops on boot/doesn't boot
+BBB DOS (2.06-5) - loops on boot/doesn't boot
 CCC DOS 2.0
 DDD DOS 2.2
-EEE loops on boot/doesn't boot
+EEE DOS 2.2 48k rev gen/82 - loops on boot/doesn't boot
 
 GP01_IMD.img.side0.ccp.bin - empty
 GP01_IMD.img.side1.ccp.bin - empty
