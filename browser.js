@@ -209,7 +209,7 @@ async function fetchProgram(name, address)
       const response = await fetch(`software/${name}`);
       if(response.status === 404) return false;
       const bytes = new Uint8Array(await response.arrayBuffer());
-      droppedFile(name, bytes, address);
+      await droppedFile(name, bytes, address);
       return true;
    }
    catch(err)
