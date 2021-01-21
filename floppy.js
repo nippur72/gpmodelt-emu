@@ -645,7 +645,7 @@ async function load_default_disks() {
       }
       else {
          dropdrive = 1; await fetchProgram(`disks/${disk1}`);
-         dropdrive = 2; await fetchProgram(`disks/${disk2}`);
+         dropdrive = 0; await fetchProgram(`disks/${disk2}`);
       }
    }
 }
