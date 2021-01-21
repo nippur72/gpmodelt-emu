@@ -417,3 +417,8 @@ function mem_write(address, value) {
 }
 mark_addr(0xE005,0xE024);
 mark_addr(0xEAD1,0xEBFF);
+
+
+
+// logs when
+paste(`MBASIC\r\n\r\nprint chr$(22)"00"\r\n\r\nSYSTEM\r\n\r\n`); poly88 = true;

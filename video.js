@@ -25,6 +25,8 @@ let imageData, bmp;
 
 let saturation = 1.0;
 
+let poly88 = false;
+
 function calculateGeometry() {
    if(border_top    !== undefined && (border_top    > 35 || border_top    < 0)) border_top    = undefined;
    if(border_bottom !== undefined && (border_bottom > 35 || border_bottom < 0)) border_bottom = undefined;
@@ -78,7 +80,7 @@ function buildPalette() {
    function setPalette(i,r,g,b) { 
       let color = applySaturation(r,g,b, saturation);
       palette[i] = 0xFF000000 | color.r | color.g << 8 | color.b << 16; 
-      halfpalette[i] = 0xFF000000 | ((color.r/2.0)|0) | ((color.g/2.0)|0) << 8 | ((color.b/2.0)|0) << 16;
+      halfpalette[i] = 0xFF000000 | ((color.r/1.1)|0) | ((color.g/1.1)|0) << 8 | ((color.b/1.1)|0) << 16;
       if(i==8) halfpalette[i] = 0xFF000000 | ((color.r/1.1)|0) | ((color.g/1.1)|0) << 8 | ((color.b/1.1)|0) << 16;
       if(hide_scanlines || !show_scanlines) halfpalette[i] = palette[i];
    }
@@ -189,7 +191,6 @@ function drawFrame_y_text(y)
       let bg = 8;
       code = code & 127;
 
-
       if(code < 64)
       {
          charset = set1;
@@ -201,6 +202,18 @@ function drawFrame_y_text(y)
          charset = set2;
          if(y_offset < 8 ) bitmap = charset[(code-64) * 8 + y_offset];
          else              bitmap = charset[(code-64) * 8 + (y_offset-8) + 64*8];
+      }
+
+      // poly 88 patch 0123 45678 9012
+      if(poly88) {
+         if(reverse) {
+            bitmap = 0;
+
+               if(y_offset <  4) { if(code & (1<<2)) bitmap |= 0b00001111; if(code & (1<<5)) bitmap |= 0b11110000; }
+            else if(y_offset <  9) { if(code & (1<<1)) bitmap |= 0b00001111; if(code & (1<<4)) bitmap |= 0b11110000; }
+            else if(y_offset < 13) { if(code & (1<<0)) bitmap |= 0b00001111; if(code & (1<<3)) bitmap |= 0b11110000; }
+         }
+         else reverse=1;
       }
 
       for(let xx=0;xx<8;xx++) {
