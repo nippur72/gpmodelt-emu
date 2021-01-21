@@ -132,7 +132,7 @@ let dropdrive = 0;
 async function load_disk(diskname, drive) {   
    if(drive === undefined) drive = 0;
    if(drive < 0 || drive >1) {
-      console.log("wrong drive number");
+      console.log(`wrong drive number ${drive}`);
       return false;
    }
    const bytes = await readFile(diskname);
