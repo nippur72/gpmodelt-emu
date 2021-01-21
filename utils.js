@@ -83,12 +83,12 @@ function mem_read_word(address) {
 }
 
 async function crun(filename, address) {
-   load(filename, address);
+   await load(filename, address);
 }
 
-function drag_drop_disk(diskname, bytes) {
+async function drag_drop_disk(diskname, bytes) {
    console.log(`dropped disk "${diskname}"`);
-   writeFile(diskname, bytes);
+   await writeFile(diskname, bytes);
 }
 
 function paste(text) {   

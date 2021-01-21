@@ -86,7 +86,7 @@ dropZone.addEventListener('drop', e => {
    }
 });
 
-function droppedFile(outName, bytes, address) {   
+async function droppedFile(outName, bytes, address) {
 
    const wav = /\.wav$/i;
    if(wav.test(outName)) {
@@ -104,18 +104,25 @@ function droppedFile(outName, bytes, address) {
 
    const img = /\.img$/i;
    if(img.test(outName)) {
-      drag_drop_disk(outName, bytes);
-      load(outName, dropdrive);
+      await drag_drop_disk(outName, bytes);
+      await load(outName, dropdrive);
       return;
    }
 
    const bin = /\.bin$/i;
    if(bin.test(outName)) {     
-      writeFile(outName, bytes)
-      crun(outName, address);         
+      await writeFile(outName, bytes)
+      await crun(outName, address);
    }
 
-   // TODO add CP/M .com
+   // CP/M .com
+   const com = /\.com$/i;
+   if(com.test(outName)) {
+      await writeFile(outName, bytes)
+      await crun(outName, address);
+      let pages = Math.ceil(bytes.length/256);
+      paste(`SAVE ${pages} ${outName}\r\n\r\n`);
+   }
 }
 
 // **** welcome message ****

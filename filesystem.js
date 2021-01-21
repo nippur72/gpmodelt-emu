@@ -67,9 +67,10 @@ async function load(filename, p) {
    const ext = filename.substr(-4).toLowerCase();
 
         if(ext === ".bin") return await load_file(filename, p);
+   else if(ext === ".com") return await load_file(filename, p);
    else if(ext === ".img") return await load_disk(filename, p);
    else {
-      console.log("give filename .bin or .img extension");
+      console.log("give filename .bin, .com or .img extension");
       return false;
    }
 }
@@ -78,8 +79,9 @@ async function save(filename, p1, p2) {
    const ext = filename.substr(-4).toLowerCase();
 
         if(ext == ".bin") await save_file(filename, p1, p2);
+   else if(ext == ".com") await save_file(filename, p1, p2);
    else if(ext == ".img") await save_disk(filename, p1);
-   else console.log("give filename .bin or .img extension");
+   else console.log("give filename .bin,.com or .img extension");
 }
 
 function loadBytes(bytes, address, fileName) {

@@ -1,15 +1,15 @@
-let debug_write_track      = true;
-let debug_read_track       = true;
-let debug_write_sector     = true;
-let debug_write_sector_dma = true;
-let debug_read_sector      = true;
-let debug_read_sector_dma  = true;
-let debug_read_address     = true;
-let debug_read_address_dma = true;
-let debug_read_status      = true;
-let debug_read_3f          = true;
+let debug_write_track      = false;
+let debug_read_track       = false;
+let debug_write_sector     = false;
+let debug_write_sector_dma = false;
+let debug_read_sector      = false;
+let debug_read_sector_dma  = false;
+let debug_read_address     = false;
+let debug_read_address_dma = false;
+let debug_read_status      = false;
+let debug_read_3f          = false;
 
-let FLOPPY_8_INCHES = false;
+let FLOPPY_8_INCHES = true;
 
 // 3f interface outside registers
 let FDC_drive_number = 2;

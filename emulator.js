@@ -3,7 +3,7 @@
 // 64K RAM
 const memory = new Uint8Array(65536).fill(0x00); 
 
-let ROM_CONFIG = "scheda4";
+let ROM_CONFIG = "standard";
 
 function initMem() {
    function rom_load(rom, address) {
@@ -335,6 +335,7 @@ if(autoload !== undefined) {
 
 setTimeout(()=>load_default_disks(), 500);
 
+/*
 // logs when PC = BA00h (CPM entry)
 debugBefore = (function() {
    let first_time = true;
@@ -358,3 +359,4 @@ debugBefore = (function() {
 
    };
 })();
+*/
