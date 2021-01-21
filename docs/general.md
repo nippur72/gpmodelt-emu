@@ -178,4 +178,9 @@ Mappatura dei dispositivi
        mem_write(0xBBCC, 0b00001100);
        mem_write(0xBBCE, 0b00000100);
 
+# MISC
+
+- print chr$(22)"00"    reverse
+- print chr$(22)"80"    reverse off
+- print chr$(12)        cls
 
