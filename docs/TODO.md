@@ -37,6 +37,7 @@
 
 # emulatore
 
+- tastiera, vedere questione getk() su Z88DK cpm
 - reset della memoria iniziale/random ecc
 - spegnere audio se non usato
 - visual display disk track ecc

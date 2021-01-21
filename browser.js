@@ -188,6 +188,10 @@ function parseQueryStringCommands() {
       else console.warn(`option charset=${options.charset} not recognized`);
    }
 
+   if(options.poly88 !== undefined) {
+      poly88 = options.poly88;
+   }
+
    if(options.bt !== undefined || 
       options.bb !== undefined || 
       options.bh !== undefined || 

@@ -612,33 +612,10 @@ class Drive {
 const drives = [ new Drive(0), new Drive(1) ];
 
 async function load_default_disks() {
-   //if(!await fileExists("GP01_IMD.img")) await fetchProgramAll("GP01_IMD.img");
-   //if(!await fileExists("GP02_IMD.img")) await fetchProgramAll("GP02_IMD.img");
-   //if(!await fileExists("GP03_IMD.img")) await fetchProgramAll("GP03_IMD.img");
-   //if(!await fileExists("GP04_IMD.img")) await fetchProgramAll("GP04_IMD.img");
-   //if(!await fileExists("GP05_IMD.img")) await fetchProgramAll("GP05_IMD.img");
-   //if(!await fileExists("GP06_IMD.img")) await fetchProgramAll("GP06_IMD.img");
-   //if(!await fileExists("GP07_IMD.img")) await fetchProgramAll("GP07_IMD.img");
-   //if(!await fileExists("GP08_IMD.img")) await fetchProgramAll("GP08_IMD.img");
-   //if(!await fileExists("GP09_IMD.img")) await fetchProgramAll("GP09_IMD.img");
-   //if(!await fileExists("GP10_IMD.img")) await fetchProgramAll("GP10_IMD.img");
-   //if(!await fileExists("GP11_IMD.img")) await fetchProgramAll("GP11_IMD.img");
-   //if(!await fileExists("GP12_IMD.img")) await fetchProgramAll("GP12_IMD.img");
-   //if(!await fileExists("GP13_IMD.img")) await fetchProgramAll("GP13_IMD.img");
-   //if(!await fileExists("GP14_IMD.img")) await fetchProgramAll("GP14_IMD.img");
-   //if(!await fileExists("GP15_IMD.img")) await fetchProgramAll("GP15_IMD.img");
-   //if(!await fileExists("GP16_IMD.img")) await fetchProgramAll("GP16_IMD.img");
-   //if(!await fileExists("GP17_IMD.img")) await fetchProgramAll("GP17_IMD.img");
-   //if(!await fileExists("GP18_IMD.img")) await fetchProgramAll("GP18_IMD.img");
-   //if(!await fileExists("GP19_IMD.img")) await fetchProgramAll("GP19_IMD.img");
-   //if(!await fileExists("GP20_IMD.img")) await fetchProgramAll("GP20_IMD.img");
-   //if(!await fileExists("GP21_IMD.img")) await fetchProgramAll("GP21_IMD.img");
-   //if(!await fileExists("GP22_IMD.img")) await fetchProgramAll("GP22_IMD.img");
-   //if(!await fileExists("GP23_IMD.img")) await fetchProgramAll("GP23_IMD.img");
-
    if(FLOPPY_8_INCHES) {
       let disk1 = "GP16_IMD.img";
       let disk2 = "GP02_IMD.img";
+      if(poly88) disk1 = "reverse.img";
       if(await fileExists(disk1) && await fileExists(disk2)) {
          await load(disk1,1);
          await load(disk2,0);
@@ -647,6 +624,7 @@ async function load_default_disks() {
          dropdrive = 1; await fetchProgram(`disks/${disk1}`);
          dropdrive = 0; await fetchProgram(`disks/${disk2}`);
       }
+      if(poly88) paste("\rBD");
    }
 }
 
