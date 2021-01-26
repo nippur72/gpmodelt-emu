@@ -8,7 +8,7 @@ function keyboard_read() {
    let key;
 
    if(!KEYBOARD_USE_BUFFER) {
-      key = keyascii;
+      key = key_pressed_ascii;
    }
    else {
       if(keyboard_buffer.length == 0) key = -1;
@@ -29,6 +29,10 @@ function keyboard_presskey(keyascii) {
    else {
       keyboard_buffer.push(keyascii);
    }
+
+   if(poly88) {
+      poly88_key = (keyascii & 0x7F) | 0x80;  // ascii + strobe on bit 7
+   }
 }
 
 function keyboard_releasekey() {
@@ -37,6 +41,10 @@ function keyboard_releasekey() {
    }
    else {
       keyboard_buffer.push(-1);
+   }
+
+   if(poly88) {
+      poly88_key = (poly88_key & 0x7F);  // ascii + strobe off on bit 7
    }
 }
 

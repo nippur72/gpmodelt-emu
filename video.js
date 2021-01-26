@@ -26,6 +26,7 @@ let imageData, bmp;
 let saturation = 1.0;
 
 let poly88 = false;
+let poly88_key = 0;
 
 function calculateGeometry() {
    if(border_top    !== undefined && (border_top    > 35 || border_top    < 0)) border_top    = undefined;

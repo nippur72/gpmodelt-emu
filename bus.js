@@ -38,6 +38,11 @@ function io_read(ioport) {
          // serial status, always ready
          return serial.receiveStatus();
 
+      case 0xe8:
+         // poly 88 ascii keyboard
+         if(poly88) return poly88_key;
+         else return 0;
+
       case 0xBC:
       case 0xBD:
       case 0xBE:
