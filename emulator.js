@@ -55,8 +55,9 @@ let cpu = new Z80({ mem_read, mem_write, io_read, io_write });
 const lineRate = 10000000 / 640;             // 640 dot pixels per line (512 active area)
 const frameRate = lineRate / 312.5;          // 50 Hz PAL standard
 const frameDuration = 1000/frameRate;        // duration of 1 frame in msec
-const cpuSpeed = 10000000 / 4;               // 10 MHz divided by 4
-const cyclesPerLine = (cpuSpeed / lineRate);
+
+let cpuSpeed = 10000000 / 4;               // 10 MHz divided by 4
+let cyclesPerLine = (cpuSpeed / lineRate);
 
 let stopped = false; // allows to stop/resume the emulation
 

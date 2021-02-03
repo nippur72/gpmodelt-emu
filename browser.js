@@ -190,6 +190,9 @@ function parseQueryStringCommands() {
 
    if(options.poly88 !== undefined) {
       poly88 = options.poly88;
+
+      cpuSpeed /= 2;
+      cyclesPerLine /= 2;
    }
 
    if(options.bt !== undefined || 
