@@ -130,6 +130,7 @@ function power() {
    zap();
    renderAllLines();
    cpu.reset();
+   SASI_reset();
 }
 
 function stop() {   
