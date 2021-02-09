@@ -30,6 +30,9 @@ BA51: C3 00 00                   LBA51: JP      0000h
 BA54: 05                         LBA54: DB      05h
 BA55: 05                                DB      05h
 BA56: 18                                DB      18h
+
+INIT_SERIAL_DATA:
+
 BA57: 01                                DB      01h
 BA58: 00                                DB      00h
 BA59: 02                                DB      02h
@@ -40,167 +43,117 @@ BA5D: 04                                DB      04h
 BA5E: 44                                DB      44h     ; 'D'
 BA5F: 05                                DB      05h
 BA60: EA                                DB      0EAh
-BA61: 21                                DB      21h     ; '!'
-BA62: 00                                DB      00h
-BA63: 20                                DB      20h     ; ' '
-BA64: 00                                DB      00h
-BA65: 21                                DB      21h     ; '!'
-BA66: 00                                DB      00h
-BA67: D4                                DB      0D4h
-BA68: 00                                DB      00h
-BA69: D5                                DB      0D5h
-BA6A: 00                                DB      00h
-BA6B: 00                                DB      00h
-BA6C: 00                                DB      00h
-BA6D: 00                                DB      00h
-BA6E: 00                                DB      00h
-BA6F: 00                                DB      00h
-BA70: 00                                DB      00h
-BA71: 00                                DB      00h
-BA72: 00                                DB      00h
-BA73: B6                                DB      0B6h
-BA74: BC                                DB      0BCh
-BA75: E4                                DB      0E4h
-BA76: BA                                DB      0BAh
-BA77: 92                                DB      92h
-BA78: BF                                DB      0BFh
-BA79: 36                                DB      36h     ; '6'
-BA7A: BD                                DB      0BDh
-BA7B: 00                                DB      00h
-BA7C: 00                                DB      00h
-BA7D: 00                                DB      00h
-BA7E: 00                                DB      00h
-BA7F: 00                                DB      00h
-BA80: 00                                DB      00h
-BA81: 00                                DB      00h
-BA82: 00                                DB      00h
-BA83: B6                                DB      0B6h
-BA84: BC                                DB      0BCh
-BA85: F3                                DB      0F3h
-BA86: BA                                DB      0BAh
-BA87: 92                                DB      92h
-BA88: BF                                DB      0BFh
-BA89: 32                                DB      32h     ; '2'
-BA8A: BF                                DB      0BFh
-BA8B: 00                                DB      00h
-BA8C: 00                                DB      00h
-BA8D: 00                                DB      00h
-BA8E: 00                                DB      00h
-BA8F: 00                                DB      00h
-BA90: 00                                DB      00h
-BA91: 00                                DB      00h
-BA92: 00                                DB      00h
-BA93: 00                                DB      00h
-BA94: 00                                DB      00h
-BA95: 00                                DB      00h
-BA96: 00                                DB      00h
-BA97: 00                                DB      00h
-BA98: 00                                DB      00h
-BA99: 00                                DB      00h
-BA9A: 00                                DB      00h
-BA9B: BB                                DB      0BBh
-BA9C: BA                                DB      0BAh
-BA9D: 00                                DB      00h
-BA9E: 00                                DB      00h
-BA9F: 00                                DB      00h
-BAA0: 00                                DB      00h
-BAA1: 00                                DB      00h
-BAA2: 00                                DB      00h
-BAA3: B6                                DB      0B6h
-BAA4: BC                                DB      0BCh
-BAA5: D5                                DB      0D5h
-BAA6: BA                                DB      0BAh
-BAA7: A2                                DB      0A2h
-BAA8: BF                                DB      0BFh
-BAA9: 52                                DB      52h     ; 'R'
-BAAA: BF                                DB      0BFh
-BAAB: BB                                DB      0BBh
-BAAC: BA                                DB      0BAh
-BAAD: 00                                DB      00h
-BAAE: 00                                DB      00h
-BAAF: 00                                DB      00h
-BAB0: 00                                DB      00h
-BAB1: 00                                DB      00h
-BAB2: 00                                DB      00h
-BAB3: B6                                DB      0B6h
-BAB4: BC                                DB      0BCh
-BAB5: D5                                DB      0D5h
-BAB6: BA                                DB      0BAh
-BAB7: B2                                DB      0B2h
-BAB8: BF                                DB      0BFh
-BAB9: 72                                DB      72h     ; 'r'
-BABA: BF                                DB      0BFh
-BABB: 01                                DB      01h
-BABC: 07                                DB      07h
-BABD: 0D                                DB      0Dh
-BABE: 13                                DB      13h
-BABF: 19                                DB      19h
-BAC0: 05                                DB      05h
-BAC1: 0B                                DB      0Bh
-BAC2: 11                                DB      11h
-BAC3: 17                                DB      17h
-BAC4: 03                                DB      03h
-BAC5: 09                                DB      09h
-BAC6: 0F                                DB      0Fh
-BAC7: 15                                DB      15h
-BAC8: 02                                DB      02h
-BAC9: 08                                DB      08h
-BACA: 0E                                DB      0Eh
-BACB: 14                                DB      14h
-BACC: 1A                                DB      1Ah
-BACD: 06                                DB      06h
-BACE: 0C                                DB      0Ch
-BACF: 12                                DB      12h
-BAD0: 18                                DB      18h
-BAD1: 04                                DB      04h
-BAD2: 0A                                DB      0Ah
-BAD3: 10                                DB      10h
-BAD4: 16                                DB      16h
-BAD5: 1A                                DB      1Ah
-BAD6: 00                                DB      00h
-BAD7: 03                                DB      03h
-BAD8: 07                                DB      07h
-BAD9: 00                                DB      00h
-BADA: F2                                DB      0F2h
-BADB: 00                                DB      00h
-BADC: 3F                                DB      3Fh     ; '?'
-BADD: 00                                DB      00h
-BADE: C0                                DB      0C0h
-BADF: 00                                DB      00h
-BAE0: 10                                DB      10h
-BAE1: 00                                DB      00h
-BAE2: 02                                DB      02h
-BAE3: 00                                DB      00h
-BAE4: 00                                DB      00h
-BAE5: 02                                DB      02h
-BAE6: 04                                DB      04h
-BAE7: 0F                                DB      0Fh
-BAE8: 00                                DB      00h
-BAE9: DF                                DB      0DFh
-BAEA: 0F                                DB      0Fh
-BAEB: 3F                                DB      3Fh     ; '?'
-BAEC: 02                                DB      02h
-BAED: FF                                DB      0FFh
-BAEE: 80                                DB      80h
-BAEF: 00                                DB      00h
-BAF0: 00                                DB      00h
-BAF1: 01                                DB      01h
-BAF2: 00                                DB      00h
-BAF3: 00                                DB      00h
-BAF4: 02                                DB      02h
-BAF5: 07                                DB      07h
-BAF6: 7F                                DB      7Fh
-BAF7: 0F                                DB      0Fh
-BAF8: 47                                DB      47h     ; 'G'
-BAF9: 00                                DB      00h
-BAFA: 3F                                DB      3Fh     ; '?'
-BAFB: 00                                DB      00h
-BAFC: 80                                DB      80h
-BAFD: 00                                DB      00h
-BAFE: 10                                DB      10h
-BAFF: 00                                DB      00h
-BB00: 01                                DB      01h
-BB01: 00                                DB      00h
+
+;BA61:
+DISK_UNIT_TABLE:
+   DW $0021                                
+   DW $0020                                
+   DW $0021                                
+   DW $00D4                                
+   DW $00D5                                
+
+
+DPH_TABLE:
+
+; LOGICAL UNIT A:
+
+;BA6B:
+
+DW $0000        ; SKEWTABLE (no skewtable)
+DW $00,$00,$00  ; scratch pad bytes
+DW $BCB6        ; DIRBUF
+DW $BAE4        ; DPB disk parameter block
+DW $BF92        ; CSVAREA 
+DW $BD36        ; ALVAREA
+
+; LOGICAL UNIT B:
+
+;BA7B
+
+DW $0000        ; SKEWTABLE (no skewtable)
+DW $00,$00,$00  ; scratch pad bytes
+DW $BCB6        ; DIRBUF
+DW $BAF3        ; DPB disk parameter block
+DW $BF92        ; CSVAREA 
+DW $BF32        ; ALVAREA
+
+; LOGICAL UNIT C:
+
+;BA8B:
+DS 16           ; unit C: is empty
+
+; LOGICAL UNIT D: (floppy 8")
+
+;BA9B:
+
+DW $BABB        ; SKEWTABLE
+DW $00,$00,$00  ; scratch pad bytes
+DW $BCB6        ; DIRBUF
+DW $BAD5        ; DPB disk parameter block
+DW $BFA2        ; CSVAREA 
+DW $BF52        ; ALVAREA
+
+; LOGICAL UNIT E: (floppy 8" 1791)
+
+;BABB:
+
+DW $BABB        ; SKEWTABLE
+DW $00,$00,$00  ; scratch pad bytes
+DW $BCB6        ; DIRBUF
+DW $BAD5        ; DPB disk parameter block
+DW $BFB2        ; CSVAREA 
+DW $BF72        ; ALVAREA
+
+;skew table for floppy discs D and E
+SKEWTABLE:
+
+;BABB:
+
+DB $01,$07,$0D,$13,$19,$05,$0B,$11,$17,$03,$09,$0F,$15,$02,$08,$0E,$14,$1A,$06,$0C,$12,$18,$04,$0A,$10,$16
+
+; disk parameter block for units D: and E:
+DPB_DE:
+;BAD5:
+
+DW $001A             ;NSECTORS - SECTORS PER TRACK
+DB $03               ;BSH - BLOCK SHIFT FACTOR (1024 bytes)
+DB $07               ;BLM - BLOCK MASK
+DB $00               ;EXM - EXTENT MASK
+DW $00F2             ;NBLOCKS - NUMBER OF BLOCKS
+DB $3F,$00           ;DIRENTRY SIZE
+DB $C0,$00           ;AL0, AL1
+DW $0010             ;CHECKSUM AREA SIZE IN BYTES
+DW $0002             ;RESERVED_TRACKS - NUMBER OF RESERVED TRACKS AT THE START OF THE DISK
+
+; disk parameter block for unit A:
+DPB_A:
+;BAE4:
+
+DW $0200             ;NSECTORS - SECTORS PER TRACK
+DB $04               ;BSH - BLOCK SHIFT FACTOR (2048 bytes)
+DB $0F               ;BLM - BLOCK MASK
+DB $00               ;EXM - EXTENT MASK
+DW $0FDF             ;NBLOCKS - NUMBER OF BLOCKS
+DW $023F             ;DIRENTRY SIZE
+DB $FF,$80           ;AL0, AL1
+DW $0000             ;CHECKSUM AREA SIZE IN BYTES
+DW $0001             ;RESERVED_TRACKS - NUMBER OF RESERVED TRACKS AT THE START OF THE DISK
+
+;disk parameter block for unit B:
+DPB_B:
+
+;BAF3:
+
+DW $0200             ;NSECTORS - SECTORS PER TRACK
+DB $07               ;BSH - BLOCK SHIFT FACTOR (16384 bytes)
+DB $7F               ;BLM - BLOCK MASK
+DB $0F               ;EXM - EXTENT MASK
+DW $0047             ;NBLOCKS - NUMBER OF BLOCKS
+DW $003F             ;DIRENTRY SIZE
+DB $80,$00           ;AL0, AL1
+DW $0010             ;CHECKSUM AREA SIZE IN BYTES
+DW $0001             ;RESERVED_TRACKS - NUMBER OF RESERVED TRACKS AT THE START OF THE DISK
+
 
                                         ; --- START PROC LBB02 ---
 BB02: 2A 26 BB                   LBB02: LD      HL,(LBB26)

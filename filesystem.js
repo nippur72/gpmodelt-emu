@@ -64,24 +64,26 @@ async function load(filename, p) {
       return false;
    }
    
-   const ext = filename.substr(-4).toLowerCase();
+   const ext = getFileExtension(filename);
 
         if(ext === ".bin") return await load_file(filename, p);
    else if(ext === ".com") return await load_file(filename, p);
    else if(ext === ".img") return await load_disk(filename, p);
+   else if(ext === ".hd")  return await load_hd(filename);
    else {
-      console.log("give filename .bin, .com or .img extension");
+      console.log(`extension "${ext}" not supported`);
       return false;
    }
 }
 
 async function save(filename, p1, p2) {
-   const ext = filename.substr(-4).toLowerCase();
+   const ext = getFileExtension(filename);
 
         if(ext == ".bin") await save_file(filename, p1, p2);
    else if(ext == ".com") await save_file(filename, p1, p2);
    else if(ext == ".img") await save_disk(filename, p1);
-   else console.log("give filename .bin,.com or .img extension");
+   else if(ext == ".hd")  await save_hd(filename);
+   else console.log(`extension "${ext}" not supported`);
 }
 
 function loadBytes(bytes, address, fileName) {
@@ -141,6 +143,19 @@ async function load_disk(diskname, drive) {
    return true;
 }
 
+async function load_hd(hdname) {
+   const bytes = await readFile(hdname);
+   hard_disks[0] = new HardDisk(bytes);
+   console.log(`hard disk has been loaded with "${hdname}" (${bytes.length} bytes)`);
+   return true;
+}
+
+async function save_hd(hdname) {
+   const bytes = hard_disks[0].image;
+   await writeFile(hdname, bytes);
+   console.log(`hard disk saved as "${hdname}" (${bytes.length} bytes)`);
+}
+
 async function remove(filename) {   
    if(await fileExists(filename)) {
       await removeFile(filename);
@@ -164,4 +179,10 @@ async function download(fileName) {
 
 function upload(fileName) {
    throw "not impemented";
+}
+
+function getFileExtension(fileName) {
+   let s = fileName.toLowerCase().split(".");
+   if(s.length == 1) return "";
+   return "." + s[s.length-1];
 }

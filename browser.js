@@ -88,8 +88,9 @@ dropZone.addEventListener('drop', e => {
 
 async function droppedFile(outName, bytes, address) {
 
-   const wav = /\.wav$/i;
-   if(wav.test(outName)) {
+   const ext = getFileExtension(outName);
+
+   if(ext == ".wav") {
       // WAV files
       //console.log("WAV file dropped");
       const info = decodeSync(bytes.buffer);
@@ -102,22 +103,25 @@ async function droppedFile(outName, bytes, address) {
       return;
    }   
 
-   const img = /\.img$/i;
-   if(img.test(outName)) {
+   if(ext == ".img") {
       await drag_drop_disk(outName, bytes);
       await load(outName, dropdrive);
       return;
    }
 
-   const bin = /\.bin$/i;
-   if(bin.test(outName)) {     
+   if(ext == ".hd") {
+      await drag_drop_disk(outName, bytes);
+      await load(outName, dropdrive);
+      return;
+   }
+
+   if(ext == ".bin") {
       await writeFile(outName, bytes)
       await crun(outName, address);
    }
 
    // CP/M .com
-   const com = /\.com$/i;
-   if(com.test(outName)) {
+   if(ext == ".com") {
       await writeFile(outName, bytes)
       await crun(outName, address);
       let pages = Math.ceil(bytes.length/256);
@@ -147,11 +151,6 @@ function getQueryStringObject(options) {
 function parseQueryStringCommands() {
    options = getQueryStringObject(options);
 
-   if(options.restore !== false) {
-      // try to restore previous state, if any
-      //restoreState();
-   }
-
    if(options.load !== undefined) {
       let [name, address] = options.load.split(",");  
 
@@ -160,39 +159,18 @@ function parseQueryStringCommands() {
       setTimeout(()=>fetchProgram(name, address), 1000);
    }
 
-   if(options.nodisk === true) {
-      emulate_fdc = false;      
-   }
-
-   if(options.notapemonitor === true) {
-      tape_monitor = false;      
-   }
-
-   if(options.scanlines === false) {
-      show_scanlines = false;   
-      buildPalette();   
-   }
-
-   if(options.saturation !== undefined) {
-           if(options.saturation < 0) saturation = 0;
-      else if(options.saturation > 1) saturation = 1;
-      else saturation = options.saturation;   
-      buildPalette();   
-   }
-
-   if(options.charset !== undefined) {
-      if(options.charset == "english") charset_offset = 0;
-      else if(options.charset == "bincode") charset_offset = 2048;
-      else if(options.charset == "german") charset_offset = 4096;
-      else if(options.charset == "french") charset_offset = 6144;
-      else console.warn(`option charset=${options.charset} not recognized`);
-   }
-
    if(options.poly88 !== undefined) {
       poly88 = options.poly88;
-
       cpuSpeed /= 2;
       cyclesPerLine /= 2;
+      ROM_CONFIG = "T08";
+   }
+
+   if(options.config!==undefined && options.config.toLowerCase() == "t20") {
+      ROM_CONFIG = "T20";
+   }
+   else if(options.config!==undefined && options.config.toLowerCase() == "t08") {
+      ROM_CONFIG = "T08";
    }
 
    if(options.bt !== undefined || 

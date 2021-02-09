@@ -62,10 +62,11 @@ let FDC_COMMAND_WRITE_SECTOR    = 4;
 let FDC_COMMAND_WRITE_TRACK     = 5;
 let FDC_COMMAND_FORCE_INTERRUPT = 6;
 
-let FDC_NSIDES     = FLOPPY_8_INCHES ? 2   : 2;
-let FDC_NTRACKS    = FLOPPY_8_INCHES ? 77  : 40;
-let FDC_NSECTORS   = FLOPPY_8_INCHES ? 26  : 18;
-let FDC_SECTORSIZE = FLOPPY_8_INCHES ? 128 : 128;
+let FDC_NSIDES      = FLOPPY_8_INCHES ? 2   : 2;
+let FDC_NTRACKS     = FLOPPY_8_INCHES ? 77  : 40;
+let FDC_NSECTORS    = FLOPPY_8_INCHES ? 26  : 18;
+let FDC_SECTORSIZE  = FLOPPY_8_INCHES ? 128 : 128;
+let FDC_FIRSTSECTOR = FLOPPY_8_INCHES ? 1 : 0;
 let FDC_MEDIA_SIZE = FDC_SECTORSIZE * FDC_NSECTORS * FDC_NSIDES * FDC_NTRACKS;
 
 // data is assumed to be stored on the media:
@@ -73,7 +74,7 @@ let FDC_MEDIA_SIZE = FDC_SECTORSIZE * FDC_NSECTORS * FDC_NSIDES * FDC_NTRACKS;
 
 function FDC_getpos(side, track, sector) {
 
-   let sec = FLOPPY_8_INCHES ? sector-1 : sector;
+   let sec = sector - FDC_FIRSTSECTOR;
 
    if(sec<0) {
       console.warn(`sector ${sec}`)
@@ -475,12 +476,13 @@ function FDC_parse_command(cmd) {
       if(debug_write_sector) console.log(`FDC WRITE SECTOR track ${FDC_track} sec ${FDC_sector} drive=${FDC_drive_number_descs[FDC_drive_number]} side=${FDC_side_descs[FDC_side]} t=${mem_read(0xbfda)} s=${mem_read(0xBFDB)}`);
 
       // sector out of range
-      if( ((FDC_sector<1 || FDC_sector>FDC_NSECTORS) && FLOPPY_8_INCHES) || (FDC_sector>=FDC_NSECTORS && !FLOPPY_8_INCHES)) {
+      //if( ((FDC_sector<1 || FDC_sector>FDC_NSECTORS) && FLOPPY_8_INCHES) || (FDC_sector>=FDC_NSECTORS && !FLOPPY_8_INCHES)) {
+      if(FDC_sector<FDC_FIRSTSECTOR || FDC_sector>=(FDC_NSECTORS+FDC_FIRSTSECTOR)) {
          FDC_STATUS_RNF = 1;
          FDC_INTREQ = 1;
          FDC_STATUS_BUSY = 0;
          FDC_update_status(FDC_COMMAND_WRITE_SECTOR);
-         console.warn(`sector ${FDC_sector} out of range `);
+         console.warn(`sector ${FDC_sector} out of range in write sector`);
          return;
       }
 
@@ -518,12 +520,13 @@ function FDC_parse_command(cmd) {
       if(debug_read_sector) console.log(`FDC READ SECTOR track ${FDC_track} sec ${FDC_sector} drive=${FDC_drive_number_descs[FDC_drive_number]} side=${FDC_side_descs[FDC_side]}`);
 
       // sector out of range
-      if( ((FDC_sector<1 || FDC_sector>FDC_NSECTORS) && FLOPPY_8_INCHES) || (FDC_sector>=FDC_NSECTORS && !FLOPPY_8_INCHES)) {
+      //if( ((FDC_sector<1 || FDC_sector>FDC_NSECTORS) && FLOPPY_8_INCHES) || (FDC_sector>=FDC_NSECTORS && !FLOPPY_8_INCHES)) {
+      if(FDC_sector<FDC_FIRSTSECTOR || FDC_sector>=(FDC_NSECTORS+FDC_FIRSTSECTOR)) {
          FDC_STATUS_RNF = 1;
          FDC_INTREQ = 1;
          FDC_STATUS_BUSY = 0;
          FDC_update_status(FDC_COMMAND_READ_SECTOR);
-         console.warn(`sector ${FDC_sector} out of range `);
+         console.warn(`sector ${FDC_sector} out of range in read sector`);
          return;
       }
 
@@ -556,14 +559,17 @@ function FDC_parse_command(cmd) {
       if(debug_read_address) console.log(`FDC READ ADDRESS track ${FDC_track} sec ${FDC_sector}`);
 
       // sector out of range
-      if( ((FDC_sector<1 || FDC_sector>FDC_NSECTORS) && FLOPPY_8_INCHES) || (FDC_sector>=FDC_NSECTORS && !FLOPPY_8_INCHES)) {
+      // check disabled to make it work with T20
+      /*
+      if(FDC_sector<FDC_FIRSTSECTOR || FDC_sector>=(FDC_NSECTORS+FDC_FIRSTSECTOR)) {
          FDC_STATUS_RNF = 1;
          FDC_INTREQ = 1;
          FDC_STATUS_BUSY = 0;
          FDC_update_status(FDC_COMMAND_READ_ADDRESS);
-         console.warn(`sector ${FDC_sector} out of range `);
+         console.warn(`sector ${FDC_sector} out of range in read address`);
          return;
       }
+      */
 
       FDC_STATUS_BUSY = 1;            // marks as busy
       FDC_sector_ptr = 0;             // starts sending first of 6 bytes
@@ -594,11 +600,7 @@ function FDC_parse_command(cmd) {
 
 class Drive {
    constructor(drive_num, image) {
-      this.drive_num = drive_num;
-      this.track = 80;
-      this.track_offset = 0;
       this.floppy = image === undefined ? new Uint8Array(FDC_MEDIA_SIZE) : this.resize(image);
-      this.write_enabled = 0;
    }
 
    resize(image) {
@@ -625,6 +627,12 @@ async function load_default_disks() {
          dropdrive = 0; await fetchProgram(`disks/${disk2}`);
       }
       if(poly88) paste("\rBD");
+   }
+
+   if(ROM_CONFIG == "T20") {
+      let hdname = "sa1004_extracted_xor_FF.hd";
+      if(await fileExists(hdname)) await load(hdname);
+      else await fetchProgram(`disks/${hdname}`);
    }
 }
 

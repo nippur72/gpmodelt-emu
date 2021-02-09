@@ -184,3 +184,27 @@ Mappatura dei dispositivi
 - print chr$(22)"80"    reverse off
 - print chr$(12)        cls
 
+# SA1004 disk geometry
+
+units: A,B,C,D,E
+
+A:
+   512 settori per traccia 
+   blocchi da 2048 bytes, 
+   4063 blocchi => 8.321.024 bytes per i files CP/M
+   directory tiene 575 files 
+   1 traccia riservata per il sistema
+   non prevede il cambio del supporto (disco fisso)
+   non utilizza la skew table (no soft interleave)
+
+B: 
+   512 settori per traccia 
+   blocchi da 16384 bytes
+   71 blocchi => 1.163.264 bytes per i files CP/M
+   directory tiene 63 files 
+   1 traccia riservata per il sistema
+   prevede il cambio del supporto (disco floppy?)
+   non utilizza la skew table (no soft interleave)
+
+C:   non utilizzato
+D,E: floppy 8" standard tipo T08

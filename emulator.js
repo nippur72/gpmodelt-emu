@@ -3,7 +3,7 @@
 // 64K RAM
 const memory = new Uint8Array(65536).fill(0x00); 
 
-let ROM_CONFIG = "standard";
+let ROM_CONFIG = "T20";
 
 function initMem() {
    function rom_load(rom, address) {
@@ -12,33 +12,50 @@ function initMem() {
       }
    }
 
-   if(ROM_CONFIG == "standard") {
+   if(ROM_CONFIG == "T08") {
       rom_load(rom_E000,        0xE000);
       rom_load(rom_E400,        0xE400);
       if(FLOPPY_8_INCHES) rom_load(rom_E800_FDC8,   0xE800);
       else                rom_load(rom_E800_FDC525, 0xE800);
       rom_load(rom_EC00_ACI,    0xEC00);
+
+      SCREEN_COLUMNS = 64;
+      SCREEN_ROWS    = 16;
+      SCREEN_COLUMNS_ARR = 64;
    }
 
+   /*
    if(ROM_CONFIG == "rig") {
       rom_load(rom_MON24_2,   0xE000);
       rom_load(rom_SYS2K_482, 0xE400);
       rom_load(rom_RIG02_U,   0xE800);
+      SCREEN_COLUMNS = 80;
+      SCREEN_ROWS    = 24;
+      SCREEN_COLUMNS_ARR = 128;
    }
 
    if(ROM_CONFIG == "scheda2") {
       rom_load(rom_U1MON1512, 0xE000);
       rom_load(rom_U3FDC,     0xE800);
+      SCREEN_COLUMNS = 80;
+      SCREEN_ROWS    = 24;
+      SCREEN_COLUMNS_ARR = 128;
    }
+   */
 
-   if(ROM_CONFIG == "scheda4") {
+   if(ROM_CONFIG == "T20") {
       rom_load(rom_T20V24, 0xE000);
+      SCREEN_COLUMNS = 80;
+      SCREEN_ROWS    = 24;
+      SCREEN_COLUMNS_ARR = 128;
    }
 
    // ROM di test di Gabriele Rossi
    // rom_load(rom_GPMON007, 0xE000);
 
    rom_load([ 0xC3, 0x00, 0xE0 ], 0x0000); // JP E000
+
+   calculateGeometry();
 }
 
 let speaker_A = 0;
@@ -321,9 +338,9 @@ function cstop() {
 // prints welcome message on the console
 welcome();
 
-power();
-
 parseQueryStringCommands();
+
+power();
 
 // starts drawing frames
 oneFrame();
@@ -352,6 +369,43 @@ debugBefore = (function() {
       if(pc === 0xEABF) console.warn(`*** HERE ***`);
       if(pc === 0xEA7E) console.warn(`*** HERE ***`);
       if(pc === 0xE8D6) console.warn(`*** HERE ***`);
+
+      //if(pc > 0xA000 && pc < 0xE000 && first_time) {
+      //   console.warn(`*** first time at ${cpu_status()} ***`);
+      //   first_time = false;
+      //}
+
+   };
+})();
+*/
+
+/*
+debugBefore = (function() {
+   let first_time = true;
+   return function() {
+      let pc = cpu.getState().pc;
+
+      if(pc === 0x0100) {
+         console.warn(`*** 0100H STARTED ***`);
+         console.log(cpu_status());
+      }
+
+      if(pc === 0xBA00) {
+         console.warn(`*** ${hex(pc,4)} START CPM BIOS ***`);
+         dumpMem(0xA400,0xB9FF);
+         dumpMem(0xBA00,0xBFFF);
+         console.log(cpu_status());
+      }
+
+      if(pc === 0x0103) {
+         console.warn(`*** ${hex(pc,4)} TOUCHED! ***`);
+         console.log(cpu_status());
+      }
+
+      if(pc === 0xeaa3) {
+         console.warn(`*** ${hex(pc,4)} TOUCHED! ***`);
+         console.log(cpu_status());
+      }
 
       //if(pc > 0xA000 && pc < 0xE000 && first_time) {
       //   console.warn(`*** first time at ${cpu_status()} ***`);

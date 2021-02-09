@@ -13,9 +13,11 @@ function io_read(ioport) {
    //if(port!=0xFF) warn(`read from unknown port ${hex(port)}h`);
    switch(port) {
 
-      case 0x6c:
       case 0x6d:
-         return HDC_read(port);
+         return ~SASI_read_pins() & 0xFF;
+
+      case 0x6c:
+         return ~SASI_read_data() & 0xFF;
 
       case 0x3f:
          return FDC_read_port_3f();
@@ -72,9 +74,11 @@ function io_write(ioport, value) {
          printerWrite(value);
          return;
 
-      case 0x6c:
       case 0x6d:
-         return HDC_write(port,value);
+         return SASI_write_pins(~value & 0xFF);
+
+      case 0x6c:
+         return SASI_write_data(~value & 0xFF);
 
       case 0x5e:
       case 0x5f:
