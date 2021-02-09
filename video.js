@@ -3,10 +3,19 @@
 let border_top = undefined;
 let border_bottom = undefined;
 let border_h = undefined;
-let aspect = 1.75; // aspect varies greatly due to Y deflection trimmer regulation
+let aspect = 1.5; //1.75; // aspect varies greatly due to Y deflection trimmer regulation
 
+/*
 const TEXT_W = 512; 
 const TEXT_H = 208;
+*/
+
+let SCREEN_COLUMNS = 80;
+let SCREEN_ROWS    = 24;
+let SCREEN_COLUMNS_ARR = 128;
+
+let TEXT_W;
+let TEXT_H;
 
 let HIDDEN_SCANLINES_TOP;
 let HIDDEN_SCANLINES_BOTTOM;
@@ -32,6 +41,9 @@ function calculateGeometry() {
    if(border_top    !== undefined && (border_top    > 35 || border_top    < 0)) border_top    = undefined;
    if(border_bottom !== undefined && (border_bottom > 35 || border_bottom < 0)) border_bottom = undefined;
    if(border_h      !== undefined && (border_h      > 15 || border_h      < 0)) border_h      = undefined;
+
+   TEXT_W = SCREEN_COLUMNS * 8;
+   TEXT_H = SCREEN_ROWS * 13;
 
    BORDER_V        = (border_top    !== undefined ? border_top    : 10);
    BORDER_V_BOTTOM = (border_bottom !== undefined ? border_bottom : 10);   
@@ -183,9 +195,9 @@ function drawFrame_y_text(y)
       set2 = rom_GCAR_B_U8;
    }
 
-   for(let x=0; x<64; x++)
+   for(let x=0; x<SCREEN_COLUMNS; x++)
    {
-      let code = memory[video_ram+(row*64)+x];
+      let code = memory[video_ram+(row*SCREEN_COLUMNS_ARR)+x];
 
       let reverse = ((code & 128) >> 7) == 0;
       let fg = 10;
