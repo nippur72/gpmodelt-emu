@@ -215,7 +215,7 @@ function copyArray(source, dest) {
    source.forEach((e,i)=>dest[i] = e);
 }
 
-function dowloadBytes(fileName, buffer) {
+function downloadBytes(fileName, buffer) {
    let blob = new Blob([buffer], {type: "application/octet-stream"});
    saveAs(blob, fileName);
    console.log(`downloaded "${fileName}"`);
