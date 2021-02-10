@@ -5,7 +5,8 @@ function mem_read(address) {
 function mem_write(address, value) {
    // TODO replicate video memory pages
    if(address <= 0xCFFF) memory[address] = value;
-   else console.warn(`ROM write at address ${hex(address,4)}h value ${hex(value)}h pc=${hex(cpu.getState().pc,4)}h`);
+   // warn disabled for T20 firmware
+   // else console.warn(`ROM write at address ${hex(address,4)}h value ${hex(value)}h pc=${hex(cpu.getState().pc,4)}h`);
 }
 
 function io_read(ioport) {  
