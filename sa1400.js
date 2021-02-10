@@ -513,8 +513,8 @@ CLASS 7 COMMANDS
 */
 
 let HDC_MEDIA_SIZE = 256 * 256 * 32 * 4;
+let FHDC_MEDIA_SIZE = 32 * 256 * 77 * 2;
 
-/***************/
 class HardDisk {
    constructor(image) {
       this.image = image === undefined ? new Uint8Array(HDC_MEDIA_SIZE).fill(0xE5) : this.resize(image);
