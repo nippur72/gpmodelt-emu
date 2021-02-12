@@ -128,7 +128,7 @@ function renderAllLines() {
 
 let last_timestamp = 0;
 function oneFrame(timestamp) {
-   let stamp = timestamp === undefined ? 0 : timestamp;
+   let stamp = timestamp === undefined ? last_timestamp : timestamp;
    let msec = stamp - last_timestamp;
    last_timestamp = stamp;
 
