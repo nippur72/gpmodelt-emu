@@ -161,8 +161,6 @@ function parseQueryStringCommands() {
 
    if(options.poly88 !== undefined) {
       poly88 = options.poly88;
-      cpuSpeed /= 2;
-      cyclesPerLine /= 2;
       ROM_CONFIG = "T08";
    }
 
@@ -210,4 +208,18 @@ function rewind_tape() {
 
 function stop_tape() {   
    tapePtr = tapeLen;   
+}
+
+let haltD = false;
+function update_halt_led() {
+   // slow down updates
+   if(frames % 20 != 0) return;
+
+   // update HALT status
+   let halt = cpu.getState().halted;
+   if(haltD != halt) {
+      const element = document.getElementById("halt");
+      element.style.display = halt ? "block" : "none";
+   }
+   haltD = halt;
 }

@@ -1,24 +1,13 @@
 // ChildZ screen geometry: 640 x 321 (512x208 visible)
 
-let border_top = undefined;
-let border_bottom = undefined;
-let border_h = undefined;
 let aspect = 1.5; //1.75; // aspect varies greatly due to Y deflection trimmer regulation
 
-/*
-const TEXT_W = 512; 
-const TEXT_H = 208;
-*/
-
-let SCREEN_COLUMNS = 80;
-let SCREEN_ROWS    = 24;
+let SCREEN_COLUMNS     = 80;
+let SCREEN_ROWS        = 24;
 let SCREEN_COLUMNS_ARR = 128;
 
 let TEXT_W;
 let TEXT_H;
-
-let HIDDEN_SCANLINES_TOP;
-let HIDDEN_SCANLINES_BOTTOM;
 
 let BORDER_V;
 let BORDER_V_BOTTOM;
@@ -26,7 +15,7 @@ let BORDER_H;
 let SCREEN_W;
 let SCREEN_H;
 let DOUBLE_SCANLINES = 2;
-let TOTAL_SCANLINES = HIDDEN_SCANLINES_TOP + BORDER_V + TEXT_H + BORDER_V_BOTTOM + HIDDEN_SCANLINES_BOTTOM;
+let TOTAL_SCANLINES = BORDER_V + TEXT_H + BORDER_V_BOTTOM;
 
 let canvas, canvasContext;
 let screenCanvas, screenContext;
@@ -35,25 +24,21 @@ let imageData, bmp;
 let saturation = 1.0;
 
 let poly88 = false;
+let poly88_paddles = true;
 let poly88_key = 0;
 
 function calculateGeometry() {
-   if(border_top    !== undefined && (border_top    > 35 || border_top    < 0)) border_top    = undefined;
-   if(border_bottom !== undefined && (border_bottom > 35 || border_bottom < 0)) border_bottom = undefined;
-   if(border_h      !== undefined && (border_h      > 15 || border_h      < 0)) border_h      = undefined;
 
    TEXT_W = SCREEN_COLUMNS * 8;
-   TEXT_H = SCREEN_ROWS * 13;
+   TEXT_H = SCREEN_ROWS    * 13;
 
-   BORDER_V        = (border_top    !== undefined ? border_top    : 10);
-   BORDER_V_BOTTOM = (border_bottom !== undefined ? border_bottom : 10);   
-   HIDDEN_SCANLINES_TOP    = 35 - BORDER_V; 
-   HIDDEN_SCANLINES_BOTTOM = 35 - BORDER_V_BOTTOM;   
-   BORDER_H = border_h !== undefined ? border_h : 15;    
+   BORDER_V        = 10;
+   BORDER_V_BOTTOM = 10;
+   BORDER_H = 15;
    SCREEN_W = BORDER_H + TEXT_W + BORDER_H;
    SCREEN_H = BORDER_V + TEXT_H + BORDER_V_BOTTOM;
    DOUBLE_SCANLINES = 2;
-   TOTAL_SCANLINES = HIDDEN_SCANLINES_TOP + BORDER_V + TEXT_H + BORDER_V_BOTTOM + HIDDEN_SCANLINES_BOTTOM; // must be 312
+   TOTAL_SCANLINES = BORDER_V + TEXT_H + BORDER_V_BOTTOM; // must be 312
 
    // canvas is the outer canvas where the aspect ratio is corrected
    canvas = document.getElementById("canvas");
@@ -144,12 +129,16 @@ function drawFrame() {
 
 function drawFrame_y()
 {
-   drawFrame_y_text(raster_y - BORDER_V);
-   drawFrame_y_border(raster_y);
+   if(raster_y < SCREEN_H) {
+      drawFrame_y_text(raster_y - BORDER_V);
+      drawFrame_y_border(raster_y);
+   }
    raster_y++;
-   if(raster_y >= SCREEN_H) {
+   if(raster_y >= SCREEN_H) {  // TODO numscanlines
       raster_y = 0; 
-      updateCanvas();     
+      updateCanvas();
+      if(end_of_frame_hook !== undefined) end_of_frame_hook();
+      frames++;
    }
 }
 

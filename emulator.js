@@ -69,24 +69,46 @@ let cpu = new Z80({ mem_read, mem_write, io_read, io_write });
 
 /******************/
 
-const lineRate = 10000000 / 640;             // 640 dot pixels per line (512 active area)
-const frameRate = lineRate / 312.5;          // 50 Hz PAL standard
-const frameDuration = 1000/frameRate;        // duration of 1 frame in msec
+let system_clock;
+let dotpixels;
+let numscanlines;
+let lineRate;
+let frameRate;
+let cpuSpeed;
+let cyclesPerLine;
+let hiddenlines;
 
-let cpuSpeed = 10000000 / 4;               // 10 MHz divided by 4
-let cyclesPerLine = (cpuSpeed / lineRate);
+function systemConfig() {
+
+   let T08 = ROM_CONFIG == "T08";
+   let T20 = ROM_CONFIG == "T20";
+
+   system_clock = T08 ? 10000000 : 12000000;   // 10 Mhz 64x16, 24Mhz/2 80x24
+   dotpixels    = T08 ? 640 : 768;             // number of dot pixels per line (512, 640 active area)
+   numscanlines = 312.5;                       // fixed PAL number of lines
+   hiddenlines  = T08 ? 312-(16*13) : 0;       // 64x16 has hidden lines, 80x24 has not
+   lineRate = system_clock / dotpixels;        // results in 15625 standard PAL
+   frameRate = lineRate / numscanlines;        // results in 50 Hz standard PAL
+   cpuSpeed = system_clock / 4;                // CPU speed
+   cyclesPerLine = (cpuSpeed / lineRate);      // how much CPU cycles per single scan line
+
+   if(poly88) {
+      cpuSpeed /= 2;
+      cyclesPerLine /= 2;
+   }
+}
 
 let stopped = false; // allows to stop/resume the emulation
 
 let frames = 0;
-let nextFrameTime = 0;
 let averageFrameTime = 0;
-let minFrameTime = Number.MAX_VALUE;
 
 let cycle = 0;
 let cycles = 0;
 
 let throttle = false;
+
+let audioEnabled = false;
 
 let options = {
    load: undefined,
@@ -94,90 +116,52 @@ let options = {
    notapemonitor: false,
    scanlines: true,
    saturation: 1.0,
-   bt: undefined,
-   bb: undefined,
-   bh: undefined
 };
 
-function cpuCycle() {
-   if(debugBefore !== undefined) debugBefore();
-   let elapsed = cpu.run_instruction();
-   if(debugAfter !== undefined) debugAfter(elapsed);
-   cycle += elapsed;
-   cycles += elapsed;
-   writeAudioSamples(elapsed);
-   cloadAudioSamples(elapsed); 
-   if(csaving) csaveAudioSamples(elapsed);       
-   return elapsed;
-}
-
-// scanline version
-function renderLines(nlines, hidden) {
-   for(let t=0; t<nlines; t++) {
-      // draw video
-      if(!hidden) drawFrame_y();
-
-      // run cpu
-      while(true) {         
-         if(debugBefore !== undefined) debugBefore();
-         let elapsed = cpu.run_instruction();
-         if(debugAfter !== undefined) debugAfter(elapsed);
-         cycle += elapsed;
-         cycles += elapsed;
-         writeAudioSamples(elapsed);
-         cloadAudioSamples(elapsed); 
-         if(csaving) csaveAudioSamples(elapsed);       
-         
-         if(cycle>=cyclesPerLine) {
-            cycle-=cyclesPerLine;
-            break;            
-         }
-      } 
-   }
-}
-
-let haltD = false;
-
-function renderAllLines() {
-   renderLines(HIDDEN_SCANLINES_TOP, true);               
-   renderLines(SCREEN_H, false);                    
-   renderLines(HIDDEN_SCANLINES_BOTTOM, true);               
-
-   // update HALT status
-   let halt = cpu.getState().halted;
-   if(haltD != halt) {
-      const element = document.getElementById("halt");
-      element.style.display = halt ? "block" : "none";
-   }
-   haltD = halt;
-}
-
-let nextFrame;
 let end_of_frame_hook = undefined;
 
-function oneFrame() {   
-   const startTime = new Date().getTime();      
+function renderAllLines() {
+   systemTicks(cyclesPerLine*numscanlines);
+}
 
-   if(nextFrame === undefined) nextFrame = startTime;
+// NEW CODE
 
-   nextFrame = nextFrame + (1000/frameRate); // ~50Hz  
+let last_timestamp = 0;
+function oneFrame(timestamp) {
+   let stamp = timestamp === undefined ? 0 : timestamp;
+   let msec = stamp - last_timestamp;
+   last_timestamp = stamp;
 
-   renderAllLines();
-   frames++;
+   let ncycles = cpuSpeed / msec;
 
-   if(end_of_frame_hook !== undefined) end_of_frame_hook();
+   if(ncycles > cpuSpeed) ncycles = 0;
 
-   const now = new Date().getTime();
-   const elapsed = now - startTime;
-   averageFrameTime = averageFrameTime * 0.992 + elapsed * 0.008;
-   if(elapsed < minFrameTime) minFrameTime = elapsed;
+   systemTicks(ncycles);
 
-   let time_out = nextFrame - now;
-   if(time_out < 0 || throttle) {
-      time_out = 0;
-      nextFrame = undefined;      
+   averageFrameTime = averageFrameTime * 0.992 + msec * 0.008;
+
+   if(!stopped) requestAnimationFrame(oneFrame);
+}
+
+function systemTicks(ncycles) {
+   let endCycle = cycles + ncycles;
+
+   while(cycles < endCycle) {
+      if(debugBefore !== undefined) debugBefore();
+      let elapsed = cpu.run_instruction();
+      if(debugAfter !== undefined) debugAfter(elapsed);
+      cycle += elapsed;
+      cycles += elapsed;
+      if(audioEnabled) {
+         writeAudioSamples(elapsed);
+         cloadAudioSamples(elapsed);
+         if(csaving) csaveAudioSamples(elapsed);
+      }
+      if(cycle>=cyclesPerLine) {
+         cycle-=cyclesPerLine;
+         drawFrame_y();
+      }
    }
-   if(!stopped) setTimeout(()=>oneFrame(), time_out);   
 }
 
 // ********************************* CPU TO AUDIO BUFFER *********************************************
@@ -341,6 +325,9 @@ welcome();
 parseQueryStringCommands();
 
 power();
+
+// calculate cpu speed
+systemConfig();
 
 // starts drawing frames
 oneFrame();
