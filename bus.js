@@ -44,7 +44,10 @@ function io_read(ioport) {
       case 0xc0:
       case 0xe8:
          // poly 88 ascii keyboard
-         if(poly88) return poly88_key;
+         if(poly88) {
+            if(poly88_paddles) return poly88_paddles_arduino();
+            else return poly88_key;
+         }
          else return 0;
 
       case 0xBC:

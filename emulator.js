@@ -353,6 +353,25 @@ if(autoload !== undefined) {
 
 setTimeout(()=>load_default_disks(), 500);
 
+
+// simulate paddles on poly88
+let paddle0 = 0;
+let paddle1 = 0;
+(function() {
+   document.onmousemove = handleMouseMove;
+   let canvas = document.getElementById("canvas");
+   function handleMouseMove(event) {
+      paddle0 = Math.min(Math.floor(event.pageX/canvas.clientWidth * 128),127);
+      paddle1 = Math.min(Math.floor(event.pageY/canvas.clientHeight * 128),127);
+      //console.log(paddle0,paddle1);
+   }
+})();
+
+function poly88_paddles_arduino() {
+   if((cycles & (1<20))!=0) return paddle0;
+   else                     return paddle1 | 128;
+}
+
 /*
 // logs when PC = BA00h (CPM entry)
 debugBefore = (function() {
