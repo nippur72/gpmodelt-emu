@@ -57,7 +57,7 @@ function get_geometry(floppy8, double_side) {
         TYPE525:     true,
         NSIDES:      2,
         NTRACKS:     40,
-        NSECTORS:    18,
+        NSECTORS:    17,
         SECTORSIZE:  128,
         FIRSTSECTOR: 0,
         DOUBLESIDE:  true

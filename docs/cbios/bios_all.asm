@@ -19,20 +19,21 @@ PATCH_VERIFY    EQU 1              ; 1=avoid repeated code in VERIFY_LOOP routin
 ;
 IF FLOPPY_525
     NTRACKS         EQU 40
-    NSECTORS        EQU 18
+    NSECTORS        EQU 17           ; EQU 18 nel formato "new"
     SECTORSIZE      EQU 128
     RESERVED_TRACKS EQU 4
     STARTSECT       EQU 0
-    USE_SKEWING     EQU 0
+    USE_SKEWING     EQU 1            ; 0 nel formato "new"
     IF DOUBLE_SIDE
-        NBLOCKS         EQU 170
+        NBLOCKS         EQU 160      ; 170 nel formato "new"
         MAX_DRIVES      EQU 2
         BLOCKSIZE       EQU 1024
     ELSE
-        NBLOCKS         EQU 80
+        NBLOCKS         EQU 75       ; 80 nel formato "new"
         MAX_DRIVES      EQU 4
         BLOCKSIZE       EQU 1024
     ENDIF
+    DIRENTRIES          EQU $1f      ; $3f nel formato "new", 1f orig
 ELSE
     NTRACKS         EQU 77
     NSECTORS        EQU 26
@@ -49,6 +50,7 @@ ELSE
         MAX_DRIVES      EQU 4
         BLOCKSIZE       EQU 1024
     ENDIF
+    DIRENTRIES          EQU $3F
 ENDIF
 
 ; IOBYTE masks and bits
@@ -211,7 +213,7 @@ ENDIF
 IF USE_SKEWING
     SKEWTABLE:
     IF FLOPPY_525
-        DB 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17
+        DB 0,3,6,9,12,15,1,4,7,10,13,16,2,5,8,11,14,17
     ELSE
         DB $01,$07,$0D,$13,$19,$05,$0B,$11,$17,$03,$09,$0F,$15,$02,$08,$0E,$14,$1A,$06,$0C,$12,$18,$04,$0A,$10,$16
     ENDIF
@@ -231,9 +233,9 @@ DPB:
         DB $00               ;EXM - EXTENT MASK
     ENDIF
     DW NBLOCKS           ;NUMBER OF BLOCKS
-    DB $3F,$00           ;DIRENTRY SIZE
+    DW DIRENTRIES        ;DIRENTRY SIZE
     DB $C0,$00           ;AL0, AL1
-    DB $10,$00           ;CHECKSUM AREA SIZE IN BYTES
+    DW $10               ;CHECKSUM AREA SIZE IN BYTES
     DW RESERVED_TRACKS   ;NUMBER OF RESERVED TRACKS AT THE START OF THE DISK
 
 WBOOT:

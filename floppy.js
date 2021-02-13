@@ -62,12 +62,21 @@ let FDC_COMMAND_WRITE_SECTOR    = 4;
 let FDC_COMMAND_WRITE_TRACK     = 5;
 let FDC_COMMAND_FORCE_INTERRUPT = 6;
 
-let FDC_NSIDES      = FLOPPY_8_INCHES ? 2   : 2;
-let FDC_NTRACKS     = FLOPPY_8_INCHES ? 77  : 40;
-let FDC_NSECTORS    = FLOPPY_8_INCHES ? 26  : 18;
-let FDC_SECTORSIZE  = FLOPPY_8_INCHES ? 128 : 128;
-let FDC_FIRSTSECTOR = FLOPPY_8_INCHES ? 1 : 0;
-let FDC_MEDIA_SIZE = FDC_SECTORSIZE * FDC_NSECTORS * FDC_NSIDES * FDC_NTRACKS;
+let FDC_NSIDES;
+let FDC_NTRACKS;
+let FDC_NSECTORS;
+let FDC_SECTORSIZE;
+let FDC_FIRSTSECTOR;
+let FDC_MEDIA_SIZE;
+
+function recalcFloppy() {
+   FDC_NSIDES      = FLOPPY_8_INCHES ? 2   : 2;
+   FDC_NTRACKS     = FLOPPY_8_INCHES ? 77  : 40;
+   FDC_NSECTORS    = FLOPPY_8_INCHES ? 26  : 17;     // 18 nel formato "new"
+   FDC_SECTORSIZE  = FLOPPY_8_INCHES ? 128 : 128;
+   FDC_FIRSTSECTOR = FLOPPY_8_INCHES ? 1 : 0;
+   FDC_MEDIA_SIZE  = FDC_SECTORSIZE * FDC_NSECTORS * FDC_NSIDES * FDC_NTRACKS;
+}
 
 // data is assumed to be stored on the media:
 // track 0 side 0 [ sectors 0-26 ], track 0 side 1 [ sectors 0-26 ], ...
@@ -614,20 +623,19 @@ class Drive {
 const drives = [ new Drive(0), new Drive(1) ];
 
 async function load_default_disks() {
-   if(FLOPPY_8_INCHES) {
-      let disk1 = "GP16_IMD.img";
-      let disk2 = "GP02_IMD.img";
-      if(poly88) disk1 = "reverse.img";
-      if(await fileExists(disk1) && await fileExists(disk2)) {
-         await load(disk1,1);
-         await load(disk2,0);
-      }
-      else {
-         dropdrive = 1; await fetchProgram(`disks/${disk1}`);
-         dropdrive = 0; await fetchProgram(`disks/${disk2}`);
-      }
-      if(poly88) paste("\rBD");
+
+   let disk1 = FLOPPY_8_INCHES ? "GP16_IMD.img" : "disk_2x40x17x128xSS.img";
+   let disk2 = FLOPPY_8_INCHES ? "GP02_IMD.img" : "disk_2x40x17x128xSS.img";
+   if(poly88) disk1 = "reverse.img";
+   if(await fileExists(disk1) && await fileExists(disk2)) {
+      await load(disk1,1);
+      await load(disk2,0);
    }
+   else {
+      dropdrive = 1; await fetchProgram(`disks/${disk1}`);
+      dropdrive = 0; await fetchProgram(`disks/${disk2}`);
+   }
+   if(poly88) paste("\rBD");
 
    if(ROM_CONFIG == "T20") {
       let hdname = "SA1004_T20.hd";

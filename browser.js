@@ -159,16 +159,14 @@ function parseQueryStringCommands() {
       setTimeout(()=>fetchProgram(name, address), 1000);
    }
 
+   let rom = options.config == undefined ? "t20" : options.config.toLowerCase();
+        if(rom == "t20") ROM_CONFIG = "T20";
+   else if(rom == "t08") ROM_CONFIG = "T08";
+   else if(rom == "t10") ROM_CONFIG = "T10";
+
    if(options.poly88 !== undefined) {
       poly88 = options.poly88;
-      ROM_CONFIG = "T08";
-   }
-
-   if(options.config!==undefined && options.config.toLowerCase() == "t20") {
-      ROM_CONFIG = "T20";
-   }
-   else if(options.config!==undefined && options.config.toLowerCase() == "t08") {
-      ROM_CONFIG = "T08";
+      ROM_CONFIG = "T10";
    }
 
    if(options.bt !== undefined || 

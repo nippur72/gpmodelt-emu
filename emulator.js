@@ -15,13 +15,27 @@ function initMem() {
    if(ROM_CONFIG == "T08") {
       rom_load(rom_E000,        0xE000);
       rom_load(rom_E400,        0xE400);
-      if(FLOPPY_8_INCHES) rom_load(rom_E800_FDC8,   0xE800);
-      else                rom_load(rom_E800_FDC525, 0xE800);
+      rom_load(rom_E800_FDC525, 0xE800);   // 5" FDC
       rom_load(rom_EC00_ACI,    0xEC00);
 
       SCREEN_COLUMNS = 64;
       SCREEN_ROWS    = 16;
       SCREEN_COLUMNS_ARR = 64;
+
+      FLOPPY_8_INCHES = false;
+   }
+
+   if(ROM_CONFIG == "T10") {
+      rom_load(rom_E000,        0xE000);
+      rom_load(rom_E400,        0xE400);
+      rom_load(rom_E800_FDC8,   0xE800);   // 8" FDC
+      rom_load(rom_EC00_ACI,    0xEC00);
+
+      SCREEN_COLUMNS = 64;
+      SCREEN_ROWS    = 16;
+      SCREEN_COLUMNS_ARR = 64;
+
+      FLOPPY_8_INCHES = true;
    }
 
    /*
@@ -56,6 +70,8 @@ function initMem() {
    rom_load([ 0xC3, 0x00, 0xE0 ], 0x0000); // JP E000
 
    calculateGeometry();
+
+   recalcFloppy();
 }
 
 let speaker_A = 0;
@@ -70,6 +86,7 @@ let cpu = new Z80({ mem_read, mem_write, io_read, io_write });
 /******************/
 
 let system_clock;
+let cpu_divisor;
 let dotpixels;
 let numscanlines;
 let lineRate;
@@ -83,13 +100,14 @@ function systemConfig() {
    let T08 = ROM_CONFIG == "T08";
    let T20 = ROM_CONFIG == "T20";
 
-   system_clock = T08 ? 10000000 : 12000000;   // 10 Mhz 64x16, 24Mhz/2 80x24
-   dotpixels    = T08 ? 640 : 768;             // number of dot pixels per line (512, 640 active area)
+   system_clock = T20 ? 12000000 : 10000000;   // 10 Mhz 64x16, 24Mhz 80x24
+   cpu_divisor  = T20 ? 5 : 4;                 // cpu clock divisor from system clock
+   dotpixels    = T20 ? 768 : 640;             // number of dot pixels per line (512, 640 active area)
    numscanlines = 312.5;                       // fixed PAL number of lines
-   hiddenlines  = T08 ? 312-(16*13) : 0;       // 64x16 has hidden lines, 80x24 has not
+   hiddenlines  = T20 ? 0 : 312-(16*13);       // 64x16 has hidden lines, 80x24 has not
    lineRate = system_clock / dotpixels;        // results in 15625 standard PAL
    frameRate = lineRate / numscanlines;        // results in 50 Hz standard PAL
-   cpuSpeed = system_clock / 4;                // CPU speed
+   cpuSpeed = system_clock / cpu_divisor;      // CPU speed
    cyclesPerLine = (cpuSpeed / lineRate) / 2;  // how much CPU cycles per single scan line (/2 two pal frames)
 
    if(poly88) {

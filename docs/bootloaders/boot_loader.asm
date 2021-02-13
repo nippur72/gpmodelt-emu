@@ -8,7 +8,7 @@
 ;BOOT_MESSAGE    EQU 1       ; default 0
 
 IF FLOPPY_525
-    NSECTORS        EQU 18
+    NSECTORS        EQU 17    ; 18 in "new" format
     SECTORSIZE      EQU 128
     STARTSECT       EQU 0
     CCPSIZE         EQU $34
