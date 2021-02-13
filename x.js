@@ -14,15 +14,12 @@ debugBefore = ()=> {
    }
 }
 
-// count t-states in turbo tape
+// count t-states
 let ct = 0;
 debugBefore = ()=> {      
    const pc = cpu.getState().pc;
-   //if(pc === 0x8927) ct = cycles;
-   //if(pc === 0x892f) console.log(`${cycles-ct}`);
-
-   if(pc === 0x8969) ct = cycles;
-   if(pc === 0x8983) console.log(`${cycles-ct}`);
+   if(pc === 0x0282) ct = cycles;
+   if(pc === 0x028b) console.log(`${cycles-ct}`);
 }
 
 
@@ -429,3 +426,14 @@ for(let t=0; t<16; t++) mem_write(0xba8b+t, mem_read(0xba6b+t));
 mem_write_word(0xba7b-2, 0xBD36+31);
 dumpMem(0xba8b,0xba8b+16);
 memory[0xE663] = 42;
+
+// *************************************************************************************
+// count t-states in time.com
+let ct = 0;
+debugBefore = ()=> {
+   const pc = cpu.getState().pc;
+   if(pc === 0x028b) {
+      console.log(`${cycles-ct}`);
+      ct = cycles;
+   }
+}
