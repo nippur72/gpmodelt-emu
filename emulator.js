@@ -90,7 +90,7 @@ function systemConfig() {
    lineRate = system_clock / dotpixels;        // results in 15625 standard PAL
    frameRate = lineRate / numscanlines;        // results in 50 Hz standard PAL
    cpuSpeed = system_clock / 4;                // CPU speed
-   cyclesPerLine = (cpuSpeed / lineRate);      // how much CPU cycles per single scan line
+   cyclesPerLine = (cpuSpeed / lineRate) / 2;  // how much CPU cycles per single scan line (/2 two pal frames)
 
    if(poly88) {
       cpuSpeed /= 2;
@@ -132,7 +132,7 @@ function oneFrame(timestamp) {
    let msec = stamp - last_timestamp;
    last_timestamp = stamp;
 
-   let ncycles = cpuSpeed / msec;
+   let ncycles = cpuSpeed * (msec / 1000);
 
    if(ncycles > cpuSpeed) ncycles = 0;
 
