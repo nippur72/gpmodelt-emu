@@ -82,7 +82,7 @@ async function save(filename, p1, p2) {
         if(ext == ".bin") await save_file(filename, p1, p2);
    else if(ext == ".com") await save_file(filename, p1, p2);
    else if(ext == ".img") await save_disk(filename, p1);
-   else if(ext == ".hd")  await save_hd(filename);
+   else if(ext == ".hd")  await save_hd(filename, p1);
    else console.log(`extension "${ext}" not supported`);
 }
 
@@ -145,15 +145,15 @@ async function load_disk(diskname, drive) {
 
 async function load_hd(hdname) {
    const bytes = await readFile(hdname);
-   hard_disks[0] = new HardDisk(bytes);
+   hard_disks[0] = new HardDisk(bytes, HDC_MEDIA_SIZE);
    console.log(`hard disk has been loaded with "${hdname}" (${bytes.length} bytes)`);
    return true;
 }
 
-async function save_hd(hdname) {
-   const bytes = hard_disks[0].image;
+async function save_hd(hdname, lun) {
+   const bytes = hard_disks[lun].image;
    await writeFile(hdname, bytes);
-   console.log(`hard disk saved as "${hdname}" (${bytes.length} bytes)`);
+   console.log(`hard disk ${lun} saved as "${hdname}" (${bytes.length} bytes)`);
 }
 
 async function remove(filename) {   
@@ -175,6 +175,11 @@ async function download(fileName) {
    let blob = new Blob([bytes], {type: "application/octet-stream"});   
    saveAs(blob, fileName);
    console.log(`downloaded "${fileName}"`);
+}
+
+async function dsave(fileName, p1, p2) {
+   await save(fileName, p1, p2);
+   download(fileName);
 }
 
 function upload(fileName) {

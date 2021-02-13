@@ -630,7 +630,7 @@ async function load_default_disks() {
    }
 
    if(ROM_CONFIG == "T20") {
-      let hdname = "sa1004_extracted_xor_FF.hd";
+      let hdname = "SA1004_T20.hd";
       if(await fileExists(hdname)) await load(hdname);
       else await fetchProgram(`disks/${hdname}`);
    }

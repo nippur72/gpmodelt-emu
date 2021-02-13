@@ -3,6 +3,9 @@ SA_CTRL_PORT   EQU $6D
 
 SA_OUT_PIN_RESET EQU 0FBh    ; RES is BIT 2
 
+CURRDRIVE EQU $BFDC
+DPH_TABLE EQU $BA6B
+
 ;**************************************************
 ; 0 BSY
 ; 1 MSG
@@ -982,20 +985,20 @@ E657: C9                         LE657: RET
 
 E658: 21 00 00                   LE658: LD      HL,0000h
 E65B: 79                                LD      A,C
-E65C: 32 DC BF                          LD      (0BFDCh),A
+E65C: 32 DC BF                          LD      (CURRDRIVE),A
 E65F: 32 87 BB                          LD      (0BB87h),A
-E662: FE 02                             CP      02h
-E664: C8                                RET     Z
+E662: FE 02                             CP      02h         ; IF drive=2 THEN RETURN
+E664: C8                                RET     Z           ;
 E665: FE 05                             CP      05h
 E667: D0                                RET     NC
-E668: 3A DC BF                          LD      A,(0BFDCh)
+E668: 3A DC BF                          LD      A,(CURRDRIVE)
 E66B: 6F                                LD      L,A
 E66C: 26 00                             LD      H,00h
 E66E: 29                                ADD     HL,HL
 E66F: 29                                ADD     HL,HL
 E670: 29                                ADD     HL,HL
 E671: 29                                ADD     HL,HL
-E672: 11 6B BA                          LD      DE,0BA6Bh
+E672: 11 6B BA                          LD      DE,DPH_TABLE
 E675: 19                                ADD     HL,DE
 E676: C9                                RET
 
@@ -1635,7 +1638,7 @@ EAA2: A0                                AND     B
                                  RIG_READSECTOR1:
 EAA3: CD 2A E8                          CALL    RIG_SET_IX_STATUS_READ
 EAA6: DD CB 09 6E                       BIT     5,(IX+IX_CURRDRIVE)     ;
-EAAA: 28 54                             JR      Z,LEB00                 ; if FDC then goto FDC
+EAAA: 28 54                             JR      Z,READ_SECTOR_FDC       ; if FDC then goto FDC
 
 EAAC: DD 36 11 05                       LD      (IX+IX_RETRYCOUNT),05h  ; retry 5 times max
                                  READ_SECTOR_RETRY:
@@ -1679,14 +1682,15 @@ EAFE: 3C                                INC     A                         ; retr
 EAFF: C9                                RET
 
 ;**************************************************************************
-;generic disk op
-EB00: 0E BF                      LEB00: LD      C,0BFh
+;read sector FDC version
+                                 READ_SECTOR_FDC:
+EB00: 0E BF                             LD      C,0BFh
 EB02: DD 6E 0A                          LD      L,(IX+IX_DSKBUFPTR+0)
 EB05: DD 66 0B                          LD      H,(IX+IX_DSKBUFPTR+1)
 EB08: 3E 7F                             LD      A,7Fh   ; ''
 EB0A: D3 BC                             OUT     (FDCCMD),A
 EB0C: CD 5E E9                          CALL    LE95E
-EB0F: 20 EF                             JR      NZ,LEB00
+EB0F: 20 EF                             JR      NZ,READ_SECTOR_FDC
 EB11: FE 00                             CP      00h
 EB13: C8                                RET     Z
 EB14: AF                                XOR     A

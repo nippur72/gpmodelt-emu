@@ -144,11 +144,10 @@ function SA_tick() {
             }
             else if(command == 8) {
                // read command
-               let LUN = SA.COMMAND[1] >> 5;
                let addr = (SA.COMMAND[3] << 0) | (SA.COMMAND[2] << 8) | ((SA.COMMAND[1] & 0b11111) << 16);
                let nblocks = SA.COMMAND[4];
 
-               SA.lun     = LUN == 1 ? 0 : 1;
+               SA.lun     = lun_to_id(SA.COMMAND[1]);
                SA.counter = nblocks * 256;
                SA.pos     = addr * 256;
 
@@ -158,11 +157,10 @@ function SA_tick() {
             }
             else if(command == 0x0a) {
                // write command
-               let LUN = SA.COMMAND[1] >> 5;
                let addr = (SA.COMMAND[3] << 0) | (SA.COMMAND[2] << 8) | ((SA.COMMAND[1] & 0b11111) << 16);
                let nblocks = SA.COMMAND[4];
 
-               SA.lun     = LUN == 1 ? 0 : 1;
+               SA.lun     = lun_to_id(SA.COMMAND[1]);
                SA.counter = nblocks * 256;
                SA.pos     = addr * 256;
 
@@ -187,16 +185,13 @@ function SA_tick() {
          else if(SA.COMMAND.length == 10 && command_class == 1) {
             if(command == 0) {
                // copy blocks
-               let LUNs = SA.COMMAND[1] >> 5;
-               let LUNd = SA.COMMAND[5] >> 5;
-
                let nblocks = SA.COMMAND[4];
 
                let addrs = (SA.COMMAND[3] << 0) | (SA.COMMAND[2] << 8) | ((SA.COMMAND[1] & 0b11111) << 16);
                let addrd = (SA.COMMAND[7] << 0) | (SA.COMMAND[6] << 8) | ((SA.COMMAND[5] & 0b11111) << 16);
 
-               let luns   = LUNs == 1 ? 0 : 1;
-               let lund   = LUNd == 1 ? 0 : 1;
+               let luns   = lun_to_id(SA.COMMAND[1]);
+               let lund   = lun_to_id(SA.COMMAND[5]);
 
                // do the actual copy
                for(let i=0;i<nblocks*256;i++) {
@@ -258,7 +253,7 @@ function SA_tick() {
    else if(SA.STATE == "READ_SECTOR") {
       // byte is sent from controller to the bus
       if(SA.ACK == 0) {
-         let byte = ~hard_disks[SA.lun].image[SA.pos] & 0xFF;
+         let byte = hard_disks[SA.lun].image[SA.pos];
          SA.BSY = 1;
          SA.MSG = 0;
          SA.CD  = 0;               // the data type is data
@@ -297,7 +292,7 @@ function SA_tick() {
       SA.CD  = 0;               // the data type is data
       if(SA.ACK == 1) {
          // write byte on disk
-         let byte = ~SA.DATA_IN & 0xFF;
+         let byte = SA.DATA_IN;
          hard_disks[SA.lun].image[SA.pos] = byte;
          SA.BSY = 1;
          SA.MSG = 0;
@@ -330,9 +325,8 @@ function SA_tick() {
       }
    }
    else if(SA.STATE == "FORMAT_DRIVE") {
-      let LUN = SA.COMMAND[1] >> 5;
       let interleave = SA.COMMAND[4];
-      SA.lun = LUN == 1 ? 0 : 1;
+      SA.lun = lun_to_id(SA.COMMAND[1]);
 
       console.log(`formatting drive ${SA.lun} with interleave=${interleave}`);
 
@@ -349,9 +343,6 @@ function SA_tick() {
 }
 
 function SASI_read_data() {
-   //log(`data read ${hex(SA.DATA_OUT)} (negated=${hex(~SA.DATA_OUT &0xFF)})`);
-   //log(cpu_status());
-   //dumpMem(0x00FF,0x01FF);
    SA_tick();
    let data = SA.DATA_OUT;
    SA.ACK = 1;
@@ -516,17 +507,31 @@ let HDC_MEDIA_SIZE = 256 * 256 * 32 * 4;
 let FHDC_MEDIA_SIZE = 32 * 256 * 77 * 2;
 
 class HardDisk {
-   constructor(image) {
-      this.image = image === undefined ? new Uint8Array(HDC_MEDIA_SIZE).fill(0xE5) : this.resize(image);
+   constructor(image, size) {
+      this.image = image === undefined ? new Uint8Array(size).fill(0xE5) : this.resize(image, size);
    }
 
-   resize(image) {
-      const new_image = new Uint8Array(HDC_MEDIA_SIZE);
+   resize(image, size) {
+      const new_image = new Uint8Array(size);
       image.forEach((e,i)=>new_image[i]=e);
       return new_image;
    }
 }
 
+function lun_to_id(byte) {
+   let LUN = (byte >> 5) & 0b011;
+
+        if(LUN==1) return 0;
+   else if(LUN==0) return 1;
+   else if(LUN==2) return 2;
+   else if(LUN==3) return 3;
+}
+
 // the actual hard disks
-let hard_disks = [new HardDisk(), new HardDisk()];
+let hard_disks = [
+   new HardDisk(undefined, HDC_MEDIA_SIZE),
+   new HardDisk(undefined, FHDC_MEDIA_SIZE),
+   new HardDisk(undefined, HDC_MEDIA_SIZE),
+   new HardDisk(undefined, HDC_MEDIA_SIZE)
+];
 
