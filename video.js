@@ -139,6 +139,7 @@ function drawFrame_y()
       updateCanvas();
       if(end_of_frame_hook !== undefined) end_of_frame_hook();
       frames++;
+      update_halt_led();
    }
 }
 
