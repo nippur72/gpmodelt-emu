@@ -152,7 +152,7 @@ function oneFrame(timestamp) {
 
    let ncycles = cpuSpeed * (msec / 1000);
 
-   if(ncycles > cpuSpeed) ncycles = 0;
+   if(ncycles > 50) ncycles = 50;
 
    systemTicks(ncycles);
 
