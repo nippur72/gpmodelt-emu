@@ -437,3 +437,15 @@ debugBefore = ()=> {
       ct = cycles;
    }
 }
+
+// *************************************************************************************
+// bold font charset
+(function() {
+   function rev(e) {
+      return ~(~e | ~(e<<1)) | 1;
+   }
+   rom_GCE_M1_U3.forEach((e,i)=>rom_GCE_M1_U3[i]=rev(e));
+   rom_GCE_M2_U4.forEach((e,i)=>rom_GCE_M2_U4[i]=rev(e));
+   rom_GCAR_A_U7.forEach((e,i)=>rom_GCAR_A_U7[i]=rev(e));
+   rom_GCAR_B_U8.forEach((e,i)=>rom_GCAR_B_U8[i]=rev(e));
+})();

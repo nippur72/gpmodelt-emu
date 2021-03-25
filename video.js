@@ -24,8 +24,9 @@ let imageData, bmp;
 let saturation = 1.0;
 
 let poly88 = false;
-let poly88_paddles = true;
+let poly88_paddles = false;
 let poly88_key = 0;
+let poly88_key_tick = 0;
 
 function calculateGeometry() {
 

@@ -46,7 +46,11 @@ function io_read(ioport) {
          // poly 88 ascii keyboard
          if(poly88) {
             if(poly88_paddles) return poly88_paddles_arduino();
-            else return poly88_key;
+            else {
+               const STROBE_DURATION = 1800000/100; // 1/100 sec
+               if(cycles > (poly88_key_tick + STROBE_DURATION)) return poly88_key & 0x7F; // clears strobe after n ticks
+               else return poly88_key;
+            }
          }
          else return 0;
 

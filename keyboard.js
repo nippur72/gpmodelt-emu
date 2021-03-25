@@ -32,6 +32,7 @@ function keyboard_presskey(keyascii) {
 
    if(poly88) {
       poly88_key = (keyascii & 0x7F) | 0x80;  // ascii + strobe on bit 7
+      poly88_key_tick = cycles;               // tracks when the key was pressed
    }
 }
 
