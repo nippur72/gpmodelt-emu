@@ -1,3 +1,4 @@
+// flags to debug all disk activity
 let debug_write_track      = false;
 let debug_read_track       = false;
 let debug_write_sector     = false;
@@ -18,14 +19,7 @@ let FDC_side = 0;
 let FDC_side_descs = [ "S0", "S1" ];
 let FDC_drive_number_descs = [ "0 (LEFT)", "1 (RIGHT)", "D2", "D3" ];
 
-// 1791 internal registers
-let FDC_track = 0;
-let FDC_sector = 0;
-let FDC_data = 0;
-let FDC_status = 0;
-
-let FDC_sector_ptr = 0;
-
+// which type of DMA is currently exectuting
 let FDC_DMA_NONE         = 0;
 let FDC_DMA_READ_ADDRESS = 1;
 let FDC_DMA_READ_SECTOR  = 2;
@@ -33,13 +27,19 @@ let FDC_DMA_WRITE_SECTOR = 3;
 let FDC_DMA_READ_TRACK   = 3;
 let FDC_DMA_WRITE_TRACK  = 4;
 
+// 1791 internal registers
+let FDC_track = 0;
+let FDC_sector = 0;
+let FDC_data = 0;
+let FDC_status = 0;
+let FDC_sector_ptr = 0;
 let FDC_dma = FDC_DMA_NONE;
 
 // 1791 service pins
 let FDC_HLD      = 0;
 let FDC_INTREQ   = 0;
 
-// status register bits
+// status register bits, depends on command type
 let FDC_STATUS_NOT_READY       = 0;  // bit 7
 let FDC_STATUS_WRITE_PROTECTED = 0;  // bit 6
 let FDC_STATUS_HEAD_LOADED     = 0;  // bit 5 for type I commands
@@ -54,6 +54,7 @@ let FDC_STATUS_INDEX           = 0;  // bit 1 for type I commands
 let FDC_STATUS_DATA_REQUEST    = 0;  // bit 1 for read/write commands
 let FDC_STATUS_BUSY            = 0;  // bit 0 for all commands
 
+// commands
 let FDC_COMMAND_TYPE_I          = 0;
 let FDC_COMMAND_READ_ADDRESS    = 1;
 let FDC_COMMAND_READ_SECTOR     = 2;
@@ -62,6 +63,7 @@ let FDC_COMMAND_WRITE_SECTOR    = 4;
 let FDC_COMMAND_WRITE_TRACK     = 5;
 let FDC_COMMAND_FORCE_INTERRUPT = 6;
 
+// disk geometry
 let FDC_NSIDES;
 let FDC_NTRACKS;
 let FDC_NSECTORS;
