@@ -629,7 +629,7 @@ async function load_default_disks() {
    let disk1 = FLOPPY_8_INCHES ? "GP16_IMD.img" : "disk_2x40x17x128xSS.img";
    let disk2 = FLOPPY_8_INCHES ? "GP02_IMD.img" : "disk_2x40x17x128xSS.img";
    if(poly88) disk1 = "reverse.img";
-   if(await fileExists(disk1) && await fileExists(disk2)) {
+   if(await storage.fileExists(disk1) && await storage.fileExists(disk2)) {
       await load(disk1,1);
       await load(disk2,0);
    }
@@ -641,7 +641,7 @@ async function load_default_disks() {
 
    if(ROM_CONFIG == "T20") {
       let hdname = "SA1004_T20.hd";
-      if(await fileExists(hdname)) await load(hdname);
+      if(await storage.fileExists(hdname)) await load(hdname);
       else await fetchProgram(`disks/${hdname}`);
    }
 }

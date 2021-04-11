@@ -1,69 +1,7 @@
-const STORAGE_KEY = "gpmodelt";
 
-const idb = idbKeyval;
-const store = new idb.Store(STORAGE_KEY, STORAGE_KEY);
-
-async function dir() {
-   const keys = await idb.keys(store);
-   console.log(keys);   
-   keys.forEach(async fn=>{
-      const file = await readFile(fn);
-      const length = file.length;
-      console.log(`${fn} (${length} bytes)`);
-   });
-}
-
-async function files(pattern) {
-   let keys = await idb.keys(store);
-   keys = keys.filter(fn=>fn.match(pattern));
-   return keys;
-}
-
-async function fileExists(filename) {
-   return await idb.get(filename, store) !== undefined;
-}
-
-async function readFile(fileName) {
-   const bytes = await idb.get(fileName, store);   
-   return bytes;
-}
-
-async function writeFile(fileName, bytes) {  
-   await idb.set(fileName, bytes, store);   
-}
-
-async function removeFile(fileName) {
-   await idb.del(fileName, store);   
-}
-
-// *******************************************************************************************
-
-/*
-function getStore() {
-   const store = window.localStorage.getItem(STORAGE_KEY);
-   if(store === undefined || store === null) return {};
-   let ob = {};
-   try 
-   {
-      ob = JSON.parse(store);
-   }
-   catch(ex) 
-   {
-   }
-   return ob;
-}
-
-function setStore(store) {
-   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
-}
-*/
+let storage = new BrowserStorage("gpmodelt");
 
 async function load(filename, p) {   
-   if(!await fileExists(filename)) {
-      console.log(`file "${filename}" not found`);
-      return false;
-   }
-   
    const ext = getFileExtension(filename);
 
         if(ext === ".bin") return await load_file(filename, p);
@@ -99,7 +37,7 @@ function loadBytes(bytes, address, fileName) {
 }
 
 async function load_file(fileName, address) {   
-   const bytes = await readFile(fileName);
+   const bytes = await storage.readFile(fileName);
    loadBytes(bytes, address, fileName);
    return true;
 }
@@ -126,7 +64,7 @@ async function save_disk(diskname, drive) {
       return;
    }
    const bytes = drives[drive].floppy;
-   await writeFile(diskname, bytes);
+   await storage.writeFile(diskname, bytes);
    console.log(`disk in drive ${FDC_drive_number_descs[drive]} saved as "${diskname}" (${bytes.length} bytes)`);
 }
 
@@ -137,14 +75,14 @@ async function load_disk(diskname, drive) {
       console.log(`wrong drive number ${drive}`);
       return false;
    }
-   const bytes = await readFile(diskname);
+   const bytes = await storage.readFile(diskname);
    drives[drive].floppy = bytes;
    console.log(`disk in drive ${FDC_drive_number_descs[drive]} has been loaded with "${diskname}" (${bytes.length} bytes)`);
    return true;
 }
 
 async function load_hd(hdname) {
-   const bytes = await readFile(hdname);
+   const bytes = await storage.readFile(hdname);
    hard_disks[0] = new HardDisk(bytes, HDC_MEDIA_SIZE);
    console.log(`hard disk has been loaded with "${hdname}" (${bytes.length} bytes)`);
    return true;
@@ -152,42 +90,6 @@ async function load_hd(hdname) {
 
 async function save_hd(hdname, lun) {
    const bytes = hard_disks[lun].image;
-   await writeFile(hdname, bytes);
+   await storage.writeFile(hdname, bytes);
    console.log(`hard disk ${lun} saved as "${hdname}" (${bytes.length} bytes)`);
-}
-
-async function remove(filename) {   
-   if(await fileExists(filename)) {
-      await removeFile(filename);
-      console.log(`removed "${filename}"`);
-   }
-   else {
-      console.log(`file "${filename}" not found`);
-   }
-}
-
-async function download(fileName) {   
-   if(!await fileExists(fileName)) {
-      console.log(`file "${fileName}" not found`);
-      return;
-   }
-   const bytes = await readFile(fileName);
-   let blob = new Blob([bytes], {type: "application/octet-stream"});   
-   saveAs(blob, fileName);
-   console.log(`downloaded "${fileName}"`);
-}
-
-async function dsave(fileName, p1, p2) {
-   await save(fileName, p1, p2);
-   download(fileName);
-}
-
-function upload(fileName) {
-   throw "not impemented";
-}
-
-function getFileExtension(fileName) {
-   let s = fileName.toLowerCase().split(".");
-   if(s.length == 1) return "";
-   return "." + s[s.length-1];
 }

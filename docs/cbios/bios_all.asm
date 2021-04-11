@@ -437,7 +437,9 @@ LISTST_EXIT:
 ;***************************************************************************************
 ;
 ;READER (function 7)
-;Read a character from the "paper tape reader" - or whatever the current auxiliary device is. If the device isn't ready, wait until it is. The character will be returned in A. If this device isn't implemented, return character 26 (^Z).
+;Read a character from the "paper tape reader" - or whatever the current auxiliary device is.
+;If the device isn't ready, wait until it is. The character will be returned in A. If this
+;device isn't implemented, return character 26 (^Z).
 ;
 ;***************************************************************************************
 

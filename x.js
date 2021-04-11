@@ -428,11 +428,11 @@ dumpMem(0xba8b,0xba8b+16);
 memory[0xE663] = 42;
 
 // *************************************************************************************
-// count t-states in time.com
+// count t-states
 let ct = 0;
 debugBefore = ()=> {
    const pc = cpu.getState().pc;
-   if(pc === 0x028b) {
+   if(pc === 0x026a) {
       console.log(`${cycles-ct}`);
       ct = cycles;
    }

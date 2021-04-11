@@ -1,5 +1,7 @@
 "use strict";
 
+// TODO audio with libemu
+
 // 64K RAM
 const memory = new Uint8Array(65536).fill(0x00); 
 
