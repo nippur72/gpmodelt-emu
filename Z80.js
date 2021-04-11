@@ -311,6 +311,7 @@ let interrupt = function(non_maskable, data)
       {
          // In the 8080-compatible interrupt mode,
          //  decode the content of the data bus as an instruction and run it.
+         push_word(pc);
          decode_instruction(data);
          cycle_counter += 2;
       }
