@@ -1,4 +1,5 @@
-node_modules/
+node_modules/*
+!node_modules/@nippur72
 trash/
 debug.log
 docs/cbios/bios.floppy.525.DS.bin
