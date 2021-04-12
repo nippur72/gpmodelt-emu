@@ -52,7 +52,7 @@ async function save_file(filename, start, end) {
    }
    const bytes = new Uint8Array(prg);
    
-   await writeFile(filename, bytes);
+   await storage.writeFile(filename, bytes);
 
    console.log(`saved "${filename}" ${bytes.length} bytes from ${hex(start,4)}h to ${hex(end,4)}h`);
 }

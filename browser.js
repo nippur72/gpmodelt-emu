@@ -116,13 +116,13 @@ async function droppedFile(outName, bytes, address) {
    }
 
    if(ext == ".bin") {
-      await writeFile(outName, bytes)
+      await storage.writeFile(outName, bytes)
       await crun(outName, address);
    }
 
    // CP/M .com
    if(ext == ".com") {
-      await writeFile(outName, bytes)
+      await storage.writeFile(outName, bytes)
       await crun(outName, address);
       let pages = Math.ceil(bytes.length/256);
       paste(`SAVE ${pages} ${outName}\r\n\r\n`);

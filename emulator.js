@@ -360,7 +360,6 @@ if(autoload !== undefined) {
 
 setTimeout(()=>load_default_disks(), 500);
 
-
 // simulate paddles on poly88
 let paddle0 = 0;
 let paddle1 = 0;

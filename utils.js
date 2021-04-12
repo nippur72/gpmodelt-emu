@@ -88,7 +88,7 @@ async function crun(filename, address) {
 
 async function drag_drop_disk(diskname, bytes) {
    console.log(`dropped disk "${diskname}"`);
-   await writeFile(diskname, bytes);
+   await storage.writeFile(diskname, bytes);
 }
 
 function paste(text) {   
