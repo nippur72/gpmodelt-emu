@@ -43,7 +43,8 @@ function io_read(ioport) {
 
       case 0xc0:
       case 0xe8:
-         return keyboard_read();
+         if(poly88) return keyboard_read();
+         else return 0;
 
       case 0xBC:
       case 0xBD:

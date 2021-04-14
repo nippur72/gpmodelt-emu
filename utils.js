@@ -220,3 +220,18 @@ function downloadBytes(fileName, buffer) {
    saveAs(blob, fileName);
    console.log(`downloaded "${fileName}"`);
 }
+
+
+// *************************************************************************************
+// connects to bbs.sblendorio.eu
+// requires TERM.COM and websocket tunnel as in:
+// wstcp -t bbs.sblendorio.eu -p 23 -w 8080 -n bbs
+async function bbs() {
+   let modem = new BBS();
+   modem.debug = false;
+
+   modem.onreceive = (data) => data.forEach(e=>serial.receive_from_external(e));
+   serial.on_send_to_external = (data) => modem.send([data]);
+
+   await modem.connect("ws://localhost:8080","bbs");
+}

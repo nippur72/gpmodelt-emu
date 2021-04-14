@@ -22,8 +22,8 @@
   },
   "homepage": "https://github.com/nippur72/ChildZ-emu#readme",
   "dependencies": {
-    "@nippur72/libemu": "^0.1.0",
-    "command-line-args": "^5.1.1",
+    "@nippur72/libemu": "^0.2.0",
+    "command-line-args": "^5.1.1"
   },
   "devDependencies": {}
 }

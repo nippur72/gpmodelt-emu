@@ -1,8 +1,8 @@
 class Serial
 {
    constructor() {
-      this.output = [];
       this.recbuf = [];
+      this.on_send_to_external = undefined;
    }
 
    cpu_read_data() {
@@ -25,12 +25,17 @@ class Serial
    }
 
    cpu_write_data(data) {
-      //this.output.push(data);
-      printerWrite(data);
+      if(this.on_send_to_external !== undefined) {
+         this.on_send_to_external(data);
+      }
    }
 
    cpu_write_command(command) {
       // ignored
+   }
+
+   receive_from_external(data) {
+      this.recbuf.push(data);
    }
 }
 
