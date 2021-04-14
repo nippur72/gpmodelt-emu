@@ -35,24 +35,15 @@ function io_read(ioport) {
 
       case 0x78:
          // serial data read
-         return serial.receive();
+         return serial.cpu_read_data();
 
       case 0x7a:
          // serial status, always ready
-         return serial.receiveStatus();
+         return serial.cpu_read_status();
 
       case 0xc0:
       case 0xe8:
-         // poly 88 ascii keyboard
-         if(poly88) {
-            if(poly88_paddles) return poly88_paddles_arduino();
-            else {
-               const STROBE_DURATION = 1800000/100; // 1/100 sec
-               if(cycles > (poly88_key_tick + STROBE_DURATION)) return poly88_key & 0x7F; // clears strobe after n ticks
-               else return poly88_key;
-            }
-         }
-         else return 0;
+         return keyboard_read();
 
       case 0xBC:
       case 0xBD:
@@ -101,12 +92,12 @@ function io_write(ioport, value) {
 
       case 0x78:
          // serial data
-         serial.send(value);
+         serial.cpu_write_data(value);
          return;
 
       case 0x7a:
          // serial command, ignored
-         serial.readyToSend(value);
+         serial.cpu_write_command(value);
          return;
 
       case 0xBC:

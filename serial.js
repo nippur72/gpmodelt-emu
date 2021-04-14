@@ -5,28 +5,32 @@ class Serial
       this.recbuf = [];
    }
 
-   receive() {
+   cpu_read_data() {
       if(this.recbuf.length > 0) {
          let ch = this.recbuf[0];
          this.recbuf = this.recbuf.slice(1);
          return ch;
+      } else {
+         return 0x00; // receive buffer empty
       }
-      return 0x00; // receive buffer empty
    }
 
-   receiveStatus() {
-      return 4+1;
-      //if(this.recbuf.length > 0) return 4+1;
-      //else return 0;
+   cpu_read_status() {
+      if(this.recbuf.length > 0) {
+         return 8+1;
+      }
+      else {
+         return 8;
+      }
    }
 
-   readyToSend(value) {
-
-   }
-
-   send(data) {
+   cpu_write_data(data) {
       //this.output.push(data);
       printerWrite(data);
+   }
+
+   cpu_write_command(command) {
+      // ignored
    }
 }
 

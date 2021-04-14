@@ -1,52 +1,19 @@
-let keyboard_buffer = [];
-
-let key_pressed_ascii = -1;
-
-let KEYBOARD_USE_BUFFER = true;
-
-function keyboard_read() {
-   let key;
-
-   if(!KEYBOARD_USE_BUFFER) {
-      key = key_pressed_ascii;
-   }
-   else {
-      if(keyboard_buffer.length == 0) key = -1;
-      else {
-         key = keyboard_buffer[0];
-         keyboard_buffer = keyboard_buffer.slice(1);
-      }
-   }
-
-   if(key == -1) return 0xFF;
-   else return key ^ 0x7f;
-}
+let key_pressed_ascii = 0;
+let key_pressed_tick = -1000000; // set last keypress beyond start of time
 
 function keyboard_presskey(keyascii) {
-   if(!KEYBOARD_USE_BUFFER) {
-      key_pressed_ascii = keyascii;
-   }
-   else {
-      keyboard_buffer.push(keyascii);
-   }
-
-   if(poly88) {
-      poly88_key = (keyascii & 0x7F) | 0x80;  // ascii + strobe on bit 7
-      poly88_key_tick = cycles;               // tracks when the key was pressed
-   }
+   key_pressed_ascii = keyascii;
+   key_pressed_tick = cycles;
 }
 
 function keyboard_releasekey() {
-   if(!KEYBOARD_USE_BUFFER) {
-      key_pressed_ascii = -1;
-   }
-   else {
-      keyboard_buffer.push(-1);
-   }
+}
 
-   if(poly88) {
-      poly88_key = (poly88_key & 0x7F);  // ascii + strobe off on bit 7
-   }
+function keyboard_read() {
+   const strobe_duration = cpuSpeed/100; // 1/100 sec
+   const strobe = cycles < (key_pressed_tick + strobe_duration) ? 1 : 0;
+   let data = (key_pressed_ascii & 0x7f) | (strobe << 7);
+   return ~data & 0xFF; // negated logic
 }
 
 function keyDown(e) { 
@@ -236,6 +203,3 @@ const element = document; //.getElementById("canvas");
 element.onkeydown = keyDown;
 element.onkeyup = keyUp;
 element.onkeypress = keyPress;
-
-
-

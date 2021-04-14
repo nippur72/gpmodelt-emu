@@ -149,12 +149,11 @@ In lettura:
 
 ## porta seriale
 
+porta 78h: read/write data
+
 porta 7Ah
     read: bit 0 => data is ready to be read
           bit 3 => data can be written to output
-
-porta 78h: read/write data
-
 
 ## notes on CP/M
 

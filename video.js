@@ -24,9 +24,6 @@ let imageData, bmp;
 let saturation = 1.0;
 
 let poly88 = false;
-let poly88_paddles = false;
-let poly88_key = 0;
-let poly88_key_tick = 0;
 
 function calculateGeometry() {
 
@@ -213,7 +210,7 @@ function drawFrame_y_text(y)
          if(reverse) {
             bitmap = 0;
 
-               if(y_offset <  4) { if(code & (1<<2)) bitmap |= 0b00001111; if(code & (1<<5)) bitmap |= 0b11110000; }
+                 if(y_offset <  4) { if(code & (1<<2)) bitmap |= 0b00001111; if(code & (1<<5)) bitmap |= 0b11110000; }
             else if(y_offset <  9) { if(code & (1<<1)) bitmap |= 0b00001111; if(code & (1<<4)) bitmap |= 0b11110000; }
             else if(y_offset < 13) { if(code & (1<<0)) bitmap |= 0b00001111; if(code & (1<<3)) bitmap |= 0b11110000; }
          }

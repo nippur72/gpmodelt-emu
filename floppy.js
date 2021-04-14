@@ -637,17 +637,17 @@ async function load_default_disks() {
       dropdrive = 1; await fetchProgram(`disks/${disk1}`);
       dropdrive = 0; await fetchProgram(`disks/${disk2}`);
    }
-   if(poly88) paste("\rBD");
+   if(poly88) {
+      paste("\r");
+      for(let t=0;t<20;t++) renderAllLines();
+      paste("BD");
+   }
 
    if(ROM_CONFIG == "T20") {
       let hdname = "SA1004_T20.hd";
       if(await storage.fileExists(hdname)) await load(hdname);
       else await fetchProgram(`disks/${hdname}`);
    }
-}
-
-async function start_cpm() {
-   paste("\nBD");
 }
 
 function dump_disk(side, track, sector) {
