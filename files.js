@@ -83,13 +83,13 @@ async function load_disk(diskname, drive) {
 
 async function load_hd(hdname) {
    const bytes = await storage.readFile(hdname);
-   hard_disks[0] = new HardDisk(bytes, HDC_MEDIA_SIZE);
+   emulator.sasi.hard_disks[0] = new HardDisk(bytes, HDC_MEDIA_SIZE);
    console.log(`hard disk has been loaded with "${hdname}" (${bytes.length} bytes)`);
    return true;
 }
 
 async function save_hd(hdname, lun) {
-   const bytes = hard_disks[lun].image;
+   const bytes = emulator.sasi.hard_disks[lun].image;
    await storage.writeFile(hdname, bytes);
    console.log(`hard disk ${lun} saved as "${hdname}" (${bytes.length} bytes)`);
 }

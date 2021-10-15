@@ -1,3 +1,5 @@
+// WD1791 floppy disk controller
+
 // flags to debug all disk activity
 let debug_write_track      = false;
 let debug_read_track       = false;

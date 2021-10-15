@@ -211,6 +211,3 @@ class Palette {
    }
 }
 
-let videoRenderer = new VideoRenderer();
-
-videoRenderer.calculateGeometry();

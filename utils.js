@@ -157,7 +157,7 @@ function power() {
    zap();
    renderAllLines();
    emulator.cpu.reset();
-   SASI_reset();
+   emulator.sasi.SASI_reset();
 }
 
 function stop() {   

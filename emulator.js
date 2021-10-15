@@ -54,6 +54,11 @@ class GPEmulator {
       this.memory = new Uint8Array(65536).fill(0x00); 
 
       this.serial = new Serial();
+
+      this.sasi = new SASI_CONTROLLER();
+
+      this.videoRenderer = new VideoRenderer();
+      this.videoRenderer.calculateGeometry();
    }
 
    systemConfig() {
@@ -90,9 +95,9 @@ class GPEmulator {
          this.rom_load(rom_E800_FDC525, 0xE800);   // 5" FDC
          this.rom_load(rom_EC00_ACI,    0xEC00);
    
-         videoRenderer.SCREEN_COLUMNS = 64;
-         videoRenderer.SCREEN_ROWS    = 16;
-         videoRenderer.SCREEN_COLUMNS_ARR = 64;
+         this.videoRenderer.SCREEN_COLUMNS = 64;
+         this.videoRenderer.SCREEN_ROWS    = 16;
+         this.videoRenderer.SCREEN_COLUMNS_ARR = 64;
    
          FLOPPY_8_INCHES = false;
       }
@@ -103,9 +108,9 @@ class GPEmulator {
          this.rom_load(rom_E800_FDC8,   0xE800);   // 8" FDC
          this.rom_load(rom_EC00_ACI,    0xEC00);
    
-         videoRenderer.SCREEN_COLUMNS = 64;
-         videoRenderer.SCREEN_ROWS    = 16;
-         videoRenderer.SCREEN_COLUMNS_ARR = 64;
+         this.videoRenderer.SCREEN_COLUMNS = 64;
+         this.videoRenderer.SCREEN_ROWS    = 16;
+         this.videoRenderer.SCREEN_COLUMNS_ARR = 64;
    
          FLOPPY_8_INCHES = true;
       }
@@ -115,25 +120,25 @@ class GPEmulator {
          this.rom_load(rom_MON24_2,   0xE000);
          this.rom_load(rom_SYS2K_482, 0xE400);
          this.rom_load(rom_RIG02_U,   0xE800);
-         videoRenderer.SCREEN_COLUMNS = 80;
-         videoRenderer.SCREEN_ROWS    = 24;
-         videoRenderer.SCREEN_COLUMNS_ARR = 128;
+         this.videoRenderer.SCREEN_COLUMNS = 80;
+         this.videoRenderer.SCREEN_ROWS    = 24;
+         this.videoRenderer.SCREEN_COLUMNS_ARR = 128;
       }
    
       if(this.ROM_CONFIG == "scheda2") {
          this.rom_load(rom_U1MON1512, 0xE000);
          this.rom_load(rom_U3FDC,     0xE800);
-         videoRenderer.SCREEN_COLUMNS = 80;
-         videoRenderer.SCREEN_ROWS    = 24;
-         videoRenderer.SCREEN_COLUMNS_ARR = 128;
+         this.videoRenderer.SCREEN_COLUMNS = 80;
+         this.videoRenderer.SCREEN_ROWS    = 24;
+         this.videoRenderer.SCREEN_COLUMNS_ARR = 128;
       }
       */
    
       if(this.ROM_CONFIG == "T20") {
          this.rom_load(rom_T20V24, 0xE000);
-         videoRenderer.SCREEN_COLUMNS = 80;
-         videoRenderer.SCREEN_ROWS    = 24;
-         videoRenderer.SCREEN_COLUMNS_ARR = 128;
+         this.videoRenderer.SCREEN_COLUMNS = 80;
+         this.videoRenderer.SCREEN_ROWS    = 24;
+         this.videoRenderer.SCREEN_COLUMNS_ARR = 128;
       }
    
       // ROM di test di Gabriele Rossi
@@ -141,7 +146,7 @@ class GPEmulator {
    
       this.rom_load([ 0xC3, 0x00, 0xE0 ], 0x0000); // JP E000
    
-      videoRenderer.calculateGeometry();
+      this.videoRenderer.calculateGeometry();
    
       recalcFloppy();
    }
@@ -178,7 +183,7 @@ class GPEmulator {
          }
          if(this.cycle>=this.cyclesPerLine) {
             this.cycle-=this.cyclesPerLine;
-            videoRenderer.drawFrame_y();
+            this.videoRenderer.drawFrame_y();
             this.frames++;
             update_halt_led();
          }
@@ -218,10 +223,10 @@ class GPEmulator {
       switch(port) {
    
          case 0x6d:
-            return ~SASI_read_pins() & 0xFF;
+            return ~this.sasi.SASI_read_pins() & 0xFF;
    
          case 0x6c:
-            return ~SASI_read_data() & 0xFF;
+            return ~this.sasi.SASI_read_data() & 0xFF;
    
          case 0x3f:
             return FDC_read_port_3f();
@@ -278,10 +283,10 @@ class GPEmulator {
             return;
    
          case 0x6d:
-            return SASI_write_pins(~value & 0xFF);
+            return this.sasi.SASI_write_pins(~value & 0xFF);
    
          case 0x6c:
-            return SASI_write_data(~value & 0xFF);
+            return this.sasi.SASI_write_data(~value & 0xFF);
    
          case 0x5e:
          case 0x5f:

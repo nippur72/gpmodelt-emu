@@ -22,8 +22,8 @@ function onResize(e) {
    canvas.style.borderRadius = "4rem";
 
    const trueHeight = canvas.offsetHeight
-   videoRenderer.hide_scanlines = (trueHeight < 512);
-   videoRenderer.palette.buildPalette();
+   emulator.videoRenderer.hide_scanlines = (trueHeight < 512);
+   emulator.videoRenderer.palette.buildPalette();
 }
 
 function goFullScreen() 
@@ -171,7 +171,7 @@ function parseQueryStringCommands() {
       if(options.bb     !== undefined) border_bottom    = Number(options.bb);
       if(options.bh     !== undefined) border_h         = Number(options.bh);
       if(options.aspect !== undefined) emulator.aspect  = Number(options.aspect);
-      videoRenderer.calculateGeometry();
+      emulator.videoRenderer.calculateGeometry();
       onResize();
    }
 }
