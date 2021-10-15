@@ -1,443 +1,320 @@
 "use strict";
 
-// TODO audio with libemu
+class GPEmulator {
+   constructor() {
+      this.aspect = 1.5;             // aspect varies greatly due to Y deflection trimmer regulation
+      this.charset_bit = 1;          // selects charset ROM font
+      this.poly88 = false;           // poly88 VTI emulation
+      
+      this.audioEnabled = true;
+      this.audio = new Audio(4096);  // the browser audio player
+      this.audioBufferSize = 4096;   // size of the audio buffer, enough to hold more than one frame time
+      this.audioBuffer = new Float32Array(this.audioBufferSize);  // audio buffer      
+      this.audioPtr = 0;             // points to the write position in the audio buffer
+      this.downSampleCounter = 0;    // counter used to downsample from CPU speed to 48 Khz audio
 
-// 64K RAM
-const memory = new Uint8Array(65536).fill(0x00); 
+      this.tape = new Tape(this);
+      this.tape_monitor = true;      // play tape signals on the audio
 
-let ROM_CONFIG = "T20";
+      // hardware bits TODO move to tape  
+      this.cassette_bit_out1 = 0;
+      this.cassette_bit_out2 = 0;
+      this.cassette_bit_in = 0;
+      
+      // frame renderer
+      this.last_timestamp = 0;      
+      this.oneFrameThisBind = timestamp => this.oneFrame(timestamp);  // bind this to oneFrame once for all
+      this.averageFrameTime = 0;
 
-function initMem() {
-   function rom_load(rom, address) {
-      for(let i=0; i<rom.length; i++) {
-         memory[address+i] = rom[i];
-      }
-   }
+      this.stopped = false;   // allows to stop/resume the emulation
+      this.frames = 0;        // count number of frames drawn
+      this.cycles = 0;        // count number of CPU cycles
+      this.cycle = 0;          // counts cycles for a frame rendering
 
-   if(ROM_CONFIG == "T08") {
-      rom_load(rom_E000,        0xE000);
-      rom_load(rom_E400,        0xE400);
-      rom_load(rom_E800_FDC525, 0xE800);   // 5" FDC
-      rom_load(rom_EC00_ACI,    0xEC00);
+      this.system_clock;
+      this.cpu_divisor;
+      this.dotpixels;
+      this.numscanlines;
+      this.lineRate;
+      this.frameRate;
+      this.cpuSpeed;
+      this.cyclesPerLine;
+      this.hiddenlines;   
+      
+      this.ROM_CONFIG = "T20";
 
-      SCREEN_COLUMNS = 64;
-      SCREEN_ROWS    = 16;
-      SCREEN_COLUMNS_ARR = 64;
-
-      FLOPPY_8_INCHES = false;
-   }
-
-   if(ROM_CONFIG == "T10") {
-      rom_load(rom_E000,        0xE000);
-      rom_load(rom_E400,        0xE400);
-      rom_load(rom_E800_FDC8,   0xE800);   // 8" FDC
-      rom_load(rom_EC00_ACI,    0xEC00);
-
-      SCREEN_COLUMNS = 64;
-      SCREEN_ROWS    = 16;
-      SCREEN_COLUMNS_ARR = 64;
-
-      FLOPPY_8_INCHES = true;
-   }
-
-   /*
-   if(ROM_CONFIG == "rig") {
-      rom_load(rom_MON24_2,   0xE000);
-      rom_load(rom_SYS2K_482, 0xE400);
-      rom_load(rom_RIG02_U,   0xE800);
-      SCREEN_COLUMNS = 80;
-      SCREEN_ROWS    = 24;
-      SCREEN_COLUMNS_ARR = 128;
-   }
-
-   if(ROM_CONFIG == "scheda2") {
-      rom_load(rom_U1MON1512, 0xE000);
-      rom_load(rom_U3FDC,     0xE800);
-      SCREEN_COLUMNS = 80;
-      SCREEN_ROWS    = 24;
-      SCREEN_COLUMNS_ARR = 128;
-   }
-   */
-
-   if(ROM_CONFIG == "T20") {
-      rom_load(rom_T20V24, 0xE000);
-      SCREEN_COLUMNS = 80;
-      SCREEN_ROWS    = 24;
-      SCREEN_COLUMNS_ARR = 128;
-   }
-
-   // ROM di test di Gabriele Rossi
-   // rom_load(rom_GPMON007, 0xE000);
-
-   rom_load([ 0xC3, 0x00, 0xE0 ], 0x0000); // JP E000
-
-   calculateGeometry();
-
-   recalcFloppy();
-}
-
-let speaker_A = 0;
-let cassette_bit_out1 = 0;
-let cassette_bit_out2 = 0;
-let cassette_bit_in = 0;
-
-let tape_monitor = true;
-
-let cpu = new Z80({ mem_read, mem_write, io_read, io_write });
-
-/******************/
-
-let system_clock;
-let cpu_divisor;
-let dotpixels;
-let numscanlines;
-let lineRate;
-let frameRate;
-let cpuSpeed;
-let cyclesPerLine;
-let hiddenlines;
-
-function systemConfig() {
-
-   let T08 = ROM_CONFIG == "T08";
-   let T20 = ROM_CONFIG == "T20";
-
-   system_clock = T20 ? 12000000 : 10000000;   // 10 Mhz 64x16, 24Mhz 80x24
-   cpu_divisor  = T20 ? 5 : 4;                 // cpu clock divisor from system clock
-   dotpixels    = T20 ? 768 : 640;             // number of dot pixels per line (512, 640 active area)
-   numscanlines = 312.5;                       // fixed PAL number of lines
-   hiddenlines  = T20 ? 0 : 312-(16*13);       // 64x16 has hidden lines, 80x24 has not
-   lineRate = system_clock / dotpixels;        // results in 15625 standard PAL
-   frameRate = lineRate / numscanlines;        // results in 50 Hz standard PAL
-   cpuSpeed = system_clock / cpu_divisor;      // CPU speed
-   cyclesPerLine = (cpuSpeed / lineRate) / 2;  // how much CPU cycles per single scan line (/2 two pal frames)
-
-   if(poly88) {
-      cpuSpeed /= 2;
-      cyclesPerLine /= 2;
-   }
-}
-
-let stopped = false; // allows to stop/resume the emulation
-
-let frames = 0;
-let averageFrameTime = 0;
-
-let cycle = 0;
-let cycles = 0;
-
-let throttle = false;
-
-let audioEnabled = false;
-
-let options = {
-   load: undefined,
-   restore: true,
-   notapemonitor: false,
-   scanlines: true,
-   saturation: 1.0,
-};
-
-let end_of_frame_hook = undefined;
-
-function renderAllLines() {
-   systemTicks(cyclesPerLine*numscanlines);
-}
-
-// NEW CODE
-
-let last_timestamp = 0;
-function oneFrame(timestamp) {
-   let stamp = timestamp === undefined ? last_timestamp : timestamp;
-   let msec = stamp - last_timestamp;
-   last_timestamp = stamp;
-
-   let ncycles = cpuSpeed * (msec / 1000);
-
-   if(msec > frameRate*2) ncycles = cpuSpeed * (frameRate*2 / 1000);
-
-   systemTicks(ncycles);
-
-   averageFrameTime = averageFrameTime * 0.992 + msec * 0.008;
-
-   if(!stopped) requestAnimationFrame(oneFrame);
-}
-
-function systemTicks(ncycles) {
-   let endCycle = cycles + ncycles;
-
-   while(cycles < endCycle) {
-      if(debugBefore !== undefined) debugBefore();
-      let elapsed = cpu.run_instruction();
-      if(debugAfter !== undefined) debugAfter(elapsed);
-      cycle += elapsed;
-      cycles += elapsed;
-      if(audioEnabled) {
-         writeAudioSamples(elapsed);
-         cloadAudioSamples(elapsed);
-         if(csaving) csaveAudioSamples(elapsed);
-      }
-      if(cycle>=cyclesPerLine) {
-         cycle-=cyclesPerLine;
-         drawFrame_y();
-      }
-   }
-}
-
-// ********************************* CPU TO AUDIO BUFFER *********************************************
-
-const audioBufferSize = 16384; // enough to hold more than one frame time
-const audioBuffer = new Float32Array(audioBufferSize);
-
-let audioPtr = 0;                // points to the write position in the audio buffer (modulus)
-let audioPtr_unclipped = 0;      // audio buffer writing absolute counter 
-let downSampleCounter = 0;       // counter used to downsample from CPU speed to 48 Khz
-
-function writeAudioSamples(n) {
-   downSampleCounter += (n * sampleRate);
-   if(downSampleCounter >= cpuSpeed) {
-      let s = (speaker_A ? -0.5 : 0.0);
-      const st = (cassette_bit_out1 && cassette_bit_out2 ? 0.75 : cassette_bit_out2 ? -0.75 : 0 );
-      if(tape_monitor) s += st + (cassette_bit_in ? 0.5 : 0.0);
-      downSampleCounter -= cpuSpeed;
-      audioBuffer[audioPtr++] = s;
-      audioPtr = audioPtr % audioBufferSize;
-      audioPtr_unclipped++;
-   }      
-}
-
-// ********************************* AUDIO BUFFER TO BROWSER AUDIO ************************************
-
-let audioContext = new (window.AudioContext || window.webkitAudioContext)();
-const bufferSize = 4096;
-const sampleRate = audioContext.sampleRate;
-var speakerSound = audioContext.createScriptProcessor(bufferSize, 1, 1);
-
-let audioPlayPtr = 0;
-let audioPlayPtr_unclipped = 0;
-
-speakerSound.onaudioprocess = function(e) {
-   const output = e.outputBuffer.getChannelData(0);
-
-   // playback gone too far, wait   
-   if(audioPlayPtr_unclipped + bufferSize > audioPtr_unclipped ) {
-      for(let i=0; i<bufferSize; i++) output[i];
-      return;
-   }
-  
-   // playback what is in the audio buffer
-   for(let i=0; i<bufferSize; i++) {
-      const audio = audioBuffer[audioPlayPtr++];
-      audioPlayPtr = audioPlayPtr % audioBufferSize;
-      audioPlayPtr_unclipped++;
-      output[i] = audio;
-    }    
-    
-    // write pointer should be always ahead of reading pointer
-    // if(kk++%50==0) console.log(`write: ${audioPtr_unclipped} read: ${audioPlayPtr_unclipped} diff: ${audioPtr_unclipped-audioPlayPtr_unclipped}`);
-}
-
-function goAudio() {
-   audioPlayPtr_unclipped = 0;
-   audioPlayPtr = 0;
-
-   audioPtr = 0;
-   audioPtr_unclipped = 0;
-
-   speakerSound.connect(audioContext.destination);
-}
-
-function stopAudio() {
-   speakerSound.disconnect(audioContext.destination);
-}
-
-function audioContextResume() {   
-   if(audioContext.state === 'suspended') {
-      audioContext.resume().then(() => {
-         console.log('sound playback resumed successfully');
+      this.cpu = new Z80({ 
+         mem_read : this.mem_read.bind(this) , 
+         mem_write: this.mem_write.bind(this), 
+         io_read  : this.io_read.bind(this)  , 
+         io_write : this.io_write.bind(this) 
       });
-   }
-}
 
-goAudio();
+      // 64K RAM
+      this.memory = new Uint8Array(65536).fill(0x00); 
 
-
-/*********************************************************************************** */
-
-let tapeSampleRate = 0;
-let tapeBuffer = new Float32Array(0);
-let tapeLen = 0;
-let tapePtr = 0;
-let tapeHighPtr = 0;
-
-function cloadAudioSamples(n) {
-   if(tapePtr >= tapeLen) {
-      cassette_bit_in = 1;
-      return;
+      this.serial = new Serial();
    }
 
-   tapeHighPtr += (n*tapeSampleRate);
-   if(tapeHighPtr >= cpuSpeed) {
-      tapeHighPtr-=cpuSpeed;
-      cassette_bit_in = tapeBuffer[tapePtr] > 0 ? 1 : 0;
-      tapePtr++;      
-   }
-}
-
-// ********************************* CPU TO CSAVE BUFFER *********************************************
-
-const csaveBufferSize = 44100 * 5 * 60; // five minutes max
-
-let csaveBuffer;                 // holds the tape audio for generating the WAV file
-let csavePtr;                    // points to the write position in the csaveo buffer 
-let csaveDownSampleCounter;      // counter used to downsample from CPU speed to 48 Khz
-
-let csaving = false;
-
-function csaveAudioSamples(n) {
-   csaveDownSampleCounter += (n * 44100);
-   if(csaveDownSampleCounter >= cpuSpeed) {
-      const s = (cassette_bit_out1 && cassette_bit_out2 ? 0.75 : cassette_bit_out2 ? -0.75 : 0 );
-      csaveDownSampleCounter -= cpuSpeed;
-      csaveBuffer[csavePtr++] = s;
-   }      
-}
-
-function csave() {
-   csavePtr = 0;
-   csaveDownSampleCounter = 0;
-   csaveBuffer = new Float32Array(csaveBufferSize);
-   csaving = true;
-   console.log("saving audio (max 5 minutes); use cstop() to stop recording");
-}
-
-function cstop() {
-   csaving = false;
-
-   // trim silence before and after
-   let start = csaveBuffer.indexOf(0.75)-100;
-   let end = csaveBuffer.lastIndexOf(0.75)+100;
-
-   start = Math.max(start, 0);
-   end   = Math.min(end, csaveBuffer.length);
-
-   const audio = csaveBuffer.slice(start, end);
-   const length = Math.round(audio.length / 44100);
-
-   const wavData = {
-      sampleRate: 44100,
-      channelData: [ audio ]
-   };
-     
-   const buffer = encodeSync(wavData, { bitDepth: 16, float: false });      
+   systemConfig() {
+      let T08 = this.ROM_CONFIG == "T08";
+      let T20 = this.ROM_CONFIG == "T20";
+      if(!T08 && !T20) throw "invalid configuration";
    
-   let blob = new Blob([buffer], {type: "application/octet-stream"});   
-   const fileName = "csaved.wav";
-   saveAs(blob, fileName);
-   console.log(`downloaded "${fileName}" (${length} seconds of audio)`);
-}
-
-/*********************************************************************************** */
-
-// prints welcome message on the console
-welcome();
-
-parseQueryStringCommands();
-
-power();
-
-// calculate cpu speed
-systemConfig();
-
-// starts drawing frames
-oneFrame();
-
-// autoload program and run it
-if(autoload !== undefined) {
-   // gives 1 sec delay, so that load happens after ram is initialized by the eprom
-   setTimeout(()=>loadBytes(autoload), 1000);
-}
-
-setTimeout(()=>load_default_disks(), 500);
-
-// simulate paddles on poly88
-let paddle0 = 0;
-let paddle1 = 0;
-(function() {
-   document.onmousemove = handleMouseMove;
-   let canvas = document.getElementById("canvas");
-   function handleMouseMove(event) {
-      paddle0 = Math.min(Math.floor(event.pageX/canvas.clientWidth * 128),127);
-      paddle1 = Math.min(Math.floor(event.pageY/canvas.clientHeight * 128),127);
-      //console.log(paddle0,paddle1);
+      this.system_clock = T20 ? 12000000 : 10000000;             // 10 Mhz 64x16, 24Mhz 80x24
+      this.cpu_divisor  = T20 ? 5 : 4;                           // cpu clock divisor from system clock
+      this.dotpixels    = T20 ? 768 : 640;                       // number of dot pixels per line (512, 640 active area)
+      this.numscanlines = 312;                                   // fixed PAL number of lines
+      this.hiddenlines  = T20 ? 0 : 312-(16*13);                 // 64x16 has hidden lines, 80x24 has not
+      this.lineRate = this.system_clock / this.dotpixels;        // results in 15625 standard PAL
+      this.frameRate = this.lineRate / this.numscanlines;        // results in 50 Hz standard PAL
+      this.cpuSpeed = this.system_clock / this.cpu_divisor;      // CPU speed
+      this.cyclesPerLine = (this.cpuSpeed / this.lineRate) / 2;  // how much CPU cycles per single scan line (/2 two pal frames)
+   
+      if(this.poly88) {
+         this.cpuSpeed /= 2;
+         this.cyclesPerLine /= 2;
+      }
    }
-})();
 
-function poly88_paddles_arduino() {
-   if((cycles & (1<20))!=0) return paddle0;
-   else                     return paddle1 | 128;
+   rom_load(rom, address) {
+      for(let i=0; i<rom.length; i++) {
+         this.memory[address+i] = rom[i];
+      }
+   }
+   
+   initMem() {   
+      if(this.ROM_CONFIG == "T08") {
+         this.rom_load(rom_E000,        0xE000);
+         this.rom_load(rom_E400,        0xE400);
+         this.rom_load(rom_E800_FDC525, 0xE800);   // 5" FDC
+         this.rom_load(rom_EC00_ACI,    0xEC00);
+   
+         videoRenderer.SCREEN_COLUMNS = 64;
+         videoRenderer.SCREEN_ROWS    = 16;
+         videoRenderer.SCREEN_COLUMNS_ARR = 64;
+   
+         FLOPPY_8_INCHES = false;
+      }
+   
+      if(this.ROM_CONFIG == "T10") {
+         this.rom_load(rom_E000,        0xE000);
+         this.rom_load(rom_E400,        0xE400);
+         this.rom_load(rom_E800_FDC8,   0xE800);   // 8" FDC
+         this.rom_load(rom_EC00_ACI,    0xEC00);
+   
+         videoRenderer.SCREEN_COLUMNS = 64;
+         videoRenderer.SCREEN_ROWS    = 16;
+         videoRenderer.SCREEN_COLUMNS_ARR = 64;
+   
+         FLOPPY_8_INCHES = true;
+      }
+   
+      /*
+      if(this.ROM_CONFIG == "rig") {
+         this.rom_load(rom_MON24_2,   0xE000);
+         this.rom_load(rom_SYS2K_482, 0xE400);
+         this.rom_load(rom_RIG02_U,   0xE800);
+         videoRenderer.SCREEN_COLUMNS = 80;
+         videoRenderer.SCREEN_ROWS    = 24;
+         videoRenderer.SCREEN_COLUMNS_ARR = 128;
+      }
+   
+      if(this.ROM_CONFIG == "scheda2") {
+         this.rom_load(rom_U1MON1512, 0xE000);
+         this.rom_load(rom_U3FDC,     0xE800);
+         videoRenderer.SCREEN_COLUMNS = 80;
+         videoRenderer.SCREEN_ROWS    = 24;
+         videoRenderer.SCREEN_COLUMNS_ARR = 128;
+      }
+      */
+   
+      if(this.ROM_CONFIG == "T20") {
+         this.rom_load(rom_T20V24, 0xE000);
+         videoRenderer.SCREEN_COLUMNS = 80;
+         videoRenderer.SCREEN_ROWS    = 24;
+         videoRenderer.SCREEN_COLUMNS_ARR = 128;
+      }
+   
+      // ROM di test di Gabriele Rossi
+      // rom_load(rom_GPMON007, 0xE000);
+   
+      this.rom_load([ 0xC3, 0x00, 0xE0 ], 0x0000); // JP E000
+   
+      videoRenderer.calculateGeometry();
+   
+      recalcFloppy();
+   }
+         
+   oneFrame(timestamp) {
+      let stamp = timestamp === undefined ? this.last_timestamp : timestamp;
+      let msec = stamp - this.last_timestamp;
+      this.last_timestamp = stamp;
+   
+      let ncycles = this.cpuSpeed * (msec / 1000);
+   
+      if(msec > this.frameRate*2) ncycles = this.cpuSpeed * (this.frameRate*2 / 1000);
+   
+      this.systemTicks(ncycles);
+   
+      this.averageFrameTime = this.averageFrameTime * 0.992 + msec * 0.008;
+         
+      if(!this.stopped) requestAnimationFrame(this.oneFrameThisBind);      
+   }   
+
+   systemTicks(ncycles) {
+      let endCycle = this.cycles + ncycles;
+   
+      while(this.cycles < endCycle) {
+         if(debugBefore !== undefined) debugBefore();
+         let elapsed = this.cpu.run_instruction();
+         if(debugAfter !== undefined) debugAfter(elapsed);
+         this.cycle += elapsed;
+         this.cycles += elapsed;
+         if(this.audioEnabled) {
+            this.writeAudioSamples(elapsed);
+            this.tape.cloadAudioSamples(elapsed);
+            if(this.tape.csaving) this.tape.csaveAudioSamples(elapsed);
+         }
+         if(this.cycle>=this.cyclesPerLine) {
+            this.cycle-=this.cyclesPerLine;
+            videoRenderer.drawFrame_y();
+            this.frames++;
+            update_halt_led();
+         }
+      }
+   }
+   
+   // write cassette bits on the audio buffer for n samples with downsampling
+   writeAudioSamples(n) {
+      this.downSampleCounter += (n * this.audio.sampleRate);
+      if(this.downSampleCounter >= this.cpuSpeed) {
+         let s = 0;
+         const st = (this.cassette_bit_out1 && this.cassette_bit_out2 ? 0.75 : this.cassette_bit_out2 ? -0.75 : 0 );
+         if(this.tape_monitor) s += st + (this.cassette_bit_in ? 0.5 : 0.0);
+         this.downSampleCounter -= this.cpuSpeed;
+         this.audioBuffer[this.audioPtr++] = s;
+         if(this.audioPtr > this.audioBufferSize) {
+            this.audio.playBuffer(this.audioBuffer);
+            this.audioPtr = 0;
+         }      
+      }      
+   }   
+
+   mem_read(address) {
+      return this.memory[address];
+   }
+   
+   mem_write(address, value) {
+      // TODO replicate video memory pages
+      if(address <= 0xCFFF) this.memory[address] = value;
+      // warn disabled for T20 firmware
+      // else console.warn(`ROM write at address ${hex(address,4)}h value ${hex(value)}h pc=${hex(emulator.cpu.getState().pc,4)}h`);
+   }
+   
+   io_read(ioport) {  
+      const port = ioport & 0xFF;
+      //if(port!=0xFF) warn(`read from unknown port ${hex(port)}h`);
+      switch(port) {
+   
+         case 0x6d:
+            return ~SASI_read_pins() & 0xFF;
+   
+         case 0x6c:
+            return ~SASI_read_data() & 0xFF;
+   
+         case 0x3f:
+            return FDC_read_port_3f();
+   
+         case 0xff:
+         case 0xd8:
+            // keyboard
+            return keyboard_read();
+   
+         case 0x77:
+            // ACI + video sync pins
+            // VSYNC necessita bit 3 posto a 0, bit 2 posto a 1
+            return 0b00000100 | (this.cassette_bit_in << 1);
+   
+         case 0x78:
+            // serial data read
+            return this.serial.cpu_read_data();
+   
+         case 0x7a:
+            // serial status, always ready
+            return this.serial.cpu_read_status();
+   
+         case 0xc0:
+         case 0xe8:
+            if(this.poly88) return keyboard_read();
+            else return 0;
+   
+         case 0xBC:
+         case 0xBD:
+         case 0xBE:
+         case 0xBF: {
+            let reg  = port - 0xBC;
+            return ~FDC_read(reg) & 0xFF;   // negated because D0-D7 are negated on the 1791
+         }
+      }
+   
+      //warn(`read from unknown port ${hex(port)}h`);
+      return 0x00;
+   }
+   
+   io_write(ioport, value) {    
+      const port = ioport & 0xFF;
+   
+      //console.log(`io write ${hex(port)} ${hex(value)}`)
+      switch(port) {
+   
+         case 0x3f:
+            FDC_write_port_3f(value);
+            return;
+   
+         case 0x5c:
+            // parallel printer
+            printerWrite(value);
+            return;
+   
+         case 0x6d:
+            return SASI_write_pins(~value & 0xFF);
+   
+         case 0x6c:
+            return SASI_write_data(~value & 0xFF);
+   
+         case 0x5e:
+         case 0x5f:
+            // paralle printer config, ignored
+            return;
+   
+         case 0x77:
+            // ACI port
+            this.cassette_bit_out1 = (value & (1<<0)) > 0;
+            this.cassette_bit_out2 = (value & (1<<2)) > 0;
+            return;
+   
+         case 0x78:
+            // serial data
+            this.serial.cpu_write_data(value);
+            return;
+   
+         case 0x7a:
+            // serial command, ignored
+            this.serial.cpu_write_command(value);
+            return;
+   
+         case 0xBC:
+         case 0xBD:
+         case 0xBE:
+         case 0xBF: {
+           let reg  = port - 0xBC;
+           let data = ~value & 0xFF;      // negated because D0-D7 are negated on the 1791
+           FDC_write(reg, data);
+           return;
+         }
+      } 
+      //warn(`write on unknown port ${hex(port)}h value ${hex(value)}h`);
+   }
 }
-
-/*
-// logs when PC = BA00h (CPM entry)
-debugBefore = (function() {
-   let first_time = true;
-   return function() {
-      let pc = cpu.getState().pc;
-
-      if(pc === 0x0000) console.warn(`*** 0000H STARTED***`);
-      if(pc === 0xBA00) console.warn(`*** CPM STARTED (BIOS $BA00) ***`);
-      if(pc === 0x0100) console.warn(`*** 0100H STARTED ***`);
-      if(pc === 0xEA87) console.warn(`*** EA87H RETURN WITH ERROR ***`);
-      if(pc === 0xE8FE) console.warn(`*** E8FEH READ BYTES ***`);
-      if(pc === 0xE8FC) console.warn(`*** E8FEH READ BYTES ***`);
-      if(pc === 0xEABF) console.warn(`*** HERE ***`);
-      if(pc === 0xEA7E) console.warn(`*** HERE ***`);
-      if(pc === 0xE8D6) console.warn(`*** HERE ***`);
-
-      //if(pc > 0xA000 && pc < 0xE000 && first_time) {
-      //   console.warn(`*** first time at ${cpu_status()} ***`);
-      //   first_time = false;
-      //}
-
-   };
-})();
-*/
-
-/*
-debugBefore = (function() {
-   let first_time = true;
-   return function() {
-      let pc = cpu.getState().pc;
-
-      if(pc === 0x0100) {
-         console.warn(`*** 0100H STARTED ***`);
-         console.log(cpu_status());
-      }
-
-      if(pc === 0xBA00) {
-         console.warn(`*** ${hex(pc,4)} START CPM BIOS ***`);
-         dumpMem(0xA400,0xB9FF);
-         dumpMem(0xBA00,0xBFFF);
-         console.log(cpu_status());
-      }
-
-      if(pc === 0x0103) {
-         console.warn(`*** ${hex(pc,4)} TOUCHED! ***`);
-         console.log(cpu_status());
-      }
-
-      if(pc === 0xeaa3) {
-         console.warn(`*** ${hex(pc,4)} TOUCHED! ***`);
-         console.log(cpu_status());
-      }
-
-      //if(pc > 0xA000 && pc < 0xE000 && first_time) {
-      //   console.warn(`*** first time at ${cpu_status()} ***`);
-      //   first_time = false;
-      //}
-
-   };
-})();
-*/
 

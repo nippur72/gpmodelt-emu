@@ -39,4 +39,3 @@ class Serial
    }
 }
 
-serial = new Serial();

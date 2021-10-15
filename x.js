@@ -2,7 +2,7 @@
 // find call addresses
 let calls = {};
 debugBefore = ()=> {      
-   const pc = cpu.getState().pc;
+   const pc = emulator.cpu.getState().pc;
    if(mem_read(pc) == 0xCD) {
       // it's call
       const address = mem_read_word(pc+1);
@@ -17,9 +17,9 @@ debugBefore = ()=> {
 // count t-states
 let ct = 0;
 debugBefore = ()=> {      
-   const pc = cpu.getState().pc;
-   if(pc === 0x0282) ct = cycles;
-   if(pc === 0x028b) console.log(`${cycles-ct}`);
+   const pc = emulator.cpu.getState().pc;
+   if(pc === 0x0282) ct = emulator.cycles;
+   if(pc === 0x028b) console.log(`${emulator.cycles-ct}`);
 }
 
 
@@ -31,7 +31,7 @@ debugBefore = ()=> {
    let values = [];
    let record = false;
    debugBefore = ()=> {      
-      const { a, pc } = cpu.getState();
+      const { a, pc } = emulator.cpu.getState();
       
       // start recording after returning from "CALL sync_tape"
       if(pc === 0x8917) record = true;
@@ -65,7 +65,7 @@ debugBefore = ()=> {
 // turbo tape sync header
 let _counter = 0;
 debugBefore = ()=> {      
-   const { pc, d, e, a } = cpu.getState();   
+   const { pc, d, e, a } = emulator.cpu.getState();   
    if(pc === 0x8971) {
       _counter++;
       const de = e+d*256;
@@ -80,7 +80,7 @@ debugBefore = ()=> {
 function hooked_mem_write(address, value) {
    mem_write(address, value);
    if(address === 0x4000) {
-      console.log(`writing in mem ${hex(address,4)}: ${hex(value)} from pc=${hex(cpu.getState().pc,4)}`);
+      console.log(`writing in mem ${hex(address,4)}: ${hex(value)} from pc=${hex(emulator.cpu.getState().pc,4)}`);
    }
 }
 cpu = new Z80({ mem_read, mem_write: hooked_mem_write, io_read, io_write });
@@ -93,7 +93,7 @@ debugBefore = (function() {
          // there was a call to RST 30
          console.log(cpu_status());
       }
-      lastpc = cpu.getState().pc;
+      lastpc = emulator.cpu.getState().pc;
    };
 })();
 
@@ -105,7 +105,7 @@ debugBefore = (function() {
          // there was a call to RST 30
          console.log(`CP/M entry point reached`);
       }
-      lastpc = cpu.getState().pc;
+      lastpc = emulator.cpu.getState().pc;
    };
 })();
 
@@ -116,8 +116,8 @@ let phase = 0;
 let tone = 748.7;
 function cloadAudioSamples(n) {
    tapeHighPtr += (n*tapeSampleRate);
-   if(tapeHighPtr >= cpuSpeed) {
-      tapeHighPtr-=cpuSpeed;
+   if(tapeHighPtr >= emulator.cpuSpeed) {
+      tapeHighPtr-=emulator.cpuSpeed;
       const audio = Math.sin(phase) * 0.75;
       phase += (2 * Math.PI * tone / 44100);
       phase = phase % (2 * Math.PI);
@@ -266,7 +266,7 @@ let inv = false;
       old_io_bit_4      = io_bit_4;
    }
    debugAfter = ()=> {                
-      let { pc } = cpu.getState();
+      let { pc } = emulator.cpu.getState();
       if(old_io_bit_7 != io_bit_7)           console.log(`bit 7 changed from ${old_io_bit_7     } to ${io_bit_7     } at ${hex(pc,4)}`);
       if(old_caps_lock_bit != caps_lock_bit) console.log(`bit 6 changed from ${old_caps_lock_bit} to ${caps_lock_bit} at ${hex(pc,4)}`);
       if(old_io_bit_4 != io_bit_4)           console.log(`bit 4 changed from ${old_io_bit_4     } to ${io_bit_4     } at ${hex(pc,4)}`);
@@ -282,7 +282,7 @@ let inv = false;
    debugBefore = (function() {
       let previous_pc = 0;
       return function() {     
-         const pc = cpu.getState().pc;    
+         const pc = emulator.cpu.getState().pc;    
          if(pc === 0x0038) {
             // there was a call to RST 38
             console.log(`RST 38h called from ${hex(previous_pc, 4)}`);
@@ -300,7 +300,7 @@ let brk = [];
    // install debug function
    debugBefore = (function() {
       return function() {     
-         const pc = cpu.getState().pc;    
+         const pc = emulator.cpu.getState().pc;    
          if(brk[pc] === true) {
             console.log(cpu_status());
          }
@@ -318,7 +318,7 @@ let brk = [];
    debugBefore = (function() {
       let previous_pc = 0;
       return function() {     
-         const pc = cpu.getState().pc;    
+         const pc = emulator.cpu.getState().pc;    
          if(pc === 0x0038) {
             // there was a call to RST 38
             console.log(`RST 38h called from ${hex(previous_pc, 4)}`);
@@ -335,7 +335,7 @@ let brk = [];
    // install debug function
    debugBefore = (function() {
       return function() {     
-         const { pc, sp } = cpu.getState();    
+         const { pc, sp } = emulator.cpu.getState();    
          if(pc >= 0x6000 && pc <= 0x7fff) {
             console.log(`${hex(pc,4)} sp ${hex(sp,4)}`);
          }
@@ -350,7 +350,7 @@ let brk = [];
    // install debug function
    debugBefore = (function() {
       return function() {     
-         const { pc, sp, h, l } = cpu.getState();    
+         const { pc, sp, h, l } = emulator.cpu.getState();    
          if(pc == 0x0100) {
             console.log(`we are at ${hex(pc,4)}`);
          }
@@ -403,20 +403,20 @@ function mark_addr(from,to) {
    for(let t=from;t<=to;t++) debug_addr[t] = 0xFF;
 }
 function mem_read(address) {
-   if(debug_addr[address]===0xFF) console.warn(`reading from ${hex(address,4)}h pc=${hex(cpu.getState().pc,4)}h`);
-   return memory[address];
+   if(debug_addr[address]===0xFF) console.warn(`reading from ${hex(address,4)}h pc=${hex(emulator.cpu.getState().pc,4)}h`);
+   return emulator.memory[address];
 }
 function mem_write(address, value) {
    // TODO replicate video memory pages
-   if(debug_addr[address]==0xFF) console.warn(`writing to ${hex(address,4)}h value ${hex(value)}h pc=${hex(cpu.getState().pc,4)}h`);
-   if(address <= 0xCFFF) memory[address] = value;
-   else console.warn(`ROM write at address ${hex(address,4)}h value ${hex(value)}h pc=${hex(cpu.getState().pc,4)}h`);
+   if(debug_addr[address]==0xFF) console.warn(`writing to ${hex(address,4)}h value ${hex(value)}h pc=${hex(emulator.cpu.getState().pc,4)}h`);
+   if(address <= 0xCFFF) emulator.memory[address] = value;
+   else console.warn(`ROM write at address ${hex(address,4)}h value ${hex(value)}h pc=${hex(emulator.cpu.getState().pc,4)}h`);
 }
 mark_addr(0xE005,0xE024);
 mark_addr(0xEAD1,0xEBFF);
 
 // logs when
-paste(`MBASIC\r\n\r\nprint chr$(22)"00"\r\n\r\nSYSTEM\r\n\r\n`); poly88 = true;
+paste(`MBASIC\r\n\r\nprint chr$(22)"00"\r\n\r\nSYSTEM\r\n\r\n`); emulator.poly88 = true;
 
 
 // *************************************************************************************
@@ -425,16 +425,16 @@ paste(`MBASIC\r\n\r\nprint chr$(22)"00"\r\n\r\nSYSTEM\r\n\r\n`); poly88 = true;
 for(let t=0; t<16; t++) mem_write(0xba8b+t, mem_read(0xba6b+t));
 mem_write_word(0xba7b-2, 0xBD36+31);
 dumpMem(0xba8b,0xba8b+16);
-memory[0xE663] = 42;
+emulator.memory[0xE663] = 42;
 
 // *************************************************************************************
 // count t-states
 let ct = 0;
 debugBefore = ()=> {
-   const pc = cpu.getState().pc;
+   const pc = emulator.cpu.getState().pc;
    if(pc === 0x026a) {
-      console.log(`${cycles-ct}`);
-      ct = cycles;
+      console.log(`${emulator.cycles-ct}`);
+      ct = emulator.cycles;
    }
 }
 
@@ -449,4 +449,90 @@ debugBefore = ()=> {
    rom_GCAR_A_U7.forEach((e,i)=>rom_GCAR_A_U7[i]=rev(e));
    rom_GCAR_B_U8.forEach((e,i)=>rom_GCAR_B_U8[i]=rev(e));
 })();
+
+
+// *************************************************************************************
+// simulate paddles on poly88
+let paddle0 = 0;
+let paddle1 = 0;
+(function() {
+   document.onmousemove = handleMouseMove;
+   let canvas = document.getElementById("canvas");
+   function handleMouseMove(event) {
+      paddle0 = Math.min(Math.floor(event.pageX/canvas.clientWidth * 128),127);
+      paddle1 = Math.min(Math.floor(event.pageY/canvas.clientHeight * 128),127);
+      //console.log(paddle0,paddle1);
+   }
+})();
+
+/*
+function poly88_paddles_arduino() {
+   if((cycles & (1<20))!=0) return paddle0;
+   else                     return paddle1 | 128;
+}
+*/
+// *************************************************************************************
+
+/*
+// logs when PC = BA00h (CPM entry)
+debugBefore = (function() {
+   let first_time = true;
+   return function() {
+      let pc = emulator.cpu.getState().pc;
+
+      if(pc === 0x0000) console.warn(`*** 0000H STARTED***`);
+      if(pc === 0xBA00) console.warn(`*** CPM STARTED (BIOS $BA00) ***`);
+      if(pc === 0x0100) console.warn(`*** 0100H STARTED ***`);
+      if(pc === 0xEA87) console.warn(`*** EA87H RETURN WITH ERROR ***`);
+      if(pc === 0xE8FE) console.warn(`*** E8FEH READ BYTES ***`);
+      if(pc === 0xE8FC) console.warn(`*** E8FEH READ BYTES ***`);
+      if(pc === 0xEABF) console.warn(`*** HERE ***`);
+      if(pc === 0xEA7E) console.warn(`*** HERE ***`);
+      if(pc === 0xE8D6) console.warn(`*** HERE ***`);
+
+      //if(pc > 0xA000 && pc < 0xE000 && first_time) {
+      //   console.warn(`*** first time at ${cpu_status()} ***`);
+      //   first_time = false;
+      //}
+
+   };
+})();
+*/
+
+/*
+debugBefore = (function() {
+   let first_time = true;
+   return function() {
+      let pc = emulator.cpu.getState().pc;
+
+      if(pc === 0x0100) {
+         console.warn(`*** 0100H STARTED ***`);
+         console.log(cpu_status());
+      }
+
+      if(pc === 0xBA00) {
+         console.warn(`*** ${hex(pc,4)} START CPM BIOS ***`);
+         dumpMem(0xA400,0xB9FF);
+         dumpMem(0xBA00,0xBFFF);
+         console.log(cpu_status());
+      }
+
+      if(pc === 0x0103) {
+         console.warn(`*** ${hex(pc,4)} TOUCHED! ***`);
+         console.log(cpu_status());
+      }
+
+      if(pc === 0xeaa3) {
+         console.warn(`*** ${hex(pc,4)} TOUCHED! ***`);
+         console.log(cpu_status());
+      }
+
+      //if(pc > 0xA000 && pc < 0xE000 && first_time) {
+      //   console.warn(`*** first time at ${cpu_status()} ***`);
+      //   first_time = false;
+      //}
+
+   };
+})();
+*/
 

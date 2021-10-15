@@ -3,15 +3,15 @@ let key_pressed_tick = -1000000; // set last keypress beyond start of time
 
 function keyboard_presskey(keyascii) {
    key_pressed_ascii = keyascii;
-   key_pressed_tick = cycles;
+   key_pressed_tick = emulator.cycles;
 }
 
 function keyboard_releasekey() {
 }
 
 function keyboard_read() {
-   const strobe_duration = cpuSpeed/100; // 1/100 sec
-   const strobe = cycles < (key_pressed_tick + strobe_duration) ? 1 : 0;
+   const strobe_duration = emulator.cpuSpeed/100; // 1/100 sec
+   const strobe = emulator.cycles < (key_pressed_tick + strobe_duration) ? 1 : 0;
    let data = (key_pressed_ascii & 0x7f) | (strobe << 7);
    return ~data & 0xFF; // negated logic
 }

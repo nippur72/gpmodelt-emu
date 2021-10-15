@@ -1,16 +1,43 @@
 /**** utility functions ****/
 
+// ********************************* UTILS WRAPPERS ************************************
+
+function renderAllLines() {
+   emulator.systemTicks(emulator.cyclesPerLine * emulator.numscanlines);
+}
+
+function goAudio() {
+   emulator.audio.start();
+}
+
+function stopAudio() {
+   emulator.audio.stop();
+}
+
+function audioContextResume() {  
+   emulator.audio.resume();
+}
+
+function csave() {
+   emulator.tape.csave();
+}
+
+function cstop() {
+   emulator.tape.cstop();
+}
+
+
 function dumpMem(start, end, rows) {
    if(rows==undefined) rows=16;
    let s="\r\n";
    for(let r=start;r<=end;r+=rows) {
       s+= hex(r, 4) + ": ";      
       for(let c=0;c<rows && (r+c)<=end;c++) {
-         const byte = mem_read(r+c);
+         const byte = emulator.mem_read(r+c);
          s+= hex(byte)+" ";
       }
       for(let c=0;c<rows && (r+c)<=end;c++) {
-         const byte = mem_read(r+c);
+         const byte = emulator.mem_read(r+c);
          s+= (byte>32 && byte<127) ? String.fromCharCode(byte) : '.' ;
       }
       s+="\n";
@@ -42,11 +69,11 @@ function hexDump(memory, start, end, rows) {
    for(let r=start;r<end;r+=rows) {
       s+= hex(r, 4) + ": ";      
       for(let c=0;c<rows;c++) {
-         const byte = memory[r+c];
+         const byte = emulator.memory[r+c];
          s+= hex(byte)+" ";
       }
       for(let c=0;c<rows;c++) {
-         const byte = memory[r+c];
+         const byte = emulator.memory[r+c];
          s+= (byte>32 && byte<127) ? String.fromCharCode(byte) : '.' ;
       }
       s+="\n";
@@ -67,18 +94,18 @@ function bin(value, size) {
 }
 
 function cpu_status() {
-   const state = cpu.getState();
+   const state = emulator.cpu.getState();
    return `A=${hex(state.a)} BC=${hex(state.b)}${hex(state.c)} DE=${hex(state.d)}${hex(state.e)} HL=${hex(state.h)}${hex(state.l)} IX=${hex(state.ix,4)} IY=${hex(state.iy,4)} SP=${hex(state.sp,4)} PC=${hex(state.pc,4)} S=${state.flags.S}, Z=${state.flags.Z}, Y=${state.flags.Y}, H=${state.flags.H}, X=${state.flags.X}, P=${state.flags.P}, N=${state.flags.N}, C=${state.flags.C}`;   
 }
 
 function mem_write_word(address, word) {
-   mem_write(address + 0, word & 0xFF);
-   mem_write(address + 1, (word & 0xFF00) >> 8);
+   emulator.mem_write(address + 0, word & 0xFF);
+   emulator.mem_write(address + 1, (word & 0xFF00) >> 8);
 }
 
 function mem_read_word(address) {
-   const lo = mem_read(address + 0);
-   const hi = mem_read(address + 1);
+   const lo = emulator.mem_read(address + 0);
+   const hi = emulator.mem_read(address + 1);
    return lo+hi*256;
 }
 
@@ -118,34 +145,34 @@ function pasteLong(str) {
 }
 
 function zap() {      
-   for(let t=0;t<memory.length;t++) memory[t] = (Math.random()*4096) & 0xFF;
-   //for(let t=0;t<memory.length;t++) memory[t] = 0x76;
-   initMem();   
-   let state = cpu.getState();
+   for(let t=0;t<emulator.memory.length;t++) emulator.memory[t] = (Math.random()*4096) & 0xFF;
+   //for(let t=0;t<emulator.memory.length;t++) emulator.memory[t] = 0x76;
+   emulator.initMem();   
+   let state = emulator.cpu.getState();
    state.halted = true;
-   cpu.setState(state);   
+   emulator.cpu.setState(state);   
 }
 
 function power() {      
    zap();
    renderAllLines();
-   cpu.reset();
+   emulator.cpu.reset();
    SASI_reset();
 }
 
 function stop() {   
-   stopped = true;
+   emulator.stopped = true;
    console.log("emulation stopped");
 }
 
 function go() {
-   stopped = false;
+   emulator.stopped = false;
    oneFrame();
    console.log("emulation resumed");
 }
 
 function info() { 
-   const average = averageFrameTime;
+   const average = emulator.averageFrameTime;
    console.log(`frame rate: average ${Math.round(average*10,2)/10} ms (${Math.round(1000/average)} Hz)`);
 }
 
@@ -159,8 +186,8 @@ function reset(value, bitmask) {
 
 function saveState() {
    const saveObject = {
-      memory: Array.from(memory),
-      cpu: cpu.getState()  
+      memory: Array.from(emulator.memory),
+      cpu: emulator.cpu.getState()  
    };   
 
    window.localStorage.setItem(`childzemu_state`, JSON.stringify(saveObject));
@@ -176,7 +203,7 @@ function restoreState() {
       s = JSON.parse(s);      
       
       copyArray( s.memory, memory);
-      cpu.setState(s.cpu);
+      emulator.cpu.setState(s.cpu);
    }
    catch(error)
    {
@@ -199,7 +226,7 @@ function not_bit(b,n) {
 } 
 
 function dumpStack() {
-   const sp = cpu.getState().sp;
+   const sp = emulator.cpu.getState().sp;
 
    for(let t=sp;t<0xC000;t+=2) {
       const word = mem_read_word(t);
@@ -224,14 +251,13 @@ function downloadBytes(fileName, buffer) {
 
 // *************************************************************************************
 // connects to bbs.sblendorio.eu
-// requires TERM.COM and websocket tunnel as in:
-// wstcp -t bbs.sblendorio.eu -p 23 -w 8080 -n bbs
+// requires TERM.COM
 async function bbs() {
    let modem = new BBS();
    modem.debug = false;
 
-   modem.onreceive = (data) => data.forEach(e=>serial.receive_from_external(e));
-   serial.on_send_to_external = (data) => modem.send([data]);
+   modem.onreceive = (data) => data.forEach(e=>emulator.serial.receive_from_external(e));
+   emulator.serial.on_send_to_external = (data) => modem.send([data]);
 
-   await modem.connect("ws://localhost:8080","bbs");
+   await modem.connect("wss://bbs.sblendorio.eu:8082","bbs");
 }

@@ -3,27 +3,27 @@
 function onResize(e) {
    const canvas = document.getElementById("canvas");
 
-   if(window.innerWidth > (window.innerHeight*aspect))
+   if(window.innerWidth > (window.innerHeight*emulator.aspect))
    {
-      canvas.style.width  = `${aspect*100}vmin`;
+      canvas.style.width  = `${emulator.aspect*100}vmin`;
       canvas.style.height = "100vmin";
    }
    else if(window.innerWidth > window.innerHeight)
    {
       canvas.style.width  = "100vmax";
-      canvas.style.height = `${(1/aspect)*100}vmax`;
+      canvas.style.height = `${(1/emulator.aspect)*100}vmax`;
    }
    else
    {
       canvas.style.width  = "100vmin";
-      canvas.style.height = `${(1/aspect)*100}vmin`;
+      canvas.style.height = `${(1/emulator.aspect)*100}vmin`;
    }
    
    canvas.style.borderRadius = "4rem";
 
    const trueHeight = canvas.offsetHeight
-   hide_scanlines = (trueHeight < 512);
-   buildPalette();
+   videoRenderer.hide_scanlines = (trueHeight < 512);
+   videoRenderer.palette.buildPalette();
 }
 
 function goFullScreen() 
@@ -36,8 +36,6 @@ function goFullScreen()
 window.addEventListener("resize", onResize);
 window.addEventListener("dblclick", goFullScreen);
 
-onResize();
-
 // **** save state on close ****
 
 window.onbeforeunload = function(e) {
@@ -49,13 +47,13 @@ window.onbeforeunload = function(e) {
 window.addEventListener("visibilitychange", function() {
    if(document.visibilityState === "hidden")
    {
-      stopped = true;
+      emulator.stopped = true;
       stopAudio();
    }
    else if(document.visibilityState === "visible")
    {
-      stopped = false;
-      oneFrame();
+      emulator.stopped = false;
+      emulator.oneFrame();
       goAudio();
    }
 });
@@ -92,14 +90,9 @@ async function droppedFile(outName, bytes, address) {
 
    if(ext == ".wav") {
       // WAV files
-      //console.log("WAV file dropped");
-      const info = decodeSync(bytes.buffer);
-      tapeSampleRate = info.sampleRate;
-      //console.log(info.channelData);
-      tapeBuffer = info.channelData[0];
-      tapeLen = tapeBuffer.length;
-      tapePtr = 0;
-      tapeHighPtr = 0;
+      console.log("WAV file dropped");
+      const info = decodeSync(bytes.buffer);      
+      emulator.tape.cload(info.channelData[0], info.sampleRate);
       return;
    }   
 
@@ -149,7 +142,7 @@ function getQueryStringObject(options) {
 }
 
 function parseQueryStringCommands() {
-   options = getQueryStringObject(options);
+   let options = getQueryStringObject({});
 
    if(options.load !== undefined) {
       let [name, address] = options.load.split(",");  
@@ -160,13 +153,13 @@ function parseQueryStringCommands() {
    }
 
    let rom = options.config == undefined ? "t20" : options.config.toLowerCase();
-        if(rom == "t20") ROM_CONFIG = "T20";
-   else if(rom == "t08") ROM_CONFIG = "T08";
-   else if(rom == "t10") ROM_CONFIG = "T10";
+        if(rom == "t20") emulator.ROM_CONFIG = "T20";
+   else if(rom == "t08") emulator.ROM_CONFIG = "T08";
+   else if(rom == "t10") emulator.ROM_CONFIG = "T10";
 
    if(options.poly88 !== undefined) {
-      poly88 = options.poly88;
-      ROM_CONFIG = "T10";
+      emulator.poly88 = options.poly88;
+      emulator.ROM_CONFIG = "T10";
    }
 
    if(options.bt !== undefined || 
@@ -174,11 +167,11 @@ function parseQueryStringCommands() {
       options.bh !== undefined || 
       options.aspect !== undefined
    ) {
-      if(options.bt     !== undefined) border_top    = Number(options.bt); 
-      if(options.bb     !== undefined) border_bottom = Number(options.bb);
-      if(options.bh     !== undefined) border_h      = Number(options.bh);
-      if(options.aspect !== undefined) aspect        = Number(options.aspect);
-      calculateGeometry();
+      if(options.bt     !== undefined) border_top       = Number(options.bt);
+      if(options.bb     !== undefined) border_bottom    = Number(options.bb);
+      if(options.bh     !== undefined) border_h         = Number(options.bh);
+      if(options.aspect !== undefined) emulator.aspect  = Number(options.aspect);
+      videoRenderer.calculateGeometry();
       onResize();
    }
 }
@@ -199,22 +192,13 @@ async function fetchProgram(name, address)
    }
 }
 
-function rewind_tape() {   
-   tapePtr = 0;
-   tapeHighPtr = 0;
-}
-
-function stop_tape() {   
-   tapePtr = tapeLen;   
-}
-
 let haltD = false;
 function update_halt_led() {
    // slow down updates
-   if(frames % 20 != 0) return;
+   if(emulator.frames % 20 != 0) return;
 
    // update HALT status
-   let halt = cpu.getState().halted;
+   let halt = emulator.cpu.getState().halted;
    if(haltD != halt) {
       const element = document.getElementById("halt");
       element.style.display = halt ? "block" : "none";

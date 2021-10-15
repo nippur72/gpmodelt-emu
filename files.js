@@ -29,7 +29,7 @@ function loadBytes(bytes, address, fileName) {
    const end = startAddress + bytes.length - 1;
 
    for(let i=0,t=startAddress;t<=end;i++,t++) {
-      mem_write(t, bytes[i]);
+      emulator.mem_write(t, bytes[i]);
    }   
 
    if(fileName === undefined) fileName = "autoload";
@@ -48,7 +48,7 @@ async function save_file(filename, start, end) {
 
    const prg = [];
    for(let i=0,t=start; t<=end; i++,t++) {
-      prg.push(mem_read(t));
+      prg.push(emulator.mem_read(t));
    }
    const bytes = new Uint8Array(prg);
    

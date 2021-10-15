@@ -628,7 +628,7 @@ async function load_default_disks() {
 
    let disk1 = FLOPPY_8_INCHES ? "GP16_IMD.img" : "disk_2x40x17x128xSS.img";
    let disk2 = FLOPPY_8_INCHES ? "GP02_IMD.img" : "disk_2x40x17x128xSS.img";
-   if(poly88) disk1 = "reverse.img";
+   if(emulator.poly88) disk1 = "reverse.img";
    if(await storage.fileExists(disk1) && await storage.fileExists(disk2)) {
       await load(disk1,1);
       await load(disk2,0);
@@ -637,13 +637,13 @@ async function load_default_disks() {
       dropdrive = 1; await fetchProgram(`disks/${disk1}`);
       dropdrive = 0; await fetchProgram(`disks/${disk2}`);
    }
-   if(poly88) {
+   if(emulator.poly88) {
       paste("\r");
       for(let t=0;t<20;t++) renderAllLines();
       paste("BD");
    }
 
-   if(ROM_CONFIG == "T20") {
+   if(emulator.ROM_CONFIG == "T20") {
       let hdname = "SA1004_T20.hd";
       if(await storage.fileExists(hdname)) await load(hdname);
       else await fetchProgram(`disks/${hdname}`);

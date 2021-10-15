@@ -110,17 +110,17 @@ function SA_tick() {
             }
             else if(command == 1) {
                // recalibrate
-               stopped = true;
+               emulator.stopped = true;
                throw `command ${command} not handled`;
             }
             else if(command == 2) {
                // request syndrome
-               stopped = true;
+               emulator.stopped = true;
                throw `command ${command} not handled`;
             }
             else if(command == 3) {
                // request sense
-               stopped = true;
+               emulator.stopped = true;
                throw `command ${command} not handled`;
             }
             else if(command == 4) {
@@ -129,17 +129,17 @@ function SA_tick() {
             }
             else if(command == 5) {
                // check track format
-               stopped = true;
+               emulator.stopped = true;
                throw `command ${command} not handled`;
             }
             else if(command == 6) {
                // format track
-               stopped = true;
+               emulator.stopped = true;
                throw `command ${command} not handled`;
             }
             else if(command == 7) {
                // format bad track
-               stopped = true;
+               emulator.stopped = true;
                throw `command ${command} not handled`;
             }
             else if(command == 8) {
@@ -170,16 +170,16 @@ function SA_tick() {
             }
             else if(command == 0x0b) {
                // seek
-               stopped = true;
+               emulator.stopped = true;
                throw `command ${command} not handled`;
             }
             else {
-               stopped = true;
+               emulator.stopped = true;
                throw `class 0 command ${command} not handled`;
             }
          }
          else if(SA.COMMAND.length == 6 && (command_class==7)) {
-            stopped = true;
+            emulator.stopped = true;
             throw `class 7 commands not handled`;
          }
          else if(SA.COMMAND.length == 10 && command_class == 1) {
@@ -203,7 +203,7 @@ function SA_tick() {
                SA.STATE = "STATUS_BYTE";
             }
             else {
-               stopped = true;
+               emulator.stopped = true;
                throw `class 1 command ${command} not handled`;
             }
          }
