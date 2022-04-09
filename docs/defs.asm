@@ -93,9 +93,12 @@ TMONTEST          EQU $E3FD    ; T-MON "T"
 ;TOGCUR            EQU ??      ; E018? toggle cursor
 PRTCHAR           EQU $E403    ; used in some dead code in CBIOS
 RDFLE             EQU $E406    ; read file from cassette (documented page 58)
-SAVEFILE          EQU $E409    ; save the memory in DE-HL to tape A=some marker
+WRFLE             EQU $E409    ; save the memory in DE-HL to tape A=some marker (documented page 57)
 NOBLK             EQU $E40C    ; attende il sincronismo video per evitare il "brillio" durante l'accesso al video
 EPROM_LPRINT      EQU $E650    ; sends C to parallel printer port
+
+; disk drive eprom
+
 ;??                EQU $E80C   ; used by CBIOS
 SET_IX_READ       EQU $E82A    ; used by CBIOS
 EPROM_INITD       EQU $E800    ; initialize the disk routines
@@ -109,6 +112,10 @@ DISK_ERROR        EQU $E830    ; display "DISK ERROR"
 BOOT_FROM_TAPE    EQU $E0B0
 BOOT_FROM_DISK    EQU $E818
 
+; ACI eprom
+
+RDFLE1            EQU $EC06
+WRFLE1            EQU $EC09
 
 ; **** IO PORTS ****
 
@@ -142,3 +149,51 @@ DISK_ERROR_0 EQU 0   ; invalid track?
 ; TODO aggiungere quelli del manuale
 
 
+; CASSETTE WRFLE ROUTINE BIT MASK PARAMETER
+CASSWR_UNUSED1       EQU &b00000001
+CASSWR_UNUSED2       EQU &b00000010
+CASSWR_TURN_OFF_END  EQU &b00000100  ; 1=turn off tape at the end of write
+CASSWR_UNUSED3       EQU &b00001000
+CASSWR_SHORT_HEAD    EQU &b00010000  ; 1=generate a shorter header
+CASSWR_SHORT_TAIL    EQU &b00100000  ; 1=generate a shorter ending pause
+CASSWR_MOTOR2        EQU &b01000000  ; 1=turn on cassette drive motor 2
+CASSWR_MOTOR1        EQU &b10000000  ; 1=turn on cassette drive motor 2
+
+; CASSETTE RDFLE ROUTINE BIT MASK PARAMETER
+CASSRD_UNUSED1       EQU &b00000001
+CASSRD_SEARCH        EQU &b00000010  ; 1=search for the specified file name
+CASSRD_UNUSED2       EQU &b00000100
+CASSRD_TURN_OFF_END  EQU &b00001000  ; 1=turn off tape at the end of read
+CASSRD_SHORT_HEAD    EQU &b00010000  ; 1=wait for a shorter header
+CASSRD_RELOCATE      EQU &b00100000  ; 1=load at address specified in DE
+CASSRD_MOTOR2        EQU &b01000000  ; 1=turn on cassette drive motor 2
+CASSRD_MOTOR1        EQU &b10000000  ; 1=turn on cassette drive motor 2
+
+; cassette port out bits
+CASSOUT_WR1    EQU &b00000001   ; write signal n.1
+CASSOUT_RELAY2 EQU &b00000010   ; relay n.2 (0=open)
+CASSOUT_WR2    EQU &b00000100   ; write signal n.2
+CASSOUT_RELAY1 EQU &b00001000   ; relay n.1 (0=open)
+
+; cassette port in bits
+CASSIN_FREE    EQU &b00000001   ; free (normally at Vcc)
+CASSIN_RD      EQU &b00000010   ; read signal
+CASSIN_ANTIBL1 EQU &b00000100   ; video anti-blink signal 1
+CASSIN_ANTIBL2 EQU &b00001000   ; video anti-blink signal 2
+
+; cassette file format
+;
+; 1024 zero (bytes or bits?)
+; 2 start pulses
+; filename
+; start address
+; end address
+; checksum
+;
+; repeated n times: 256 bytes data + checksum
+;
+; pause
+; end
+;
+;
+;
