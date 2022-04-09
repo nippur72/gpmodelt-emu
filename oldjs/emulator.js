@@ -6,7 +6,8 @@ class GPEmulator {
       this.charset_bit = 1;          // selects charset ROM font
       this.poly88 = false;           // poly88 VTI emulation
       
-      this.audioEnabled = true;
+      this.audioEnabled = false;
+
       this.audio = new Audio(4096);  // the browser audio player
       this.audioBufferSize = 4096;   // size of the audio buffer, enough to hold more than one frame time
       this.audioBuffer = new Float32Array(this.audioBufferSize);  // audio buffer      
@@ -59,6 +60,8 @@ class GPEmulator {
 
       this.videoRenderer = new VideoRenderer();
       this.videoRenderer.calculateGeometry();
+
+      this.keyboard = new AsciiKeyboard(this);
    }
 
    systemConfig() {
@@ -148,7 +151,7 @@ class GPEmulator {
    
       this.videoRenderer.calculateGeometry();
    
-      recalcFloppy();
+      wd1791.recalcFloppy();
    }
          
    oneFrame(timestamp) {
@@ -234,7 +237,7 @@ class GPEmulator {
          case 0xff:
          case 0xd8:
             // keyboard
-            return keyboard_read();
+            return this.keyboard.keyboard_read();
    
          case 0x77:
             // ACI + video sync pins
@@ -251,7 +254,7 @@ class GPEmulator {
    
          case 0xc0:
          case 0xe8:
-            if(this.poly88) return keyboard_read();
+            if(this.poly88) return this.keyboard.keyboard_read();
             else return 0;
    
          case 0xBC:

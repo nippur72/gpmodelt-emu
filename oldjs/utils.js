@@ -121,10 +121,9 @@ async function drag_drop_disk(diskname, bytes) {
 function paste(text) {   
    for(let t=0;t<text.length;t++) {
       const v = text.charCodeAt(t);
-      keyboard_presskey(v);
+      emulator.keyboard.keyboard_presskey(v);
       renderAllLines();
       renderAllLines();
-      keyboard_releasekey();
       renderAllLines();
       renderAllLines();
    }

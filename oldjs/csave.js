@@ -1,4 +1,3 @@
-
 class Tape {
    constructor(emulator) {
       this.emulator = emulator;

@@ -1,29 +1,43 @@
 {
-  "name": "childz-emu",
+  "name": "gpmodelt-emu",
   "version": "0.0.1",
-  "description": "ChildZ emulator",
+  "description": "General Processor Model T emulator",
   "main": "elect.js",
   "scripts": {
-    "start": "electron electron.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "start http-server -p 8080 & npx webpack -w --mode=development"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nippur72/ChildZ-emu.git"
+    "url": "git+https://github.com/nippur72/gpmodelt-emu.git"
   },
   "keywords": [
-    "ChildZ",
     "General Processor"
   ],
   "author": "Antonino Porcino <nino.porcino@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/nippur72/ChildZ-emu/issues"
+    "url": "https://github.com/nippur72/gpmodelt-emu/issues"
   },
-  "homepage": "https://github.com/nippur72/ChildZ-emu#readme",
+  "homepage": "https://github.com/nippur72/gpmodelt-emu#readme",
   "dependencies": {
+    "@fluentui/react": "^8.64.1",
     "@nippur72/libemu": "^0.2.0",
-    "command-line-args": "^5.1.1"
+    "@types/react": "^17.0.44",
+    "@types/react-dom": "^18.0.0",
+    "command-line-args": "^5.2.1",
+    "file-saver": "^2.0.5",
+    "idb-keyval": "^6.1.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "wav-decoder": "^1.3.0",
+    "wav-encoder": "^1.3.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/file-saver": "^2.0.5",
+    "@types/wav-encoder": "^1.3.0",
+    "ts-loader": "^9.2.6",
+    "typescript": "^4.5.5",
+    "webpack": "^5.69.1",
+    "webpack-cli": "^4.9.2"
+  }
 }

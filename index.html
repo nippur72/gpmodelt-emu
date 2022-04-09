@@ -6,7 +6,9 @@
 </head>
 
 <body style="padding:0; margin:0; background: black; color: green;">
-   
+   <div id="mountnode">
+   </div>
+
    <div style="margin: auto" id="screen">
       <canvas id="canvas" style="display: block; border:black 0px solid; padding: 0px; margin:auto;"></canvas>
    </div>
@@ -15,48 +17,7 @@
       HALT
    </div>
 
-   <script type="text/javascript" src="node_modules/@nippur72/libemu/FileSaver.js"></script>
-   <script type="text/javascript" src="node_modules/@nippur72/libemu/idb-keyval-iife.min.js"></script>
-   <script type="text/javascript" src="node_modules/@nippur72/libemu/wav-decoder.js"></script>
-   <script type="text/javascript" src="node_modules/@nippur72/libemu/wav-encoder.js"></script>
-   <script type="text/javascript" src="node_modules/@nippur72/libemu/Z80.js"></script>
-   <script type="text/javascript" src="node_modules/@nippur72/libemu/printer.js"></script>
-   <script type="text/javascript" src="node_modules/@nippur72/libemu/bytes.js"></script>
-   <script type="text/javascript" src="node_modules/@nippur72/libemu/filesystem.js"></script>
-   <script type="text/javascript" src="node_modules/@nippur72/libemu/bbs.js"></script>
-   <script type="text/javascript" src="node_modules/@nippur72/libemu/audio.js"></script>
+   <script src="dist/bundle.js"></script>
 
-   <!-- core emulator files -->
-   <script type="text/javascript" src="autoload.js"></script>
-
-   <script type="text/javascript" src="roms/rom.E000.js"></script>
-   <script type="text/javascript" src="roms/rom.E400.js"></script>
-   <script type="text/javascript" src="roms/rom.E800_FDC525.js"></script>
-   <script type="text/javascript" src="roms/rom.E800_FDC8.js"></script>
-   <script type="text/javascript" src="roms/rom.EC00.js"></script>
-   <script type="text/javascript" src="roms/rom.GCAR_A_U7"></script>
-   <script type="text/javascript" src="roms/rom.GCAR_B_87"></script>
-   <script type="text/javascript" src="roms/rom.GCE_M1_U3.js"></script>
-   <script type="text/javascript" src="roms/rom.GCE_M2_U4.js"></script>
-   <script type="text/javascript" src="roms/rom.MON24_2.js"></script>
-   <script type="text/javascript" src="roms/rom.SYS2K_482.js"></script>
-   <script type="text/javascript" src="roms/rom.RIG02_U.js"></script>
-   <script type="text/javascript" src="roms/rom.GPMON007.js"></script>
-   <script type="text/javascript" src="roms/rom.U1MON1512.js"></script>
-   <script type="text/javascript" src="roms/rom.U3FDC.js"></script>
-   <script type="text/javascript" src="roms/rom.T20V24.js"></script>
-   
-   <script type="text/javascript" src="keyboard.js"></script>   
-   <script type="text/javascript" src="video.js"></script>
-   <script type="text/javascript" src="csave.js"></script>
-   <script type="text/javascript" src="serial.js"></script>
-   <script type="text/javascript" src="utils.js"></script>
-   <script type="text/javascript" src="files.js"></script>
-   <script type="text/javascript" src="floppy.js"></script>
-   <script type="text/javascript" src="sa1400.js"></script>
-   <script type="text/javascript" src="browser.js"></script>
-   <script type="text/javascript" src="emulator.js"></script>
-   <script type="text/javascript" src="index.js"></script>
-      
 </body>
 </html>
