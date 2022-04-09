@@ -183,6 +183,10 @@ Mappatura dei dispositivi
 - print chr$(22)"80"    reverse off
 - print chr$(12)        cls
 
+# MISC
+
+- DOS 2.04 ha cursore lampeggiante
+
 # SA1004 disk geometry
 
 units: A,B,C,D,E
@@ -207,3 +211,11 @@ B:
 
 C:   non utilizzato
 D,E: floppy 8" standard tipo T08
+
+
+# LISTINO
+
+T/05 con registratore a cassette audio (2.212.000+IVA)
+T/08 con “mini dischi flessibili” da 5,25” (a partire da 3.289.000+IVA)
+T/10 con floppy “standard” da 8” (a partire da 4.572.000+IVA)
+T/20 con hard disk (a partire da 8.722.000+IVA)
