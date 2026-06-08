@@ -62,7 +62,7 @@ function warn(msg: string) {
 
 // WD1791 floppy disk controller
 class WD7191 {
-   FLOPPY_8_INCHES: boolean;
+   FLOPPY_8_INCHES: boolean = false;
 
    // flags to debug all disk activity
    debug_write_track      : boolean = false;
@@ -76,16 +76,20 @@ class WD7191 {
    debug_read_status      : boolean = false;
    debug_read_3f          : boolean = false;
 
-   FDC_NSIDES: number;
-   FDC_NTRACKS: number;
-   FDC_NSECTORS: number;
-   FDC_SECTORSIZE: number;
-   FDC_FIRSTSECTOR: number;
-   FDC_MEDIA_SIZE: number;
+   FDC_NSIDES: number = 0;
+   FDC_NTRACKS: number = 0;
+   FDC_NSECTORS: number = 0;
+   FDC_SECTORSIZE: number = 0;
+   FDC_FIRSTSECTOR: number = 0;
+   FDC_MEDIA_SIZE: number = 0;
 
-   drives: Drive[];   // the actual floppy disks inserted in the drives
+   drives: Drive[] = [ new Drive(0), new Drive(0)]; // start with no floppy
 
-   constructor(FLOPPY_8_INCHES: boolean) {
+   constructor() {
+      this.setDriveType(false);
+   }
+
+   setDriveType(FLOPPY_8_INCHES: boolean) {
       this.FLOPPY_8_INCHES = FLOPPY_8_INCHES;
 
       this.FDC_NSIDES      = FLOPPY_8_INCHES ? 2   : 2;
@@ -96,7 +100,10 @@ class WD7191 {
 
       this.FDC_MEDIA_SIZE  = this.FDC_SECTORSIZE * this.FDC_NSECTORS * this.FDC_NSIDES * this.FDC_NTRACKS;
 
-      this.drives = [ new Drive(this.FDC_MEDIA_SIZE), new Drive(this.FDC_MEDIA_SIZE) ];
+      // mount empty floppy disks if media has changed
+      if(this.drives[0].length() != this.FDC_MEDIA_SIZE || this.drives[1].length() != this.FDC_MEDIA_SIZE) {
+         this.drives = [ new Drive(this.FDC_MEDIA_SIZE), new Drive(this.FDC_MEDIA_SIZE) ];
+      }
    }
 
    // data is assumed to be stored on the media:
@@ -620,6 +627,10 @@ class Drive {
 
    constructor(size: number) {
       this.floppy = new Uint8Array(size);
+   }
+
+   length() {
+      return this.floppy.length;
    }
 }
 

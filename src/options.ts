@@ -26,9 +26,9 @@ config=T08|T10|T20|POLY88
 
 */
 
-function getQueryStringConfig(): Config {
+export function getConfigFromQueryString(): Config {
 
-   let config = {
+   let config: Config = {
       model: "T20"
    };
 
@@ -47,6 +47,7 @@ function getQueryStringConfig(): Config {
    let model = options.model == undefined ? "T20" : options.model.toUpperCase();
 
         if(model == "T20")    config.model = "T20";
+   else if(model == "T05")    config.model = "T05";
    else if(model == "T08")    config.model = "T08";
    else if(model == "T10")    config.model = "T10";
    else if(model == "POLY88") config.model = "POLY88";
@@ -69,5 +70,3 @@ function getQueryStringConfig(): Config {
 
    return config;
 }
-
-export { getQueryStringConfig };

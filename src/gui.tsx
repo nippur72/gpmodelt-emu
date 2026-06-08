@@ -11,12 +11,13 @@ import { GPEmulator } from "./emulator";
 
 // import { Uploader } from "./UploadButton";
 
-type machineTypes = "T08" | "T10" | "T20";
+import { machineTypes } from "./emulator";
 
 let machineOptions: IDropdownOption<{machineTypes: string}>[] = [
-   { key: "T08" , text: "Model T/08"  },
-   { key: "T10" , text: "Model T/10"  },
-   { key: "T20" , text: "Model T/20"  }
+   { key: "T05" , text: "Model T/05 (64x16, cassette)"  },
+   { key: "T08" , text: 'Model T/08 (64x16, two 5"1/4 floppy disks)'  },
+   { key: "T10" , text: 'Model T/10 (64x16, two 8" floppy disks)' },
+   { key: "T20" , text: 'Model T/20 (80x24, 5MB hard disk SASI, four 8" floppy disks)' }
 ];
 
 interface IState {
@@ -28,7 +29,7 @@ export class Gui extends Component<IState> {
 
    state = {
       showPreferences: false,
-      machine: "T08"
+      machine: getEmulator().ROM_CONFIG
    };
 
    componentDidMount() {
@@ -57,10 +58,8 @@ export class Gui extends Component<IState> {
       this.setState({ showPreferences: false });
    }
 
-   buttonResetClick = () => {
-      /*
-      emulator.reset();
-      */
+   buttonPowerOnOffClick = () => {
+      getEmulator().power();
       this.close();
    }
 
@@ -72,13 +71,6 @@ export class Gui extends Component<IState> {
    function handleUploadVZ(files: FileList) {
       emulator.droppedFiles(files);
       close();
-   }
-
-   function handleChangeMachine(event: React.FormEvent<HTMLDivElement>, item: IDropdownOption|undefined) {
-      if(item===undefined) return;
-      let machineType = String(item.key);
-      setMachine(machineType);
-      emulator.setMachineType(machineType);
    }
 
    function handleChangeMemory(event: React.FormEvent<HTMLDivElement>, item: IDropdownOption|undefined) {
@@ -97,9 +89,9 @@ export class Gui extends Component<IState> {
 
    handleChangeMachine = (event: React.FormEvent<HTMLDivElement>, item: IDropdownOption|undefined) => {
       if(item===undefined) return;
-      let machine = String(item.key);
+      let machine = String(item.key) as machineTypes;
       this.setState({ machine });
-      //emulator.setMachineType(machineType);
+      getEmulator().configure(machine);
    }
 
    render() {
@@ -108,7 +100,7 @@ export class Gui extends Component<IState> {
          handleKeyDown,
          handleChangeMachine,
          buttonCloseClick,
-         buttonResetClick,
+         buttonPowerOnOffClick,
       } = this;
 
       return (
@@ -128,7 +120,7 @@ export class Gui extends Component<IState> {
                </Pivot>
 
                <Stack horizontal horizontalAlign="space-between">
-                  <DefaultButton onClick={buttonResetClick}>Reset CPU</DefaultButton>
+                  <DefaultButton onClick={buttonPowerOnOffClick}>Power OFF/ON</DefaultButton>
                   <PrimaryButton onClick={buttonCloseClick}>Close</PrimaryButton>
                </Stack>
 

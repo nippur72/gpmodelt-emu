@@ -23,40 +23,31 @@ import { rom_T20V24      } from "./roms/rom.T20V24";
 // other utils
 import { getFileExtension } from "./files";
 
+export type machineTypes = "T05" | "T08" | "T10" | "T20" | "POLY88";  // POLY88, CHILDZ ???
+
 // emulator configuration
 interface Config {
-   model: string;    // T08, T10, T20, POLY88, CHILDZ ?
+   model: machineTypes;
    load?: string;
 }
 
 class GPEmulator {
+   // special flags
    aspect: number;
    charset_bit: number;
    poly88: boolean;
    imsai_soundcard: boolean;
 
-   audioEnabled: boolean;
-   audio: Audio;
-   audioBufferSize: number;
-   audioBuffer: Float32Array;
-   audioPtr: number;
-   downSampleCounter: number;
-
-   tape: Tape;
-   tape_monitor: boolean;
-   cassette_bit_out1: number;
-   cassette_bit_out2: number;
-   cassette_bit_in: number;
-
+   // emulation
    last_timestamp: number;
    oneFrameThisBind: (timestamp: number) => void;
    averageFrameTime: number;
-
    stopped: boolean;
    frames: number;
    cycles: number;
    cycle: number;
 
+   // system parameters
    system_clock: number = 0;
    cpu_divisor: number = 0;
    dotpixels: number = 0;
@@ -67,22 +58,39 @@ class GPEmulator {
    cyclesPerLine: number = 0;
    hiddenlines: number = 0;
 
-   ROM_CONFIG: string;  // TODO restric configs
+   ROM_CONFIG: machineTypes = "T08";
 
+   // GP hardware
    cpu: Z80CPU;
    memory: Uint8Array;
-   serial: Serial;
-   sasi: SASI_CONTROLLER;
-   videoRenderer: VideoRenderer;
    keyboard: AsciiKeyboard;
+   videoRenderer: VideoRenderer;
    wd1791: WD7191;
+   sasi: SASI_CONTROLLER;
+   serial: Serial;
+
+   // tape interface
+   tape: Tape;
+   tape_monitor: boolean;
+   cassette_bit_out1: number;
+   cassette_bit_out2: number;
+   cassette_bit_in: number;
+
+   // audio
+   audioEnabled: boolean;
+   audio: Audio;
+   audioBufferSize: number;
+   audioBuffer: Float32Array;
+   audioPtr: number;
+   downSampleCounter: number;
 
    browser: BrowserDriver;
 
+   // debug hooks
    debugBefore: undefined | (()=>void);
    debugAfter: undefined | ((elapsed: number)=>void);
 
-   constructor(config: Config) {
+   constructor() {
       this.aspect = 1.5;             // aspect varies greatly due to Y deflection trimmer regulation
       this.charset_bit = 1;          // selects charset ROM font
       this.poly88 = false;           // poly88 VTI emulation
@@ -114,8 +122,6 @@ class GPEmulator {
       this.cycles = 0;        // count number of CPU cycles
       this.cycle = 0;          // counts cycles for a frame rendering
 
-      this.ROM_CONFIG = config.model;
-
       this.cpu = Z80({
          mem_read : this.mem_read.bind(this) , 
          mem_write: this.mem_write.bind(this), 
@@ -124,23 +130,18 @@ class GPEmulator {
       });
 
       // 64K RAM
-      this.memory = new Uint8Array(65536).fill(0x00); 
-
-      this.serial = new Serial();
-
-      this.sasi = new SASI_CONTROLLER();
-
-      this.videoRenderer = new VideoRenderer(this);
-      this.videoRenderer.calculateGeometry();
-
+      this.memory = new Uint8Array(65536).fill(0x00);
       this.keyboard = new AsciiKeyboard(this);
-
-      this.wd1791 = new WD7191(config.model != "T08");
-
+      this.sasi = new SASI_CONTROLLER();
+      this.wd1791 = new WD7191();
+      this.serial = new Serial();
+      this.videoRenderer = new VideoRenderer(this);
       this.browser = new BrowserDriver(this);
    }
 
-   systemConfig() {
+   configure(machine: machineTypes) {
+      this.ROM_CONFIG = machine;
+
       let hires = this.ROM_CONFIG == "T20";
 
       this.system_clock = hires ? 12000000 : 10000000;           // 10 Mhz 64x16, 24Mhz 80x24
@@ -157,6 +158,15 @@ class GPEmulator {
          this.cpuSpeed /= 2;
          this.cyclesPerLine /= 2;
       }
+
+      this.wd1791.setDriveType(this.ROM_CONFIG != "T08");
+
+      this.loadDefaultROMs();
+
+      this.videoRenderer.calculateGeometry();
+      this.browser.onResize();                 // force recalc of geometry
+
+      this.power();
    }
 
    rom_load(rom: Uint8Array, address: number) {
@@ -165,8 +175,20 @@ class GPEmulator {
       }
    }
    
-   initMem() {   
-      if(this.ROM_CONFIG == "T08") {
+   loadDefaultROMs() {
+      if(this.ROM_CONFIG == "T05") {
+         this.rom_load(rom_E000,        0xE000);
+         this.rom_load(rom_E400,        0xE400);
+         this.rom_load(rom_E800_FDC525, 0xE800);   // 5" FDC
+         this.rom_load(rom_EC00_ACI,    0xEC00);
+
+         this.videoRenderer.SCREEN_COLUMNS = 64;
+         this.videoRenderer.SCREEN_ROWS    = 16;
+         this.videoRenderer.SCREEN_COLUMNS_ARR = 64;
+
+         this.wd1791.FLOPPY_8_INCHES = false;
+      }
+      else if(this.ROM_CONFIG == "T08") {
          this.rom_load(rom_E000,        0xE000);
          this.rom_load(rom_E400,        0xE400);
          this.rom_load(rom_E800_FDC525, 0xE800);   // 5" FDC
@@ -178,8 +200,7 @@ class GPEmulator {
    
          this.wd1791.FLOPPY_8_INCHES = false;
       }
-   
-      if(this.ROM_CONFIG == "T10") {
+      else if(this.ROM_CONFIG == "T10") {
          this.rom_load(rom_E000,        0xE000);
          this.rom_load(rom_E400,        0xE400);
          this.rom_load(rom_E800_FDC8,   0xE800);   // 8" FDC
@@ -191,9 +212,8 @@ class GPEmulator {
    
          this.wd1791.FLOPPY_8_INCHES = true;
       }
-   
       /*
-      if(this.ROM_CONFIG == "rig") {
+      else if(this.ROM_CONFIG == "rig") {
          this.rom_load(rom_MON24_2,   0xE000);
          this.rom_load(rom_SYS2K_482, 0xE400);
          this.rom_load(rom_RIG02_U,   0xE800);
@@ -202,7 +222,7 @@ class GPEmulator {
          this.videoRenderer.SCREEN_COLUMNS_ARR = 128;
       }
    
-      if(this.ROM_CONFIG == "scheda2") {
+      else if(this.ROM_CONFIG == "scheda2") {
          this.rom_load(rom_U1MON1512, 0xE000);
          this.rom_load(rom_U3FDC,     0xE800);
          this.videoRenderer.SCREEN_COLUMNS = 80;
@@ -210,34 +230,30 @@ class GPEmulator {
          this.videoRenderer.SCREEN_COLUMNS_ARR = 128;
       }
       */
-   
-      if(this.ROM_CONFIG == "T20") {
+      else if(this.ROM_CONFIG == "T20") {
          this.rom_load(rom_T20V24, 0xE000);
          this.videoRenderer.SCREEN_COLUMNS = 80;
          this.videoRenderer.SCREEN_ROWS    = 24;
          this.videoRenderer.SCREEN_COLUMNS_ARR = 128;
       }
+      else throw `unrecognized configuration ${this.ROM_CONFIG}`;
    
       // ROM di test di Gabriele Rossi
       // rom_load(rom_GPMON007, 0xE000);
-   
-      this.rom_load(new Uint8Array([ 0xC3, 0x00, 0xE0 ]), 0x0000); // JP E000
-   
-      this.videoRenderer.calculateGeometry();
-   }
-
-   zap() {
-      for(let t=0;t<this.memory.length;t++) this.memory[t] = (Math.random()*4096) & 0xFF;
-      //for(let t=0;t<emulator.memory.length;t++) emulator.memory[t] = 0x76;
-      this.initMem();
-      let state = this.cpu.getState();
-      state.halted = true;
-      this.cpu.setState(state);
    }
 
    power() {
-      this.zap();
+      for(let t=0;t<0xCFFF;t++) this.memory[t] = (Math.random()*4096) & 0xFF;  // 0x76;
+      let state = this.cpu.getState();
+      state.halted = true;
+      this.cpu.setState(state);
       this.renderAllLines();
+
+      this.rom_load(new Uint8Array([ 0xC3, 0x00, 0xE0 ]), 0x0000); // JP E000
+      this.reset();
+   }
+
+   reset() {
       this.cpu.reset();
       this.sasi.SASI_reset();
    }

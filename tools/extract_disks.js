@@ -2,16 +2,16 @@ const fs = require('fs');
 const { FDC_getpos: getpos, FDC_getpos_geometry, emptydisk } = require("./fdc-pos");
 
 // read all disks
-let disk_path = "../software";
+let disk_path = "../software/disks";
 let disk_names = fs.readdirSync(disk_path).filter(fn=>fn.match(/GP.*img$/g));
 
 //disk_names.forEach(dn=>extract_boot(dn));
 //disk_names.forEach(dn=>extract_ccp(dn, 0));
 //disk_names.forEach(dn=>extract_ccp(dn, 1));
-//disk_names.forEach(dn=>extract_side_1(dn));
+disk_names.forEach(dn=>extract_side_1(dn));
 //extract_boot_rig("../docs/rig","sa1004_extracted_xor_FF.bin");
 
-extract_ccp_rig("../docs/rig","sa1004_extracted_xor_FF.bin");
+//extract_ccp_rig("../docs/rig","sa1004_extracted_xor_FF.bin");
 
 function extract_ccp_rig(disk_path, disk_name) {
     let disk = fs.readFileSync(`${disk_path}/${disk_name}`);
@@ -61,6 +61,7 @@ function extract_side_1(disk_name) {
 
     // write
     fs.writeFileSync(dest_name, dest_disk);
+    console.log(dest_name);
 }
 
 function extract_boot(disk_name) {
